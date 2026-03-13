@@ -1,0 +1,56 @@
+[
+  {
+    "id": "neural-racer",
+    "title": "Neural Racer X",
+    "developer": "AI Dynamics",
+    "category": "Racing",
+    "imageUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.8,
+    "description": "An intense, AI-generated track racing game where the environment adapts to your driving style."
+  },
+  {
+    "id": "quantum-chess",
+    "title": "Quantum Chess",
+    "developer": "Logic Mind",
+    "category": "Strategy",
+    "imageUrl": "https://images.unsplash.com/photo-1528819622765-d6bcf132f793?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Play chess against a neural network that predicts your moves with quantum-like precision."
+  },
+  {
+    "id": "synth-city",
+    "title": "Synth City Builder",
+    "developer": "CityAI",
+    "category": "Simulation",
+    "imageUrl": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.5,
+    "description": "Build and manage a cyberpunk metropolis where the AI dynamically simulates citizen behavior."
+  },
+  {
+    "id": "void-defender",
+    "title": "Void Defender",
+    "developer": "Cosmic AI",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.7,
+    "description": "Defend your base against waves of procedurally generated alien swarms that learn your tactics."
+  },
+  {
+    "id": "echo-maze",
+    "title": "Echo Maze",
+    "developer": "Puzzle Gen",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.4,
+    "description": "Navigate through a labyrinth that shifts and changes based on AI voice recognition algorithms."
+  },
+  {
+    "id": "neon-strike",
+    "title": "Neon Strike",
+    "developer": "Retro Pulse",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.6,
+    "description": "Fast-paced arcade shooter with generative neon visuals and an adaptive synth-wave soundtrack."
+  }
+]

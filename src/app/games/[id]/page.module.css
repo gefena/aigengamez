@@ -1,0 +1,220 @@
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--accent-secondary);
+}
+
+.gameLayout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.gameWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gameContainer {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameDetails {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.gameHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rating {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.developer {
+  color: var(--accent-primary);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.shareBtn {
+  width: 100%;
+  margin-top: 2rem;
+  background: transparent;
+  border: 1px solid var(--border-highlight);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.shareBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-primary);
+}
+
+/* Simple Game Canvas Styles */
+.gameInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background: radial-gradient(circle, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+.gameTitle {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.gameDesc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  background: var(--border-color);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  background: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 2.5rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--bg-secondary);
+}
+
+.cell:disabled {
+  cursor: not-allowed;
+}
+
+.cellX {
+  color: var(--accent-secondary);
+}
+
+.cellO {
+  color: var(--accent-primary);
+}
+
+.gameControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  height: 2rem;
+}
+
+.resetBtn {
+  background: var(--accent-gradient);
+  border: none;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.resetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 1024px) {
+  .gameLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cell {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+}
