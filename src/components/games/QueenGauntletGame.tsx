@@ -781,9 +781,9 @@ export default function QueenGauntletGame({ title }: { title: string }) {
       {/* Board */}
       <div
         ref={containerRef}
-        style={{ flex: 1, minHeight: 0, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
+        style={{ flex: 1, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
       >
-        <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block", touchAction: "none" }} />
+        <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block", touchAction: "none" }} />
 
         {phase === "idle" && (
           <div onClick={startGame} style={{ position: "absolute", inset: 0, background: "rgba(5,5,20,0.88)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem", cursor: "pointer" }}>
