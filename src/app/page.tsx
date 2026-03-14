@@ -2,41 +2,20 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import GameCard from "@/components/GameCard";
 
-// Mock data for featured games to showcase the UI
-const FEATURED_GAMES = [
-  {
-    id: "neural-racer",
-    title: "Neural Racer X",
-    developer: "AI Dynamics",
-    category: "Racing",
-    imageUrl: "", // Handled by fallback
-    rating: 4.8,
-  },
-  {
-    id: "quantum-chess",
-    title: "Quantum Chess",
-    developer: "Logic Mind",
-    category: "Strategy",
-    imageUrl: "",
-    rating: 4.9,
-  },
-  {
-    id: "synth-city",
-    title: "Synth City Builder",
-    developer: "CityAI",
-    category: "Simulation",
-    imageUrl: "",
-    rating: 4.5,
-  },
-  {
-    id: "void-defender",
-    title: "Void Defender",
-    developer: "Cosmic AI",
-    category: "Action",
-    imageUrl: "",
-    rating: 4.7,
-  }
-];
+import gamesData from "@/data/games.json";
+
+// We feature our working prototypes first
+const FEATURED_GAMES = gamesData.filter(g => 
+  ['tic-tac-toe', 'ai-canvas', 'neural-racer', 'quantum-chess'].includes(g.id)
+).sort((a, b) => {
+  const order = ['tic-tac-toe', 'ai-canvas'];
+  const aIdx = order.indexOf(a.id);
+  const bIdx = order.indexOf(b.id);
+  if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+  if (aIdx !== -1) return -1;
+  if (bIdx !== -1) return 1;
+  return 0;
+}).slice(0, 4);
 
 export default function Home() {
   return (
