@@ -208,22 +208,30 @@ function AICanvasGame({ title }: { title: string }) {
   const [brushSize, setBrushSize] = useState<number>(5);
   const [isSymmetryMode, setIsSymmetryMode] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+  const isInitialized = useRef<boolean>(false);
+
+  // Effect 1: Initialize canvas ONCE on mount (setting dimensions wipes the canvas, so NEVER do this again)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || isInitialized.current) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    isInitialized.current = true;
+  }, []);
+
+  // Effect 2: Re-attach event listeners whenever color/brushSize/symmetry change
+  // These closures capture the latest values—no canvas sizing here
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    // Only set dimensions and fill white if they haven't been set yet
-    // This prevents the canvas from wiping on re-renders when state (color/size) changes
-    if (canvas.width === 0 || canvas.height === 0 || canvas.width !== canvas.getBoundingClientRect().width) {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
 
     let isDrawing = false;
     let lastX = 0;
@@ -236,38 +244,35 @@ function AICanvasGame({ title }: { title: string }) {
       const r = canvas.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      const x = clientX - r.left;
-      const y = clientY - r.top;
+      // Scale CSS coords to canvas logical coords
+      const scaleX = canvas.width / r.width;
+      const scaleY = canvas.height / r.height;
+      const x = (clientX - r.left) * scaleX;
+      const y = (clientY - r.top) * scaleY;
 
       ctx.strokeStyle = color;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
       ctx.lineWidth = brushSize;
 
-      // Draw main stroke
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(x, y);
       ctx.stroke();
 
-      // AI Symmetry Mode (Kaleidoscope effect)
       if (isSymmetryMode) {
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        
-        // Draw 3 mirrored strokes for algorithmic symmetry
         const points = [
-          { x: centerX + (centerX - x), y }, // Horizontal mirror
-          { x, y: centerY + (centerY - y) }, // Vertical mirror
-          { x: centerX + (centerX - x), y: centerY + (centerY - y) } // Diagonal mirror
+          { x: centerX + (centerX - x), y },
+          { x, y: centerY + (centerY - y) },
+          { x: centerX + (centerX - x), y: centerY + (centerY - y) }
         ];
-
         const lastPoints = [
           { x: centerX + (centerX - lastX), y: lastY },
           { x: lastX, y: centerY + (centerY - lastY) },
           { x: centerX + (centerX - lastX), y: centerY + (centerY - lastY) }
         ];
-
         points.forEach((p, i) => {
           ctx.beginPath();
           ctx.moveTo(lastPoints[i].x, lastPoints[i].y);
@@ -285,19 +290,18 @@ function AICanvasGame({ title }: { title: string }) {
       const r = canvas.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      lastX = clientX - r.left;
-      lastY = clientY - r.top;
+      const scaleX = canvas.width / r.width;
+      const scaleY = canvas.height / r.height;
+      lastX = (clientX - r.left) * scaleX;
+      lastY = (clientY - r.top) * scaleY;
     };
 
-    const stopDraw = () => {
-      isDrawing = false;
-    };
+    const stopDraw = () => { isDrawing = false; };
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDraw);
     canvas.addEventListener('mouseout', stopDraw);
-    
     canvas.addEventListener('touchstart', startDraw, { passive: false });
     canvas.addEventListener('touchmove', draw, { passive: false });
     canvas.addEventListener('touchend', stopDraw);
@@ -307,7 +311,6 @@ function AICanvasGame({ title }: { title: string }) {
       canvas.removeEventListener('mousemove', draw);
       canvas.removeEventListener('mouseup', stopDraw);
       canvas.removeEventListener('mouseout', stopDraw);
-      
       canvas.removeEventListener('touchstart', startDraw);
       canvas.removeEventListener('touchmove', draw);
       canvas.removeEventListener('touchend', stopDraw);
