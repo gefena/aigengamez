@@ -16,7 +16,6 @@ export default function Navbar() {
           <Link href="/about" className={styles.navLink}>
             About
           </Link>
-          <button className={styles.loginBtn}>Sign In</button>
         </div>
       </div>
     </nav>
