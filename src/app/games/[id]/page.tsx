@@ -11,6 +11,7 @@ import PixelArtGame from "@/components/games/PixelArtGame";
 import FireworksGame from "@/components/games/FireworksGame";
 import EndlessRunnerGame from "@/components/games/EndlessRunnerGame";
 import QueenGauntletGame from "@/components/games/QueenGauntletGame";
+import MazeGame from "@/components/games/MazeGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = {
@@ -21,6 +22,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'fireworks-canvas': FireworksGame,
   'endless-runner': EndlessRunnerGame,
   'queen-gauntlet': QueenGauntletGame,
+  'maze-game': MazeGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

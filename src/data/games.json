@@ -54,6 +54,15 @@
     "description": "Click or drag anywhere on the night-sky canvas to launch spectacular fireworks explosions packed with colour and sparkle!"
   },
   {
+    "id": "maze-game",
+    "title": "Intestine Escape",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.8,
+    "description": "Navigate 💩 through a winding intestinal maze and reach the toilet 🚽 before it's too late. Dodge dead-ends, follow the fleshy pink corridors, and find freedom!"
+  },
+  {
     "id": "endless-runner",
     "title": "Temple Dash",
     "developer": "aigengamez",
