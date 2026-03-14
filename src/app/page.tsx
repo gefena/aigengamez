@@ -4,18 +4,11 @@ import GameCard from "@/components/GameCard";
 
 import gamesData from "@/data/games.json";
 
-// We feature our working prototypes first
-const FEATURED_GAMES = gamesData.filter(g => 
-  ['tic-tac-toe', 'ai-canvas', 'neural-racer', 'quantum-chess'].includes(g.id)
-).sort((a, b) => {
-  const order = ['tic-tac-toe', 'ai-canvas'];
-  const aIdx = order.indexOf(a.id);
-  const bIdx = order.indexOf(b.id);
-  if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
-  if (aIdx !== -1) return -1;
-  if (bIdx !== -1) return 1;
-  return 0;
-}).slice(0, 4);
+// Only feature actual working games — update this list whenever a new game ships
+const WORKING_GAME_IDS = ['tic-tac-toe', 'ai-canvas', 'stamp-pad', 'pixel-art', 'fireworks-canvas'];
+const FEATURED_GAMES = gamesData
+  .filter(g => WORKING_GAME_IDS.includes(g.id))
+  .sort((a, b) => WORKING_GAME_IDS.indexOf(a.id) - WORKING_GAME_IDS.indexOf(b.id));
 
 export default function Home() {
   return (

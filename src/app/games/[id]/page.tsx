@@ -436,6 +436,339 @@ function AICanvasGame({ title }: { title: string }) {
   );
 }
 
+
+// ─── Stamp & Sticker Pad ────────────────────────────────────────────────────
+const STAMP_CATEGORIES: Record<string, string[]> = {
+  Animals:  ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐸','🐙','🦋','🐝'],
+  Food:     ['🍕','🍔','🌮','🍣','🍩','🎂','🍦','🍓','🍉','🍋','🥝','🥑','🍟','🧁','🍪'],
+  Space:    ['🚀','🌍','🌙','⭐','🌟','💫','☄️','🪐','👽','🛸','🌌','🔭','🌠','🌞','🪨'],
+  Fun:      ['🎉','🎈','🎁','🎮','🎨','🎵','🏆','❤️','😂','🤩','🦄','🌈','💎','🔥','✨'],
+};
+const BG_COLORS = ['#fff9f0','#f0fff4','#f0f4ff','#fff0f0','#f5f0ff','#fffde7'];
+
+function StampPadGame({ title }: { title: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [category, setCategory] = useState<string>('Animals');
+  const [selectedStamp, setSelectedStamp] = useState<string>('🐶');
+  const [bgColor, setBgColor] = useState<string>(BG_COLORS[0]);
+  const [stampSize, setStampSize] = useState<number>(48);
+
+  // Fill background when bgColor changes
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    if (canvas.width === 0) {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || 600;
+      canvas.height = rect.height || 400;
+    }
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, [bgColor]);
+
+  // Size canvas on mount
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width || 600;
+    canvas.height = rect.height || 400;
+    const ctx = canvas.getContext('2d');
+    if (ctx) { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const placeStamp = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rect = canvas.getBoundingClientRect();
+    let clientX: number, clientY: number;
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
+    ctx.font = `${stampSize * scaleX}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(selectedStamp, x, y);
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx) { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+  };
+
+  return (
+    <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '0.75rem', boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <h3 className={styles.gameTitle} style={{ margin: 0 }}>{title}</h3>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          {BG_COLORS.map(c => (
+            <button key={c} onClick={() => setBgColor(c)} title="Background colour" style={{ width: 22, height: 22, borderRadius: '50%', background: c, border: bgColor === c ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)', cursor: 'pointer' }} />
+          ))}
+          <select
+            value={stampSize}
+            onChange={e => setStampSize(Number(e.target.value))}
+            style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', padding: '0.25rem 0.4rem', fontSize: '0.85rem', cursor: 'pointer' }}
+          >
+            {[32, 48, 72, 96].map(s => <option key={s} value={s}>{s}px</option>)}
+          </select>
+          <button onClick={clearCanvas} style={{ padding: '0.35rem 0.9rem', background: 'rgba(255,50,50,0.15)', color: '#ff6b6b', border: '1px solid rgba(255,50,50,0.4)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>Clear</button>
+        </div>
+      </div>
+
+      {/* Category tabs */}
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+        {Object.keys(STAMP_CATEGORIES).map(cat => (
+          <button key={cat} onClick={() => { setCategory(cat); setSelectedStamp(STAMP_CATEGORIES[cat][0]); }}
+            style={{ padding: '0.3rem 0.8rem', borderRadius: 'var(--radius-full)', border: 'none', background: category === cat ? 'var(--accent-primary)' : 'rgba(255,255,255,0.08)', color: category === cat ? 'white' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
+          >{cat}</button>
+        ))}
+      </div>
+
+      {/* Stamp picker */}
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', background: 'var(--bg-secondary)', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+        {STAMP_CATEGORIES[category].map(emoji => (
+          <button key={emoji} onClick={() => setSelectedStamp(emoji)}
+            style={{ fontSize: '1.4rem', padding: '0.2rem 0.3rem', borderRadius: 'var(--radius-sm)', border: selectedStamp === emoji ? '2px solid var(--accent-primary)' : '2px solid transparent', background: selectedStamp === emoji ? 'rgba(255,255,255,0.1)' : 'transparent', cursor: 'pointer', lineHeight: 1 }}
+          >{emoji}</button>
+        ))}
+      </div>
+
+      {/* Canvas */}
+      <div style={{ flex: 1, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+        <canvas
+          ref={canvasRef}
+          onClick={placeStamp}
+          onTouchStart={placeStamp}
+          style={{ width: '100%', height: '100%', display: 'block', cursor: 'cell', touchAction: 'none' }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Pixel Art Maker ────────────────────────────────────────────────────────
+const GRID = 32;
+const PIXEL_PALETTE = [
+  '#000000','#ffffff','#ff3366','#ff6b6b','#ff9a9e','#ff6b2b','#ffaa33','#ffcc00',
+  '#f9f871','#33ff99','#00c896','#4caf50','#33ccff','#2196f3','#1565c0',
+  '#9933ff','#ce93d8','#7c4dff','#aaaaaa','#555555',
+];
+
+function PixelArtGame({ title }: { title: string }) {
+  const [pixels, setPixels] = useState<string[]>(() => Array(GRID * GRID).fill('#ffffff'));
+  const [activeColor, setActiveColor] = useState<string>('#000000');
+  const [isEraser, setIsEraser] = useState<boolean>(false);
+  const isPainting = useRef<boolean>(false);
+
+  const paint = (idx: number) => {
+    setPixels(prev => {
+      const next = [...prev];
+      next[idx] = isEraser ? '#ffffff' : activeColor;
+      return next;
+    });
+  };
+
+  const downloadImage = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = GRID;
+    canvas.height = GRID;
+    const ctx = canvas.getContext('2d')!;
+    pixels.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i % GRID, Math.floor(i / GRID), 1, 1);
+    });
+    const link = document.createElement('a');
+    link.download = 'pixel-art.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
+  const cellSize = `${100 / GRID}%`;
+
+  return (
+    <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '0.75rem', boxSizing: 'border-box' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <h3 className={styles.gameTitle} style={{ margin: 0 }}>{title}</h3>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={() => setIsEraser(!isEraser)}
+            style={{ padding: '0.35rem 0.9rem', borderRadius: 'var(--radius-full)', border: 'none', background: isEraser ? 'var(--accent-gradient)' : 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
+          >🧹 {isEraser ? 'Eraser ON' : 'Eraser'}</button>
+          <button onClick={() => setPixels(Array(GRID * GRID).fill('#ffffff'))}
+            style={{ padding: '0.35rem 0.9rem', background: 'rgba(255,50,50,0.15)', color: '#ff6b6b', border: '1px solid rgba(255,50,50,0.4)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>Clear</button>
+          <button onClick={downloadImage}
+            style={{ padding: '0.35rem 0.9rem', background: 'rgba(30,200,100,0.15)', color: '#33ff99', border: '1px solid rgba(30,200,100,0.4)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>↓ Save</button>
+        </div>
+      </div>
+
+      {/* Palette */}
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', background: 'var(--bg-secondary)', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center' }}>
+        {PIXEL_PALETTE.map(c => (
+          <button key={c} onClick={() => { setActiveColor(c); setIsEraser(false); }}
+            style={{ width: 26, height: 26, borderRadius: '50%', background: c, border: (!isEraser && activeColor === c) ? '3px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: (!isEraser && activeColor === c) ? '0 0 8px rgba(255,255,255,0.6)' : 'none', flexShrink: 0 }}
+          />
+        ))}
+        <label title="Custom" style={{ width: 26, height: 26, borderRadius: '50%', background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)', border: '2px solid transparent', cursor: 'pointer', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <input type="color" value={activeColor} onChange={e => { setActiveColor(e.target.value); setIsEraser(false); }} style={{ opacity: 0, position: 'absolute', width: 0, height: 0 }} />
+        </label>
+      </div>
+
+      {/* Grid */}
+      <div
+        style={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${GRID}, ${cellSize})`, border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden', userSelect: 'none', touchAction: 'none' }}
+        onMouseLeave={() => { isPainting.current = false; }}
+      >
+        {pixels.map((c, i) => (
+          <div
+            key={i}
+            style={{ backgroundColor: c, aspectRatio: '1', borderRight: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)', cursor: 'crosshair' }}
+            onMouseDown={() => { isPainting.current = true; paint(i); }}
+            onMouseUp={() => { isPainting.current = false; }}
+            onMouseEnter={() => { if (isPainting.current) paint(i); }}
+            onTouchStart={(e) => { e.preventDefault(); isPainting.current = true; paint(i); }}
+            onTouchEnd={() => { isPainting.current = false; }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Fireworks Canvas ───────────────────────────────────────────────────────
+type Particle = { x: number; y: number; vx: number; vy: number; alpha: number; color: string; radius: number; };
+
+function FireworksGame({ title }: { title: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const animRef = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
+
+  const FIREWORK_COLORS = [
+    '#ff3366','#ff6b2b','#ffcc00','#33ff99','#33ccff','#9933ff','#ff9a9e','#f9f871','#ce93d8'
+  ];
+
+  const spawnBurst = (x: number, y: number) => {
+    const count = 60 + Math.floor(Math.random() * 40);
+    const baseColor = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+      const speed = 2 + Math.random() * 5;
+      particlesRef.current.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        color: Math.random() < 0.2 ? FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)] : baseColor,
+        radius: 2 + Math.random() * 3,
+      });
+    }
+  };
+
+  const getCoords = (e: MouseEvent | TouchEvent, rect: DOMRect, canvas: HTMLCanvasElement) => {
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if ('touches' in e) {
+      return { x: (e.touches[0].clientX - rect.left) * scaleX, y: (e.touches[0].clientY - rect.top) * scaleY };
+    }
+    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width || 600;
+    canvas.height = rect.height || 400;
+    const ctx = canvas.getContext('2d')!;
+
+    const loop = () => {
+      ctx.fillStyle = 'rgba(10,10,20,0.18)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      particlesRef.current = particlesRef.current.filter(p => p.alpha > 0.02);
+      for (const p of particlesRef.current) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.07; // gravity
+        p.vx *= 0.98;
+        p.alpha -= 0.018;
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      animRef.current = requestAnimationFrame(loop);
+    };
+    // Dark background
+    ctx.fillStyle = '#0a0a14';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    animRef.current = requestAnimationFrame(loop);
+
+    const handleDown = (e: MouseEvent | TouchEvent) => {
+      isDragging.current = true;
+      const r = canvas.getBoundingClientRect();
+      const { x, y } = getCoords(e, r, canvas);
+      spawnBurst(x, y);
+    };
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDragging.current) return;
+      e.preventDefault();
+      if (Math.random() < 0.3) {
+        const r = canvas.getBoundingClientRect();
+        const { x, y } = getCoords(e, r, canvas);
+        spawnBurst(x, y);
+      }
+    };
+    const handleUp = () => { isDragging.current = false; };
+
+    canvas.addEventListener('mousedown', handleDown);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleUp);
+    canvas.addEventListener('touchstart', handleDown, { passive: false });
+    canvas.addEventListener('touchmove', handleMove, { passive: false });
+    canvas.addEventListener('touchend', handleUp);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      canvas.removeEventListener('mousedown', handleDown);
+      canvas.removeEventListener('mousemove', handleMove);
+      canvas.removeEventListener('mouseup', handleUp);
+      canvas.removeEventListener('touchstart', handleDown);
+      canvas.removeEventListener('touchmove', handleMove);
+      canvas.removeEventListener('touchend', handleUp);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '0.75rem', boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <h3 className={styles.gameTitle} style={{ margin: 0 }}>{title}</h3>
+        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Click or drag to launch 🎆</span>
+      </div>
+      <div style={{ flex: 1, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+        <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block', cursor: 'crosshair', touchAction: 'none' }} />
+      </div>
+    </div>
+  );
+}
+
 export default function GamePage({ params }: { params: { id: string } }) {
   const game = gamesData.find(g => g.id === params.id);
 
@@ -458,6 +791,12 @@ export default function GamePage({ params }: { params: { id: string } }) {
                 <TicTacToeGame title={game.title} />
               ) : game.id === 'ai-canvas' ? (
                 <AICanvasGame title={game.title} />
+              ) : game.id === 'stamp-pad' ? (
+                <StampPadGame title={game.title} />
+              ) : game.id === 'pixel-art' ? (
+                <PixelArtGame title={game.title} />
+              ) : game.id === 'fireworks-canvas' ? (
+                <FireworksGame title={game.title} />
               ) : (
                 <ComingSoonGame title={game.title} />
               )}
