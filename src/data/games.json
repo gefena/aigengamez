@@ -1,5 +1,14 @@
 [
   {
+    "id": "queen-gauntlet",
+    "title": "Queen's Gauntlet",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1528819622765-d6bcf132f793?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "60 seconds. One white queen. Up to 4 enemy pieces hunting you down. Capture black pieces for points — but if they catch you, your queen teleports and you lose points. How high can you score?"
+  },
+  {
     "id": "tic-tac-toe",
     "title": "Tic-Tac-Toe NextGen",
     "developer": "aigengamez",

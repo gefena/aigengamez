@@ -12,7 +12,7 @@ const LANE_SLIDE_SPD    = 0.2;
 const INITIAL_SPEED     = 0.005;
 const SPEED_CAP         = 0.016;
 const COLLISION_Z       = 0.09;
-const STRIP_COUNT       = 20;
+const GRID_LINES        = 18;   // horizontal grid lines across floor
 const REF_W             = 800;
 const REF_H             = 500;
 const INVINCIBLE_FRAMES = 120;
@@ -20,10 +20,17 @@ const MAGNET_DURATION   = 360;
 const SLOWMO_DURATION   = 240;
 const MAGNET_Z          = 0.15;
 const MILESTONES        = [100, 250, 500, 1000, 2000, 5000, 10000];
+const TRAIL_LEN         = 6;    // ghost frames for player trail
+const SHOOT_INTERVAL    = 280;  // frames between shooting stars
+const SPEED_LINE_COUNT  = 16;
 
 const C = {
-  bgTop: '#050511', bgBottom: '#1a1a2e',
-  ground0: '#0f0f1e', ground1: '#13132a',
+  bgTop: '#020210', bgMid: '#0a0520', bgBottom: '#160930',
+  ground0: '#0b0b1f', ground1: '#10102a',
+  gridLine: 'rgba(120,50,230,0.55)',
+  wallLeft: '#0d0820', wallRight: '#0d0820',
+  wallTrimL: 'rgba(109,40,217,0.8)', wallTrimR: 'rgba(109,40,217,0.8)',
+  archFill: '#1a1030', archTrim: 'rgba(140,70,240,0.6)',
   lane: 'rgba(109,40,217,0.35)',
   player: '#33ccff', playerGlow: '#33ccff',
   pillar: '#ec4899', pillarGlow: '#ec4899',
@@ -35,6 +42,9 @@ const C = {
   slowmo: '#ce93d8', slowmoGlow: '#9933ff',
   hud: '#ffffff', hudDim: 'rgba(255,255,255,0.4)',
   heart: '#ec4899', star: '#ffffff',
+  shootStar: '#aaddff',
+  silhouette: 'rgba(14,6,35,0.9)',
+  vignette: 'rgba(0,0,0,0.55)',
 };
 
 // ─── Audio ───────────────────────────────────────────────────────────────────
@@ -81,66 +91,102 @@ type PwrType  = 'shield' | 'magnet' | 'slowmo';
 interface Player {
   lane: Lane; targetLane: Lane; laneT: number;
   jumpY: number; jumpVY: number; isJumping: boolean;
+  wasJumping: boolean; // for landing detection
   isSliding: boolean; slideTimer: number;
 }
 interface Obstacle { id: number; lane: Lane; z: number; type: ObsType; }
 interface Coin     { id: number; lane: Lane; z: number; collected: boolean; justCollected: boolean; }
 interface PowerUp  { id: number; lane: Lane; z: number; type: PwrType; }
 interface Star     { x: number; y: number; r: number; phase: number; spd: number; }
-interface Particle { x: number; y: number; vx: number; vy: number; life: number; decay: number; color: string; r: number; }
+interface ShootStar { x: number; y: number; vx: number; vy: number; life: number; len: number; }
+interface SpeedLine { angle: number; len: number; phase: number; }
+interface TrailPos  { x: number; y: number; w: number; h: number; r: number; }
+interface Particle  { x: number; y: number; vx: number; vy: number; life: number; decay: number; color: string; r: number; }
+interface SilLayer  { spd: number; offset: number; peaks: number[]; }
 
 interface GS {
   phase: Phase; distance: number; speed: number; score: number; highScore: number;
   lives: number; invincible: number;
   player: Player;
+  trail: TrailPos[];
   obstacles: Obstacle[]; coins: Coin[]; powerUps: PowerUp[];
   particles: Particle[]; stars: Star[];
+  shootStars: ShootStar[]; shootTimer: number;
+  speedLines: SpeedLine[];
+  silLayers: SilLayer[];
   shieldActive: boolean; magnetTimer: number; slowmoTimer: number;
   spawnTimer: number; coinTimer: number; powerUpTimer: number;
   nextId: number; frameId: number; frame: number;
   shakeFrames: number; shakeIntensity: number;
   milestone: { text: string; frames: number } | null;
   lastMilestone: number;
+  hitFlash: number;       // frames of red flash remaining
+  pwrFlash: { color: string; frames: number } | null; // power-up collect flash
 }
 
 // ─── State helpers ────────────────────────────────────────────────────────────
 function makeStars(): Star[] {
-  return Array.from({ length: 80 }, () => ({
+  return Array.from({ length: 90 }, () => ({
     x: Math.random(), y: Math.random(),
-    r: 0.5 + Math.random() * 1.5,
+    r: 0.4 + Math.random() * 1.8,
     phase: Math.random() * Math.PI * 2,
-    spd: 0.5 + Math.random() * 1.5,
+    spd: 0.4 + Math.random() * 1.6,
   }));
+}
+
+function makeSpeedLines(): SpeedLine[] {
+  return Array.from({ length: SPEED_LINE_COUNT }, (_, i) => ({
+    angle: (Math.PI * 2 * i) / SPEED_LINE_COUNT + (Math.random() - 0.5) * 0.15,
+    len: 40 + Math.random() * 80,
+    phase: Math.random() * Math.PI * 2,
+  }));
+}
+
+function makeSilLayers(): SilLayer[] {
+  // Two parallax silhouette layers: far (slow), near (faster)
+  return [
+    { spd: 0.00018, offset: 0, peaks: makePeaks(12, 0.12, 0.38) },
+    { spd: 0.00035, offset: 0, peaks: makePeaks(8, 0.22, 0.48) },
+  ];
+}
+
+function makePeaks(count: number, minH: number, maxH: number): number[] {
+  return Array.from({ length: count + 2 }, () => minH + Math.random() * (maxH - minH));
 }
 
 function makeState(highScore = 0): GS {
   return {
     phase: 'idle', distance: 0, speed: INITIAL_SPEED, score: 0, highScore,
     lives: 3, invincible: 0,
-    player: { lane: 1, targetLane: 1, laneT: 1, jumpY: 0, jumpVY: 0, isJumping: false, isSliding: false, slideTimer: 0 },
+    player: { lane: 1, targetLane: 1, laneT: 1, jumpY: 0, jumpVY: 0, isJumping: false, wasJumping: false, isSliding: false, slideTimer: 0 },
+    trail: [],
     obstacles: [], coins: [], powerUps: [], particles: [], stars: makeStars(),
+    shootStars: [], shootTimer: SHOOT_INTERVAL,
+    speedLines: makeSpeedLines(),
+    silLayers: makeSilLayers(),
     shieldActive: false, magnetTimer: 0, slowmoTimer: 0,
     spawnTimer: 80, coinTimer: 50, powerUpTimer: 220,
     nextId: 0, frameId: 0, frame: 0,
     shakeFrames: 0, shakeIntensity: 0,
     milestone: null, lastMilestone: 0,
+    hitFlash: 0, pwrFlash: null,
   };
 }
 
 // ─── Projection ──────────────────────────────────────────────────────────────
 function corridorK(W: number, H: number) {
-  const t      = Math.min(1, Math.max(0, (W / H - 0.56) / 1.22));
-  const vpY    = H * (0.40 - 0.04 * t);
-  const hwBot  = W * (0.46 - 0.06 * t);
-  const hwTop  = W * 0.03;
+  const t     = Math.min(1, Math.max(0, (W / H - 0.56) / 1.22));
+  const vpY   = H * (0.40 - 0.04 * t);
+  const hwBot = W * (0.46 - 0.06 * t);
+  const hwTop = W * 0.03;
   return { vpY, hwBot, hwTop };
 }
 
 function proj(lane: Lane, z: number, W: number, H: number, vpY: number, hwBot: number, hwTop: number) {
-  const y     = H + (vpY - H) * z;
-  const hw    = hwBot + (hwTop - hwBot) * z;
-  const x     = W / 2 + ([-1, 0, 1] as const)[lane] * (hw * 2 / 3);
-  const ps    = Math.max(0, 1 - z);
+  const y  = H + (vpY - H) * z;
+  const hw = hwBot + (hwTop - hwBot) * z;
+  const x  = W / 2 + ([-1, 0, 1] as const)[lane] * (hw * 2 / 3);
+  const ps = Math.max(0, 1 - z);
   return { x, y, ps, hw };
 }
 
@@ -173,7 +219,28 @@ function spawnParticles(gs: GS, x: number, y: number, color: string, count = 8) 
   for (let i = 0; i < count; i++) {
     const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
     const spd   = 1.5 + Math.random() * 3;
-    gs.particles.push({ x, y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 1, life: 1, decay: 0.04 + Math.random() * 0.03, color, r: 2 + Math.random() * 3 });
+    gs.particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 1,
+      life: 1, decay: 0.04 + Math.random() * 0.03,
+      color, r: 2 + Math.random() * 3,
+    });
+  }
+}
+
+function spawnConfetti(gs: GS, x: number, y: number) {
+  const colors = ['#ffcc00','#33ccff','#ec4899','#33ff99','#a855f7','#ff6b2b','#ffffff'];
+  for (let i = 0; i < 55; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = 2 + Math.random() * 5;
+    gs.particles.push({
+      x: x + (Math.random() - 0.5) * 80,
+      y: y + (Math.random() - 0.5) * 40,
+      vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 2,
+      life: 1, decay: 0.02 + Math.random() * 0.025,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      r: 2.5 + Math.random() * 4,
+    });
   }
 }
 
@@ -210,13 +277,45 @@ function update(gs: GS, setScore: (n: number) => void, setPhase: (p: Phase) => v
   if (gs.slowmoTimer  > 0) gs.slowmoTimer--;
   if (gs.invincible   > 0) gs.invincible--;
   if (gs.shakeFrames  > 0) { gs.shakeFrames--; gs.shakeIntensity *= 0.84; }
+  if (gs.hitFlash     > 0) gs.hitFlash--;
+  if (gs.pwrFlash) { gs.pwrFlash.frames--; if (gs.pwrFlash.frames <= 0) gs.pwrFlash = null; }
+
+  // Shooting stars
+  gs.shootTimer--;
+  if (gs.shootTimer <= 0) {
+    gs.shootStars.push({
+      x: Math.random(),
+      y: 0.05 + Math.random() * 0.55,
+      vx: -(0.004 + Math.random() * 0.006),
+      vy: 0.001 + Math.random() * 0.003,
+      life: 1, len: 0.06 + Math.random() * 0.1,
+    });
+    gs.shootTimer = SHOOT_INTERVAL + Math.floor(Math.random() * 180);
+  }
+  for (const s of gs.shootStars) { s.x += s.vx; s.y += s.vy; s.life -= 0.018; }
+  gs.shootStars = gs.shootStars.filter(s => s.life > 0 && s.x > -0.2);
+
+  // Speed lines — slowly drift angle+len for variety
+  for (const sl of gs.speedLines) {
+    sl.phase += 0.04;
+    sl.len = Math.max(30, Math.min(160, sl.len + (Math.random() - 0.5) * 4));
+  }
+
+  // Parallax silhouette layers
+  for (const lay of gs.silLayers) {
+    lay.offset = (lay.offset + lay.spd * effSpeed * 1000) % 1;
+  }
 
   // Player movement
   if (gs.player.laneT < 1) gs.player.laneT = Math.min(1, gs.player.laneT + LANE_SLIDE_SPD);
+
+  gs.player.wasJumping = gs.player.isJumping;
   if (gs.player.isJumping) {
     gs.player.jumpY  += gs.player.jumpVY;
     gs.player.jumpVY -= GRAVITY;
-    if (gs.player.jumpY <= 0) { gs.player.jumpY = 0; gs.player.jumpVY = 0; gs.player.isJumping = false; }
+    if (gs.player.jumpY <= 0) {
+      gs.player.jumpY  = 0; gs.player.jumpVY = 0; gs.player.isJumping = false;
+    }
   }
   if (gs.player.isSliding) {
     gs.player.slideTimer--;
@@ -278,15 +377,16 @@ function update(gs: GS, setScore: (n: number) => void, setPhase: (p: Phase) => v
       if (obs.z > COLLISION_Z || obs.z < 0 || obs.lane !== pl) continue;
       if (obs.type === 'bar'  && gs.player.jumpY >= BAR_CLEARANCE) continue;
       if (obs.type === 'beam' && gs.player.isSliding) continue;
-      // Hit!
       if (gs.shieldActive) {
         gs.shieldActive = false;
         gs.invincible   = INVINCIBLE_FRAMES;
         gs.shakeFrames  = 10; gs.shakeIntensity = 5;
+        gs.hitFlash     = 4;
         SFX.hit();
       } else {
         gs.lives--;
         gs.shakeFrames = 20; gs.shakeIntensity = 8;
+        gs.hitFlash    = 6;
         SFX.hit();
         if (gs.lives <= 0) {
           gs.phase = 'dead'; setScore(gs.score); setPhase('dead'); SFX.death(); return;
@@ -317,8 +417,84 @@ function update(gs: GS, setScore: (n: number) => void, setPhase: (p: Phase) => v
     if (pu.type === 'shield') gs.shieldActive  = true;
     if (pu.type === 'magnet') gs.magnetTimer   = MAGNET_DURATION;
     if (pu.type === 'slowmo') gs.slowmoTimer   = SLOWMO_DURATION;
+    const flashColor = pu.type === 'shield' ? 'rgba(51,255,153,0.18)' :
+                       pu.type === 'magnet' ? 'rgba(255,100,100,0.18)' :
+                                              'rgba(180,100,255,0.18)';
+    gs.pwrFlash = { color: flashColor, frames: 8 };
     SFX.powerup(); break;
   }
+}
+
+// ─── Draw helpers ─────────────────────────────────────────────────────────────
+
+function drawArch(ctx: CanvasRenderingContext2D, cx: number, cy: number, scale: number) {
+  // Temple arch silhouette at vanishing point
+  const aw = 52 * scale, ah = 68 * scale;
+  const pilW = 10 * scale, pilH = ah * 0.65;
+
+  ctx.save();
+  ctx.fillStyle = C.archFill;
+  ctx.shadowBlur = 14 * scale;
+  ctx.shadowColor = C.archTrim;
+
+  // Left pillar
+  ctx.fillRect(cx - aw / 2 - pilW, cy - pilH, pilW, pilH);
+  // Right pillar
+  ctx.fillRect(cx + aw / 2, cy - pilH, pilW, pilH);
+  // Arch top (semicircle)
+  ctx.beginPath();
+  ctx.arc(cx, cy - pilH, aw / 2 + pilW / 2, Math.PI, 0);
+  ctx.lineTo(cx + aw / 2 + pilW, cy - pilH);
+  ctx.lineTo(cx - aw / 2 - pilW, cy - pilH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Trim
+  ctx.strokeStyle = C.archTrim;
+  ctx.lineWidth = 1.5 * scale;
+  ctx.beginPath();
+  ctx.arc(cx, cy - pilH, aw / 2 + pilW / 2, Math.PI, 0);
+  ctx.stroke();
+  ctx.strokeRect(cx - aw / 2 - pilW, cy - pilH, pilW, pilH);
+  ctx.strokeRect(cx + aw / 2, cy - pilH, pilW, pilH);
+
+  ctx.restore();
+}
+
+function drawSilLayer(
+  ctx: CanvasRenderingContext2D,
+  W: number, vpY: number,
+  layer: SilLayer, alpha: number, yBase: number,
+) {
+  const peaks = layer.peaks;
+  const count = peaks.length;
+  const segW  = W / (count - 2);
+  const off   = layer.offset * segW;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle   = C.silhouette;
+  ctx.beginPath();
+  ctx.moveTo(-off - segW, vpY);
+
+  for (let i = 0; i < count; i++) {
+    const x = -off + (i - 1) * segW;
+    const h = peaks[i % peaks.length] * vpY;
+    // Simple temple silhouette: flat top with occasional spire
+    const mid = x + segW / 2;
+    ctx.lineTo(x, vpY * yBase);
+    ctx.lineTo(x + segW * 0.15, vpY * yBase - h * 0.6);
+    ctx.lineTo(mid - segW * 0.04, vpY * yBase - h);
+    ctx.lineTo(mid, vpY * yBase - h - h * 0.25); // spire tip
+    ctx.lineTo(mid + segW * 0.04, vpY * yBase - h);
+    ctx.lineTo(x + segW * 0.85, vpY * yBase - h * 0.6);
+    ctx.lineTo(x + segW, vpY * yBase);
+  }
+
+  ctx.lineTo(W + segW, vpY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
 }
 
 // ─── Draw ─────────────────────────────────────────────────────────────────────
@@ -327,82 +503,175 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
   const isPortrait = W / H < 0.9;
   const { vpY, hwBot, hwTop } = corridorK(W, H);
   const p = (lane: Lane, z: number) => proj(lane, z, W, H, vpY, hwBot, hwTop);
+  const speedRatio = (gs.speed - INITIAL_SPEED) / (SPEED_CAP - INITIAL_SPEED);
 
   // Screen shake
   ctx.save();
   if (gs.shakeFrames > 0) {
-    ctx.translate((Math.random() - 0.5) * gs.shakeIntensity * 2, (Math.random() - 0.5) * gs.shakeIntensity * 2);
+    ctx.translate(
+      (Math.random() - 0.5) * gs.shakeIntensity * 2,
+      (Math.random() - 0.5) * gs.shakeIntensity * 2,
+    );
   }
   ctx.clearRect(-20, -20, W + 40, H + 40);
 
-  // ── Sky ──
+  // ── Sky gradient ──
   const sky = ctx.createLinearGradient(0, 0, 0, vpY);
-  sky.addColorStop(0, C.bgTop); sky.addColorStop(1, C.bgBottom);
-  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, vpY);
+  sky.addColorStop(0, C.bgTop);
+  sky.addColorStop(0.55, C.bgMid);
+  sky.addColorStop(1, C.bgBottom);
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, vpY + 2);
+
+  // ── Parallax silhouette layers ──
+  drawSilLayer(ctx, W, vpY, gs.silLayers[0], 0.45, 0.88);
+  drawSilLayer(ctx, W, vpY, gs.silLayers[1], 0.6, 0.96);
 
   // ── Stars ──
   for (const s of gs.stars) {
-    const sx  = s.x * W;
-    const sy  = s.y * vpY * 0.95;
-    const br  = 0.35 + 0.65 * Math.abs(Math.sin(gs.frame * 0.02 * s.spd + s.phase));
-    ctx.save(); ctx.globalAlpha = br; ctx.fillStyle = C.star;
+    const sx = s.x * W;
+    const sy = s.y * vpY * 0.92;
+    const br = 0.3 + 0.7 * Math.abs(Math.sin(gs.frame * 0.02 * s.spd + s.phase));
+    ctx.save(); ctx.globalAlpha = br * 0.85; ctx.fillStyle = C.star;
     ctx.beginPath(); ctx.arc(sx, sy, s.r * scale, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
   }
 
-  // ── Ground ──
-  ctx.fillStyle = C.ground0; ctx.fillRect(0, vpY, W, H - vpY);
-
-  // ── Scrolling road strips ──
-  const scrollOff = gs.distance % (1 / STRIP_COUNT);
-  for (let i = 0; i < STRIP_COUNT + 1; i++) {
-    const z0 = (i + scrollOff) / STRIP_COUNT;
-    const z1 = (i + 1 + scrollOff) / STRIP_COUNT;
-    if (z0 > 1) continue;
-    const p0L = p(0, z0), p0R = p(2, z0);
-    const p1L = p(0, Math.min(z1, 1)), p1R = p(2, Math.min(z1, 1));
-    const lw0 = (p0R.x - p0L.x) / 3, lw1 = (p1R.x - p1L.x) / 3;
+  // ── Shooting stars ──
+  for (const ss of gs.shootStars) {
+    ctx.save();
+    ctx.globalAlpha = ss.life * 0.85;
+    ctx.strokeStyle = C.shootStar;
+    ctx.lineWidth   = 1.2 * scale;
+    ctx.shadowBlur  = 4 * scale;
+    ctx.shadowColor = C.shootStar;
     ctx.beginPath();
-    ctx.moveTo(p0L.x - lw0 * 0.15, p0L.y); ctx.lineTo(p0R.x + lw0 * 0.15, p0R.y);
-    ctx.lineTo(p1R.x + lw1 * 0.15, p1R.y); ctx.lineTo(p1L.x - lw1 * 0.15, p1L.y);
-    ctx.closePath(); ctx.fillStyle = i % 2 === 0 ? C.ground0 : C.ground1; ctx.fill();
-  }
-
-  // ── Lane dividers ──
-  ctx.save();
-  ctx.strokeStyle = C.lane; ctx.lineWidth = Math.max(1, 1.5 * scale);
-  ctx.setLineDash([8 * scale, 14 * scale]);
-  for (let d = 0; d < 4; d++) {
-    const bl   = d === 3 ? 2 : d as Lane;
-    const side = d === 0 ? -1 : d === 3 ? 1 : 0;
-    const near = p(bl, 0.02), far = p(bl, 0.98);
-    const wN   = (p(2, 0.02).x - p(0, 0.02).x) / 3;
-    const wF   = (p(2, 0.98).x - p(0, 0.98).x) / 3;
-    ctx.beginPath();
-    ctx.moveTo(near.x + side * wN / 2, near.y); ctx.lineTo(far.x + side * wF / 2, far.y);
+    ctx.moveTo(ss.x * W, ss.y * vpY);
+    ctx.lineTo((ss.x + ss.vx * 18) * W, (ss.y + ss.vy * 18) * vpY);
     ctx.stroke();
+    ctx.restore();
   }
-  ctx.setLineDash([]); ctx.restore();
+
+  // ── Ground fill ──
+  ctx.fillStyle = C.ground0;
+  ctx.fillRect(0, vpY, W, H - vpY);
+
+  // ── Side walls ──
+  {
+    const nearL = p(0, 0.01), farL = p(0, 0.99);
+    const nearR = p(2, 0.01), farR = p(2, 0.99);
+    const lw0   = (nearR.x - nearL.x) / 3;
+    const lw1   = (farR.x - farL.x) / 3;
+    const wallH = (H - vpY) * 0.65; // how tall the wall extends above ground
+
+    // Left wall
+    ctx.save();
+    ctx.fillStyle = C.wallLeft;
+    ctx.beginPath();
+    ctx.moveTo(0, vpY);
+    ctx.lineTo(nearL.x - lw0 * 0.15, nearL.y);
+    ctx.lineTo(farL.x - lw1 * 0.15, farL.y);
+    ctx.lineTo(W / 2, vpY);
+    ctx.closePath();
+    ctx.fill();
+    // Left wall trim
+    ctx.strokeStyle = C.wallTrimL;
+    ctx.lineWidth   = Math.max(1, 2.5 * scale);
+    ctx.shadowBlur  = 10 * scale;
+    ctx.shadowColor = C.wallTrimL;
+    ctx.beginPath();
+    ctx.moveTo(nearL.x - lw0 * 0.15, nearL.y - wallH * nearL.ps);
+    ctx.lineTo(farL.x - lw1 * 0.15, farL.y - wallH * farL.ps);
+    ctx.stroke();
+    ctx.restore();
+
+    // Right wall
+    ctx.save();
+    ctx.fillStyle = C.wallRight;
+    ctx.beginPath();
+    ctx.moveTo(W, vpY);
+    ctx.lineTo(nearR.x + lw0 * 0.15, nearR.y);
+    ctx.lineTo(farR.x + lw1 * 0.15, farR.y);
+    ctx.lineTo(W / 2, vpY);
+    ctx.closePath();
+    ctx.fill();
+    // Right wall trim
+    ctx.strokeStyle = C.wallTrimR;
+    ctx.lineWidth   = Math.max(1, 2.5 * scale);
+    ctx.shadowBlur  = 10 * scale;
+    ctx.shadowColor = C.wallTrimR;
+    ctx.beginPath();
+    ctx.moveTo(nearR.x + lw0 * 0.15, nearR.y - wallH * nearR.ps);
+    ctx.lineTo(farR.x + lw1 * 0.15, farR.y - wallH * farR.ps);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Temple arch at vanishing point ──
+  drawArch(ctx, W / 2, vpY + 2, scale);
+
+  // ── Neon grid floor ──
+  {
+    ctx.save();
+    ctx.shadowBlur = 6 * scale;
+    ctx.shadowColor = C.gridLine;
+    ctx.strokeStyle = C.gridLine;
+
+    // Horizontal grid lines (z-bands)
+    for (let i = 1; i <= GRID_LINES; i++) {
+      const z = i / GRID_LINES;
+      const pL = p(0, z), pR = p(2, z);
+      const lw = (pR.x - pL.x) / 3;
+      const alpha = 0.3 + z * 0.55;
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth   = Math.max(0.5, 1.0 * z * scale);
+      ctx.beginPath();
+      ctx.moveTo(pL.x - lw * 0.15, pL.y);
+      ctx.lineTo(pR.x + lw * 0.15, pR.y);
+      ctx.stroke();
+    }
+
+    // Vertical grid lines (lane edges running to VP)
+    ctx.globalAlpha = 0.6;
+    ctx.lineWidth   = Math.max(0.5, 1.2 * scale);
+    const edgeZs = [0.01, 0.99];
+    // Left edge, between-lane-0-1, between-lane-1-2, right edge
+    const laneEdges = [-1, -1/3, 1/3, 1] as const;
+    for (const frac of laneEdges) {
+      const nearX = W / 2 + frac * (p(0, 0.01).hw * 2);
+      const farX  = W / 2 + frac * (p(0, 0.99).hw * 2);
+      const nearY = p(0, edgeZs[0]).y;
+      const farY  = p(0, edgeZs[1]).y;
+      ctx.beginPath();
+      ctx.moveTo(nearX, nearY);
+      ctx.lineTo(farX, farY);
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
 
   // ── Speed lines ──
-  const speedRatio = (gs.speed - INITIAL_SPEED) / (SPEED_CAP - INITIAL_SPEED);
-  if (speedRatio > 0.55 && gs.slowmoTimer === 0) {
-    const la = (speedRatio - 0.55) * 0.22;
-    ctx.save(); ctx.globalAlpha = la; ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1;
-    const cx = W / 2, cy = H * 0.62;
-    for (let i = 0; i < 14; i++) {
-      const angle = (Math.PI * 2 * i) / 14;
-      const len   = (50 + Math.random() * 50) * scale * speedRatio;
-      const sr    = 28 * scale;
+  if (speedRatio > 0.45 && gs.slowmoTimer === 0) {
+    const la = Math.min(0.28, (speedRatio - 0.45) * 0.4);
+    ctx.save();
+    ctx.globalAlpha = la;
+    ctx.strokeStyle = 'rgba(200,180,255,0.8)';
+    const cx = W / 2, cy = vpY + (H - vpY) * 0.35;
+    for (const sl of gs.speedLines) {
+      const effLen = sl.len * scale * (0.7 + 0.3 * Math.sin(sl.phase));
+      const sr = 22 * scale;
+      ctx.lineWidth = 0.8 + Math.random() * 0.6;
       ctx.beginPath();
-      ctx.moveTo(cx + Math.cos(angle) * sr, cy + Math.sin(angle) * sr * 0.4);
-      ctx.lineTo(cx + Math.cos(angle) * (sr + len), cy + Math.sin(angle) * (sr + len) * 0.4);
+      ctx.moveTo(cx + Math.cos(sl.angle) * sr, cy + Math.sin(sl.angle) * sr * 0.4);
+      ctx.lineTo(cx + Math.cos(sl.angle) * (sr + effLen), cy + Math.sin(sl.angle) * (sr + effLen) * 0.4);
       ctx.stroke();
     }
     ctx.restore();
   }
 
-  // ── Renderables ──
+  // ── Renderables (painter's algorithm) ──
   type R = { z: number; fn: () => void };
   const rs: R[] = [];
 
@@ -410,13 +679,26 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
   for (const coin of gs.coins) {
     if (coin.collected || coin.z > 1) continue;
     rs.push({ z: coin.z, fn: () => {
-      const q = p(coin.lane, coin.z);
-      const r = Math.max(2, 14 * q.ps * scale);
+      const q    = p(coin.lane, coin.z);
+      const r    = Math.max(2, 14 * q.ps * scale);
+      // Spin: oscillate x-radius to simulate rotation
+      const spin = Math.abs(Math.cos(gs.frame * 0.14 + coin.id * 0.9));
+      const rx   = r * (0.15 + 0.85 * spin);
+      // Proximity glow
+      const proxGlow = 8 + (1 - coin.z) * 18;
       ctx.save();
-      ctx.shadowBlur = 12 * scale; ctx.shadowColor = C.coinGlow;
-      ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, Math.PI * 2); ctx.fillStyle = C.coin; ctx.fill();
-      ctx.beginPath(); ctx.arc(q.x - r * 0.25, q.y - r * 0.25, r * 0.35, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,220,0.7)'; ctx.fill();
+      ctx.shadowBlur  = proxGlow * scale;
+      ctx.shadowColor = C.coinGlow;
+      ctx.fillStyle   = C.coin;
+      ctx.beginPath();
+      ctx.ellipse(q.x, q.y, rx, r, 0, 0, Math.PI * 2);
+      ctx.fill();
+      if (spin > 0.3) {
+        ctx.beginPath();
+        ctx.ellipse(q.x - rx * 0.28, q.y - r * 0.28, rx * 0.3, r * 0.3, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,220,0.65)';
+        ctx.fill();
+      }
       ctx.restore();
       if (coin.justCollected) { spawnParticles(gs, q.x, q.y, C.coin, 7); coin.justCollected = false; }
     }});
@@ -432,8 +714,10 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
       const glow = pu.type === 'shield' ? C.shieldGlow : pu.type === 'magnet' ? C.magnetGlow : C.slowmoGlow;
       const icon = pu.type === 'shield' ? '🛡' : pu.type === 'magnet' ? '🧲' : '⏱';
       const pulse = 0.7 + 0.3 * Math.sin(gs.frame * 0.1 + pu.id);
+      // Proximity glow
+      const proxGlow = 10 + (1 - pu.z) * 24;
       ctx.save();
-      ctx.shadowBlur = 16 * scale; ctx.shadowColor = glow;
+      ctx.shadowBlur = proxGlow * scale; ctx.shadowColor = glow;
       ctx.strokeStyle = col; ctx.lineWidth = 2 * scale * pulse;
       ctx.beginPath(); ctx.arc(q.x, q.y, sz * 1.3, 0, Math.PI * 2); ctx.stroke();
       ctx.font = `${Math.round(sz * 1.5)}px serif`;
@@ -447,18 +731,22 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
   for (const obs of gs.obstacles) {
     if (obs.z > 1) continue;
     rs.push({ z: obs.z, fn: () => {
-      const q    = p(obs.lane, obs.z);
-      const lw   = (p(2, obs.z).x - p(0, obs.z).x) / 3;
+      const q   = p(obs.lane, obs.z);
+      const lw  = (p(2, obs.z).x - p(0, obs.z).x) / 3;
+      // Proximity glow — gets dramatically stronger as obstacle approaches
+      const proxFactor = Math.pow(Math.max(0, 1 - obs.z / 0.7), 1.8);
       ctx.save();
       if (obs.type === 'pillar') {
         const w = lw * 0.55, h = 110 * q.ps * scale;
-        ctx.shadowBlur = 20 * scale; ctx.shadowColor = C.pillarGlow; ctx.fillStyle = C.pillar;
+        ctx.shadowBlur = (14 + proxFactor * 28) * scale;
+        ctx.shadowColor = C.pillarGlow; ctx.fillStyle = C.pillar;
         ctx.beginPath(); ctx.roundRect(q.x - w / 2, q.y - h, w, h, 4 * q.ps); ctx.fill();
         ctx.fillStyle = 'rgba(255,255,255,0.15)';
         ctx.beginPath(); ctx.roundRect(q.x - w / 2 + 3 * q.ps, q.y - h + 4 * q.ps, w * 0.25, h * 0.6, 2); ctx.fill();
       } else if (obs.type === 'bar') {
         const w = lw * 0.85, h = 22 * q.ps * scale;
-        ctx.shadowBlur = 16 * scale; ctx.shadowColor = C.barGlow; ctx.fillStyle = C.bar;
+        ctx.shadowBlur = (10 + proxFactor * 22) * scale;
+        ctx.shadowColor = C.barGlow; ctx.fillStyle = C.bar;
         ctx.beginPath(); ctx.roundRect(q.x - w / 2, q.y - h, w, h, 3 * q.ps); ctx.fill();
         ctx.fillStyle = 'rgba(168,85,247,0.5)'; ctx.fillRect(q.x - w / 2, q.y - h, w, 3 * q.ps);
       } else {
@@ -467,7 +755,8 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
         const bBot = 46 * q.ps * scale;
         const bH   = 18 * q.ps * scale;
         const pw   = 5 * q.ps * scale;
-        ctx.shadowBlur = 18 * scale; ctx.shadowColor = C.beamGlow; ctx.fillStyle = C.beam;
+        ctx.shadowBlur = (12 + proxFactor * 24) * scale;
+        ctx.shadowColor = C.beamGlow; ctx.fillStyle = C.beam;
         ctx.beginPath(); ctx.roundRect(q.x - w / 2, q.y - bBot - bH, w, bH, 3 * q.ps); ctx.fill();
         ctx.fillStyle = 'rgba(255,200,100,0.3)'; ctx.fillRect(q.x - w / 2, q.y - bBot - bH, w, 3 * q.ps);
         ctx.fillStyle = C.beam;
@@ -490,6 +779,21 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
   }
   ctx.restore();
 
+  // ── Player trail ──
+  for (let i = 0; i < gs.trail.length; i++) {
+    const t   = gs.trail[i];
+    const age = (i + 1) / (gs.trail.length + 1);
+    ctx.save();
+    ctx.globalAlpha = (1 - age) * 0.35;
+    ctx.fillStyle   = C.player;
+    ctx.shadowBlur  = 10 * scale;
+    ctx.shadowColor = C.playerGlow;
+    ctx.beginPath();
+    ctx.roundRect(t.x - t.w / 2, t.y - t.h, t.w, t.h, t.r);
+    ctx.fill();
+    ctx.restore();
+  }
+
   // ── Player ──
   {
     const near  = p(gs.player.lane, 0.04);
@@ -503,6 +807,17 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
     const hr    = 10 * scale;
     const vis   = gs.invincible === 0 || gs.frame % 6 < 3;
 
+    // Record trail
+    if (gs.phase === 'running' && gs.frame % 2 === 0) {
+      gs.trail.unshift({ x: px, y: baseY - jOff, w: pw, h: ph, r: slid ? 5 * scale : 6 * scale });
+      if (gs.trail.length > TRAIL_LEN) gs.trail.pop();
+    }
+
+    // Landing puff
+    if (gs.player.wasJumping && !gs.player.isJumping) {
+      spawnParticles(gs, px, baseY, 'rgba(100,180,255,0.7)', 6);
+    }
+
     if (vis) {
       ctx.save();
       ctx.shadowBlur = 24 * scale; ctx.shadowColor = C.playerGlow; ctx.fillStyle = C.player;
@@ -511,7 +826,7 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
       } else {
         ctx.beginPath(); ctx.roundRect(px - pw / 2, baseY - ph - jOff, pw, ph, 6 * scale); ctx.fill();
         ctx.beginPath(); ctx.arc(px, baseY - ph - jOff - hr * 1.2, hr, 0, Math.PI * 2); ctx.fill();
-        const legPh = (gs.distance * 15) % (Math.PI * 2);
+        const legPh  = (gs.distance * 15) % (Math.PI * 2);
         const legOff = Math.sin(legPh) * 8 * scale;
         ctx.fillStyle = 'rgba(51,204,255,0.6)';
         ctx.fillRect(px - pw / 2 + 2, baseY - jOff, pw / 2 - 2, 10 * scale + legOff);
@@ -521,9 +836,9 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
 
       // Shield ring
       if (gs.shieldActive) {
-        const pulse  = 0.7 + 0.3 * Math.sin(gs.frame * 0.12);
-        const shR    = (ph / 2 + hr * 1.5 + 8 * scale);
-        const centY  = slid ? baseY - ph / 2 : baseY - ph / 2 - jOff;
+        const pulse = 0.7 + 0.3 * Math.sin(gs.frame * 0.12);
+        const shR   = (ph / 2 + hr * 1.5 + 8 * scale);
+        const centY = slid ? baseY - ph / 2 : baseY - ph / 2 - jOff;
         ctx.save();
         ctx.shadowBlur = 12 * scale; ctx.shadowColor = C.shieldGlow;
         ctx.strokeStyle = C.shield; ctx.lineWidth = 3 * scale * pulse; ctx.globalAlpha = 0.85;
@@ -540,6 +855,40 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
     ctx.restore();
   }
 
+  // ── Magnet beam visual ──
+  if (gs.magnetTimer > 0) {
+    const near  = p(gs.player.lane, 0.04);
+    const nearT = p(gs.player.targetLane, 0.04);
+    const px    = near.x + (nearT.x - near.x) * gs.player.laneT;
+    const py    = near.y - 26 * scale;
+    ctx.save();
+    ctx.strokeStyle = C.magnet;
+    ctx.lineWidth   = 1.5 * scale;
+    ctx.setLineDash([4 * scale, 6 * scale]);
+    for (const coin of gs.coins) {
+      if (coin.collected || coin.z > MAGNET_Z || coin.z < 0) continue;
+      const q = p(coin.lane, coin.z);
+      if (Math.abs(coin.lane - effLane(gs.player)) > 1) continue;
+      ctx.globalAlpha = Math.min(0.55, gs.magnetTimer / 80);
+      ctx.shadowBlur  = 4 * scale;
+      ctx.shadowColor = C.magnetGlow;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(q.x, q.y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]); ctx.restore();
+  }
+
+  // ── Color temperature shift at high speed ──
+  if (speedRatio > 0.65 && gs.slowmoTimer === 0) {
+    const heat = Math.min(0.12, (speedRatio - 0.65) * 0.35);
+    ctx.save();
+    ctx.fillStyle = `rgba(255,80,0,${heat})`;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+
   // ── Slow-mo tint ──
   if (gs.slowmoTimer > 0) {
     ctx.save();
@@ -547,15 +896,43 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
     ctx.fillRect(0, 0, W, H); ctx.restore();
   }
 
+  // ── Hit flash ──
+  if (gs.hitFlash > 0) {
+    ctx.save();
+    ctx.fillStyle = `rgba(255,30,30,${gs.hitFlash * 0.06})`;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+
+  // ── Power-up collection flash ──
+  if (gs.pwrFlash) {
+    ctx.save();
+    ctx.fillStyle = gs.pwrFlash.color;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+
+  // ── Vignette ──
+  {
+    const vgR = Math.max(W, H) * 0.85;
+    const vg  = ctx.createRadialGradient(W / 2, H / 2, vgR * 0.35, W / 2, H / 2, vgR);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, C.vignette);
+    ctx.save();
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+
   // ── HUD ──
   {
-    const pad    = 14 * scale;
-    const barW   = Math.round(80 * scale);
-    const barH   = Math.round(Math.max(4, 6 * scale));
-    const fSc    = Math.max(10, Math.round(22 * scale));
-    const fLb    = Math.max(8,  Math.round(11 * scale));
-    const fHt    = Math.max(12, Math.round(18 * scale));
-    const spR    = (gs.speed - INITIAL_SPEED) / (SPEED_CAP - INITIAL_SPEED);
+    const pad  = 14 * scale;
+    const barW = Math.round(80 * scale);
+    const barH = Math.round(Math.max(4, 6 * scale));
+    const fSc  = Math.max(10, Math.round(22 * scale));
+    const fLb  = Math.max(8,  Math.round(11 * scale));
+    const fHt  = Math.max(12, Math.round(18 * scale));
+    const spR  = speedRatio;
 
     ctx.save();
     // Score
@@ -575,7 +952,7 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
       ctx.fillText('SCORE', pad, pad + fSc + fLb + 2);
     }
 
-    // High score (when not leading)
+    // High score
     if (gs.highScore > 0 && gs.highScore > gs.score) {
       ctx.textAlign = isPortrait ? 'center' : 'left';
       ctx.font = `${fLb}px monospace`; ctx.fillStyle = C.hudDim;
@@ -596,11 +973,11 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
 
     // Speed bar (top-right)
     ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillStyle  = 'rgba(255,255,255,0.1)';
     ctx.beginPath(); ctx.roundRect(W - barW - pad, pad, barW, barH, 3); ctx.fill();
     const barColor = gs.slowmoTimer > 0 ? C.slowmo : C.pillar;
     const barGlow  = gs.slowmoTimer > 0 ? C.slowmoGlow : C.pillarGlow;
-    ctx.fillStyle = barColor; ctx.shadowBlur = 6 * scale; ctx.shadowColor = barGlow;
+    ctx.fillStyle  = barColor; ctx.shadowBlur = 6 * scale; ctx.shadowColor = barGlow;
     ctx.beginPath(); ctx.roundRect(W - barW - pad, pad, barW * spR, barH, 3); ctx.fill();
     ctx.shadowBlur = 0; ctx.textAlign = 'right'; ctx.font = `${fLb}px monospace`; ctx.fillStyle = C.hudDim;
     ctx.fillText('SPEED', W - pad, pad + barH + fLb + 2);
@@ -624,16 +1001,18 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
     ctx.shadowBlur = 20 * scale; ctx.shadowColor = C.coinGlow;
     ctx.fillText(gs.milestone.text, W / 2, H * 0.22);
     ctx.restore();
+    // Confetti spawned once (when frames == 99)
+    if (gs.milestone.frames === 99) spawnConfetti(gs, W / 2, H * 0.22);
   }
 
   // ── Idle screen ──
   if (gs.phase === 'idle') {
-    const lh   = Math.round(28 * scale);
-    const fT   = Math.max(16, Math.round(38 * scale));
-    const fI   = Math.max(10, Math.round(14 * scale));
-    const fC   = Math.max(11, Math.round(17 * scale));
+    const lh = Math.round(28 * scale);
+    const fT = Math.max(16, Math.round(38 * scale));
+    const fI = Math.max(10, Math.round(14 * scale));
+    const fC = Math.max(11, Math.round(17 * scale));
     ctx.save();
-    ctx.fillStyle = 'rgba(5,5,17,0.8)'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(2,2,16,0.82)'; ctx.fillRect(0, 0, W, H);
     ctx.textAlign = 'center';
     ctx.font = `bold ${fT}px monospace`; ctx.fillStyle = C.player;
     ctx.shadowBlur = 20 * scale; ctx.shadowColor = C.playerGlow;
@@ -662,12 +1041,12 @@ function draw(ctx: CanvasRenderingContext2D, gs: GS, W: number, H: number) {
 
   // ── Game over ──
   if (gs.phase === 'dead') {
-    const lh  = Math.round(28 * scale);
-    const fO  = Math.max(18, Math.round(42 * scale));
-    const fS  = Math.max(14, Math.round(26 * scale));
-    const fR  = Math.max(10, Math.round(16 * scale));
+    const lh = Math.round(28 * scale);
+    const fO = Math.max(18, Math.round(42 * scale));
+    const fS = Math.max(14, Math.round(26 * scale));
+    const fR = Math.max(10, Math.round(16 * scale));
     ctx.save();
-    ctx.fillStyle = 'rgba(5,5,17,0.86)'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(2,2,16,0.88)'; ctx.fillRect(0, 0, W, H);
     ctx.textAlign = 'center';
     ctx.font = `bold ${fO}px monospace`; ctx.fillStyle = C.pillar;
     ctx.shadowBlur = 24 * scale; ctx.shadowColor = C.pillarGlow;
@@ -742,7 +1121,7 @@ export default function EndlessRunnerGame({ title }: { title: string }) {
     ro.observe(container);
 
     const startGame = () => {
-      getAC(); // init/resume audio on user gesture
+      getAC();
       const hs  = gsRef.current.highScore;
       const fid = gsRef.current.frameId;
       gsRef.current = { ...makeState(hs), phase: 'running', frameId: fid };
@@ -755,10 +1134,10 @@ export default function EndlessRunnerGame({ title }: { title: string }) {
       if (gs.phase !== 'running') {
         if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startGame(); } return;
       }
-      if (e.code === 'ArrowLeft')                      { e.preventDefault(); shiftLane(gs, -1); }
-      if (e.code === 'ArrowRight')                     { e.preventDefault(); shiftLane(gs, 1);  }
-      if (e.code === 'ArrowUp' || e.code === 'Space')  { e.preventDefault(); doJump(gs);        }
-      if (e.code === 'ArrowDown')                      { e.preventDefault(); doSlide(gs);       }
+      if (e.code === 'ArrowLeft')                     { e.preventDefault(); shiftLane(gs, -1); }
+      if (e.code === 'ArrowRight')                    { e.preventDefault(); shiftLane(gs, 1);  }
+      if (e.code === 'ArrowUp' || e.code === 'Space') { e.preventDefault(); doJump(gs);        }
+      if (e.code === 'ArrowDown')                     { e.preventDefault(); doSlide(gs);       }
     };
     window.addEventListener('keydown', onKey);
 
