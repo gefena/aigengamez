@@ -39,8 +39,8 @@
 
 .gameContainer {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  min-height: 500px;
+  aspect-ratio: 4 / 3;
+  min-height: 520px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -255,10 +255,11 @@
   .gameLayout {
     grid-template-columns: 1fr;
   }
-  
+
   .gameContainer {
     aspect-ratio: auto;
-    min-height: 560px;
+    height: min(80vw, 700px);
+    min-height: 480px;
   }
 }
 
@@ -269,7 +270,8 @@
 
   .gameContainer {
     aspect-ratio: auto;
-    min-height: 580px;
+    height: calc(100vw - 2rem);
+    min-height: 300px;
     max-width: 100%;
   }
   

@@ -449,26 +449,41 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     return () => cancelAnimationFrame(animRef.current);
   }, [render]);
 
-  // ── ResizeObserver ──
+  // ── ResizeObserver — force the board container to be square ──
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    const ro = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect;
+
+    const applySize = (width: number, height: number) => {
       if (!width || !height) return;
+      // Constrain to a square using the smaller of the two available dimensions
+      const side = Math.floor(Math.min(width, height));
+      // Only update if meaningfully changed (avoid infinite loop)
+      if (Math.abs(side - sizeRef.current.W) < 2) return;
+      container.style.width  = `${side}px`;
+      container.style.height = `${side}px`;
+      container.style.flex   = "none";
+      container.style.margin = "0 auto";
       const canvas = canvasRef.current;
       if (!canvas) return;
-      canvas.width = Math.round(width);
-      canvas.height = Math.round(height);
-      sizeRef.current = { W: canvas.width, H: canvas.height };
+      canvas.width  = side;
+      canvas.height = side;
+      sizeRef.current = { W: side, H: side };
       dirtyRef.current = true;
+    };
+
+    const ro = new ResizeObserver(entries => {
+      const { width, height } = entries[0].contentRect;
+      applySize(width, height);
     });
     ro.observe(container);
-    const rect = container.getBoundingClientRect();
-    const canvas = canvasRef.current!;
-    canvas.width = rect.width || 480;
-    canvas.height = rect.height || 480;
-    sizeRef.current = { W: canvas.width, H: canvas.height };
+
+    // Initial size from parent (before the container is constrained)
+    const parent = container.parentElement;
+    const pw = parent ? parent.getBoundingClientRect().width  : 480;
+    const ph = parent ? parent.getBoundingClientRect().height : 480;
+    applySize(pw, ph > 80 ? ph : pw); // ph might be 0 on first paint
+
     return () => ro.disconnect();
   }, []);
 
@@ -702,9 +717,9 @@ export default function QueenGauntletGame({ title }: { title: string }) {
   const timerColor = timeLeft <= 10 ? "#ec4899" : timeLeft <= 20 ? "#ffaa33" : "#33ccff";
 
   return (
-    <div className={styles.gameInner} style={{ padding: "1rem", display: "flex", flexDirection: "column", height: "100%", width: "100%", gap: "0.6rem", boxSizing: "border-box" }}>
+    <div className={styles.gameInner} style={{ padding: "1rem", display: "flex", flexDirection: "column", alignItems: "center", height: "100%", width: "100%", gap: "0.6rem", boxSizing: "border-box" }}>
       {/* HUD */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", width: "100%" }}>
         <h3 className={styles.gameTitle} style={{ margin: 0, fontSize: "1rem" }}>{title}</h3>
         <div style={{ display: "flex", gap: "1rem", alignItems: "center", fontSize: "0.9rem" }}>
           {phase === "playing" && (
