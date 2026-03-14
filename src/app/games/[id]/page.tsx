@@ -9,6 +9,7 @@ import AICanvasGame from "@/components/games/AICanvasGame";
 import StampPadGame from "@/components/games/StampPadGame";
 import PixelArtGame from "@/components/games/PixelArtGame";
 import FireworksGame from "@/components/games/FireworksGame";
+import EndlessRunnerGame from "@/components/games/EndlessRunnerGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = {
@@ -17,6 +18,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'stamp-pad': StampPadGame,
   'pixel-art': PixelArtGame,
   'fireworks-canvas': FireworksGame,
+  'endless-runner': EndlessRunnerGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

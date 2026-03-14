@@ -43,5 +43,14 @@
     "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=800",
     "rating": 5.0,
     "description": "Click or drag anywhere on the night-sky canvas to launch spectacular fireworks explosions packed with colour and sparkle!"
+  },
+  {
+    "id": "endless-runner",
+    "title": "Temple Dash",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Run through a neon corridor! Dodge glowing pillars, leap over low bars, and collect coins as the speed ramps up. How far can you go?"
   }
 ]
