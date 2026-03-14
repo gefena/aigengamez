@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .backLink {
@@ -121,6 +122,8 @@
   height: 100%;
   padding: 2rem;
   background: radial-gradient(circle, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .gameTitle {
@@ -260,13 +263,18 @@
 }
 
 @media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
   .gameContainer {
     aspect-ratio: auto;
     min-height: 580px;
+    max-width: 100%;
   }
   
   .gameInner {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.75rem;
   }
   
   .gameDesc {
