@@ -185,13 +185,14 @@ function drawBoard(
   grace:          number,
   frame:          number,
 ) {
-  // Board sizing — leave left margin for rank labels, bottom margin for file labels
-  const margin = Math.min(W, H) * 0.055;
-  const sqSz   = (Math.min(W, H) - margin * 2) / 8;
-  const bw     = sqSz * 8;
-  const bh     = sqSz * 8;
-  const ox     = (W - bw) / 2 + margin * 0.5;
-  const oy     = (H - bh) / 2 - margin * 0.3;
+  // Board sizing — use nearly the full shorter dimension so the board is large on mobile
+  const sqSz = Math.floor(Math.min(W, H) / 8);
+  const bw   = sqSz * 8;
+  const bh   = sqSz * 8;
+  const ox   = Math.floor((W - bw) / 2);
+  const oy   = Math.floor((H - bh) / 2);
+  // Only show coordinate labels if there is surplus space around the board
+  const showLabels = (W - bw > 20) || (H - bh > 20);
 
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = COL_BG;
@@ -250,15 +251,18 @@ function drawBoard(
   ctx.strokeRect(ox, oy, bw, bh);
   ctx.restore();
 
-  // ── Rank / file labels ──
-  const lblSz = Math.max(9, Math.round(sqSz * 0.24));
-  ctx.font = `${lblSz}px monospace`;
-  ctx.fillStyle = "rgba(255,255,255,0.3)";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  for (let i = 0; i < 8; i++) {
-    ctx.fillText(String.fromCharCode(97 + i), ox + i*sqSz + sqSz/2, oy + bh + margin * 0.6);
-    ctx.fillText(String(8 - i), ox - margin * 0.55, oy + i*sqSz + sqSz/2);
+  // ── Rank / file labels (only when there is room) ──
+  if (showLabels) {
+    const lblSz = Math.max(9, Math.round(sqSz * 0.22));
+    const gap   = Math.max(10, (Math.min(W - bw, H - bh)) / 2 * 0.7);
+    ctx.font = `${lblSz}px monospace`;
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (let i = 0; i < 8; i++) {
+      ctx.fillText(String.fromCharCode(97 + i), ox + i*sqSz + sqSz/2, oy + bh + gap);
+      ctx.fillText(String(8 - i), ox - gap, oy + i*sqSz + sqSz/2);
+    }
   }
 
   // ── Black pieces ──
@@ -566,8 +570,8 @@ export default function QueenGauntletGame({ title }: { title: string }) {
   // ── Start game ──
   const startGame = useCallback(() => {
     _nextId = 1;
-    queenPos.current    = { r: 3, c: 3 };
-    blacks.current      = [];
+    const qp: Sq = { r: 3, c: 3 };
+    queenPos.current    = qp;
     selected.current    = false;
     validMoves.current  = new Set();
     safeSquares.current = new Set();
@@ -579,6 +583,11 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     turnsRef.current    = 0;
     graceRef.current    = 0;
     dirtyRef.current    = true;
+    // Spawn one starting black piece far from the queen
+    const occupied = new Set([`${qp.r},${qp.c}`]);
+    const type = ALL_TYPES[Math.floor(Math.random() * ALL_TYPES.length)];
+    const pos  = randomEmpty(occupied, qp);
+    blacks.current = [{ id: _nextId++, type, r: pos.r, c: pos.c }];
     setScore(0);
     setTimeLeft(GAME_DURATION);
     setPhase("playing");
@@ -604,12 +613,11 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     const my     = (clientY - rect.top) * scaleY;
 
     const { W, H } = sizeRef.current;
-    const margin = Math.min(W, H) * 0.055;
-    const sqSz   = (Math.min(W, H) - margin * 2) / 8;
-    const bw     = sqSz * 8;
-    const bh     = sqSz * 8;
-    const ox     = (W - bw) / 2 + margin * 0.5;
-    const oy     = (H - bh) / 2 - margin * 0.3;
+    const sqSz = Math.floor(Math.min(W, H) / 8);
+    const bw   = sqSz * 8;
+    const bh   = sqSz * 8;
+    const ox   = Math.floor((W - bw) / 2);
+    const oy   = Math.floor((H - bh) / 2);
 
     const c = Math.floor((mx - ox) / sqSz);
     const r = Math.floor((my - oy) / sqSz);
