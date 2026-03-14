@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./page.module.css";
 import gamesData from "@/data/games.json";
 import Link from "next/link";
@@ -206,21 +206,23 @@ function AICanvasGame({ title }: { title: string }) {
   const [color, setColor] = useState<string>("#ff3366");
   const [brushSize, setBrushSize] = useState<number>(5);
   const [isSymmetryMode, setIsSymmetryMode] = useState<boolean>(false);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
-    const canvas = document.getElementById('aiCanvas') as HTMLCanvasElement;
+    const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set real canvas dimensions to match display dimensions
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-
-    // Fill white background for saving
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Only set dimensions and fill white if they haven't been set yet
+    // This prevents the canvas from wiping on re-renders when state (color/size) changes
+    if (canvas.width === 0 || canvas.height === 0 || canvas.width !== canvas.getBoundingClientRect().width) {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     let isDrawing = false;
     let lastX = 0;
@@ -312,7 +314,7 @@ function AICanvasGame({ title }: { title: string }) {
   }, [color, brushSize, isSymmetryMode]);
 
   const clearCanvas = () => {
-    const canvas = document.getElementById('aiCanvas') as HTMLCanvasElement;
+    const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (ctx) {
@@ -390,7 +392,7 @@ function AICanvasGame({ title }: { title: string }) {
 
       {/* Canvas Area */}
       <div style={{ flex: 1, background: 'white', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'crosshair', border: '1px solid var(--border-color)', width: '100%', minHeight: '200px' }}>
-        <canvas id="aiCanvas" style={{ width: '100%', height: '100%', touchAction: 'none' }} />
+        <canvas ref={canvasRef} id="aiCanvas" style={{ width: '100%', height: '100%', touchAction: 'none' }} />
       </div>
     </div>
   );
