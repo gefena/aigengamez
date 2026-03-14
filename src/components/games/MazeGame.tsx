@@ -9,100 +9,137 @@ type Dir = "up" | "down" | "left" | "right";
 interface Collectible { r: number; c: number; }
 interface Confetti { x: number; y: number; vx: number; vy: number; alpha: number; emoji: string; size: number; }
 
-// ─── Mazes ───────────────────────────────────────────────────────────────────
-// 0 = path, 1 = wall. All 19×19. Entrance (1,1), Exit (17,17).
-
-const MAZE1: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,0,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,0,1],
-  [1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,1,0,1],
-  [1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,0,1,0,1,1,1,1,1,0,0,0,0,0,1,1,1],
-  [1,1,1,0,0,0,1,0,0,1,1,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-];
-
-const MAZE2: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1],
-  [1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-];
-
-const MAZE3: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,0,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,0,1,1,1,0,1,1,1,1,1,0,0,0,0,0,1,1,1],
-  [1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,1],
-  [1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-];
-
-interface LevelDef {
-  maze: number[][];
-  name: string;
-  collectibles: Collectible[];
-}
-const LEVELS: LevelDef[] = [
-  {
-    maze: MAZE1,
-    name: "Rumbling Gut",
-    collectibles: [{ r:4,c:9 },{ r:7,c:5 },{ r:1,c:15 },{ r:9,c:6 },{ r:13,c:10 }],
-  },
-  {
-    maze: MAZE2,
-    name: "Deep Intestine",
-    collectibles: [{ r:2,c:1 },{ r:7,c:3 },{ r:9,c:7 },{ r:3,c:13 },{ r:11,c:9 }],
-  },
-  {
-    maze: MAZE3,
-    name: "Colon Crisis",
-    collectibles: [{ r:4,c:5 },{ r:7,c:11 },{ r:9,c:8 },{ r:12,c:9 },{ r:13,c:16 }],
-  },
-];
+// ─── Level config ─────────────────────────────────────────────────────────────
+const LEVEL_NAMES = ["Rumbling Gut", "Deep Intestine", "Colon Crisis"];
 const ROWS = 19; const COLS = 19;
-const EXIT_R = 17; const EXIT_C = 17;
+const EXIT_R = ROWS - 2; const EXIT_C = COLS - 2; // (17,17)
 const ANIM_FRAMES = 8;
+
+// ─── Maze generator ───────────────────────────────────────────────────────────
+// Algorithm:
+//   Phase 1 — Biased loop-erased random walk from (1,1) to (EXIT_R,EXIT_C).
+//             The walk prefers directions that reduce Manhattan distance to the
+//             exit (goal bias), but is otherwise random. Loops in the walk are
+//             erased as they form, giving a clean non-self-intersecting path.
+//   Phase 2 — Random branches sprout from existing open cells to add dead-ends
+//             and make the maze "noisy". Branches prefer carving new wall cells.
+//   Phase 3 — Collectibles placed on random open cells away from start/exit.
+function generateMaze(
+  rows: number, cols: number, difficulty: 1 | 2 | 3,
+): { grid: number[][]; collectibles: Collectible[] } {
+
+  const grid: number[][] = Array.from({ length: rows }, () => Array(cols).fill(1));
+  const inBounds = (r: number, c: number) => r >= 1 && r <= rows-2 && c >= 1 && c <= cols-2;
+  const DIRS: [number, number][] = [[0,1],[0,-1],[1,0],[-1,0]];
+  const er = rows - 2, ec = cols - 2;
+
+  // Goal bias: probability weight bonus when moving toward exit.
+  // Lower bias → more winding path → harder maze.
+  const goalBias = difficulty === 1 ? 0.55 : difficulty === 2 ? 0.38 : 0.22;
+
+  // ── Phase 1: solution path ────────────────────────────────────────────────
+  let solutionPath: [number, number][] = [];
+
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const path: [number, number][] = [[1, 1]];
+    const pathIdx = new Map<string, number>([["1,1", 0]]);
+    let reached = false;
+
+    for (let iter = 0; iter < rows * cols * 40; iter++) {
+      const [r, c] = path[path.length - 1];
+      if (r === er && c === ec) { reached = true; break; }
+
+      // Weighted random direction: goal-approaching dirs get a bonus weight.
+      const weights = DIRS.map(([dr, dc]) => {
+        if (!inBounds(r+dr, c+dc)) return 0;
+        const curDist = Math.abs(er - r)    + Math.abs(ec - c);
+        const nxtDist = Math.abs(er - r-dr) + Math.abs(ec - c-dc);
+        return 1 + (nxtDist < curDist ? goalBias * 4 : 0);
+      });
+      const total = weights.reduce((s, w) => s + w, 0);
+      if (total === 0) break;
+
+      let rand = Math.random() * total, di = 0;
+      for (let i = 0; i < 4; i++) { rand -= weights[i]; if (rand <= 0) { di = i; break; } }
+      const [dr, dc] = DIRS[di];
+      const nr = r + dr, nc = c + dc;
+      const key = `${nr},${nc}`;
+
+      if (pathIdx.has(key)) {
+        // Erase the loop back to where nr,nc first appeared
+        const li = pathIdx.get(key)!;
+        for (let i = li + 1; i < path.length; i++) pathIdx.delete(`${path[i][0]},${path[i][1]}`);
+        path.splice(li + 1);
+      } else {
+        pathIdx.set(key, path.length);
+        path.push([nr, nc]);
+      }
+    }
+
+    if (reached) { solutionPath = path; break; }
+  }
+
+  // Fallback: if random walk never converged, carve a minimal L-path
+  if (solutionPath.length === 0) {
+    for (let r = 1; r <= er; r++) solutionPath.push([r, 1]);
+    for (let c = 2; c <= ec; c++) solutionPath.push([er, c]);
+  }
+
+  // Carve solution path into grid
+  for (const [r, c] of solutionPath) grid[r][c] = 0;
+
+  // ── Phase 2: noise branches ───────────────────────────────────────────────
+  const openCells: [number, number][] = solutionPath.slice();
+  const numBranches   = difficulty === 1 ? 8  : difficulty === 2 ? 15 : 24;
+  const maxBranchLen  = difficulty === 1 ? 7  : difficulty === 2 ? 12 : 18;
+
+  for (let b = 0; b < numBranches; b++) {
+    let [r, c] = openCells[Math.floor(Math.random() * openCells.length)];
+    const len = 3 + Math.floor(Math.random() * (maxBranchLen - 3));
+
+    for (let step = 0; step < len; step++) {
+      // Fisher-Yates shuffle of DIRS
+      const dirs: [number,number][] = [[0,1],[0,-1],[1,0],[-1,0]];
+      for (let i = 3; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
+      }
+      // Prefer carving unvisited (wall) cells so branches create real dead-ends
+      const wallDirs = dirs.filter(([dr, dc]) => {
+        const nr = r+dr, nc = c+dc;
+        return inBounds(nr, nc) && grid[nr][nc] === 1;
+      });
+      const anyDirs = dirs.filter(([dr, dc]) => inBounds(r+dr, c+dc));
+      const chosen = wallDirs.length > 0 ? wallDirs : anyDirs;
+      if (chosen.length === 0) break;
+
+      const [dr, dc] = chosen[0];
+      r += dr; c += dc;
+      grid[r][c] = 0;
+      openCells.push([r, c]);
+    }
+  }
+
+  // ── Phase 3: collectibles ─────────────────────────────────────────────────
+  const seen = new Set<string>(["1,1", `${er},${ec}`]);
+  const candidates: [number, number][] = [];
+  for (const [r, c] of openCells) {
+    const k = `${r},${c}`;
+    if (seen.has(k)) continue;
+    seen.add(k);
+    if (Math.abs(r-1) + Math.abs(c-1) > 3 && Math.abs(r-er) + Math.abs(c-ec) > 3) {
+      candidates.push([r, c]);
+    }
+  }
+  // Shuffle candidates
+  for (let i = candidates.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+  const collectibles = candidates.slice(0, 5).map(([r, c]) => ({ r, c }));
+
+  return { grid, collectibles };
+}
 
 // ─── Colours ─────────────────────────────────────────────────────────────────
 const PATH_DARK    = "#2a0d0d";
@@ -179,14 +216,13 @@ function adjustBrightness(hex: string, f: number): string {
   return `rgb(${r},${g},${b})`;
 }
 
-// ─── Drawing helpers ──────────────────────────────────────────────────────────
+// ─── Drawing ─────────────────────────────────────────────────────────────────
 function rrect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath();
   ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
   ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
   ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
-  ctx.closePath();
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
 }
 
 function drawWall(ctx: CanvasRenderingContext2D, x: number, y: number, sz: number, pulse: number) {
@@ -215,35 +251,30 @@ function drawPlayer(ctx: CanvasRenderingContext2D, cx: number, cy: number, sz: n
   ctx.font = `${Math.round(sz * 0.72)}px serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.shadowBlur = 10; ctx.shadowColor = "rgba(255,180,100,0.7)";
-  ctx.fillText("💩", cx, cy + bob);
-  ctx.restore();
+  ctx.fillText("💩", cx, cy + bob); ctx.restore();
 }
 
 function drawGoal(ctx: CanvasRenderingContext2D, cx: number, cy: number, sz: number, frame: number) {
-  // Halo
   const pulse = 0.5 + 0.5 * Math.sin(frame * 0.06);
   ctx.save();
-  ctx.globalAlpha = 0.25 + 0.2 * pulse;
+  ctx.globalAlpha = 0.22 + 0.18 * pulse;
   const grad = ctx.createRadialGradient(cx, cy, sz*0.2, cx, cy, sz*0.9);
   grad.addColorStop(0, "#ffd700"); grad.addColorStop(1, "transparent");
   ctx.fillStyle = grad; ctx.fillRect(cx-sz, cy-sz, sz*2, sz*2);
   ctx.restore();
-  // Toilet
   ctx.save();
   ctx.font = `${Math.round(sz * 0.78)}px serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.shadowBlur = 20; ctx.shadowColor = "#ffd700";
   ctx.fillText("🚽", cx, cy); ctx.restore();
-  // Sparkles
   ctx.save();
   ctx.font = `${Math.round(sz * 0.18)}px serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.fillStyle = SPARKLE_CLR;
   for (let i = 0; i < 6; i++) {
     const angle = (i/6)*Math.PI*2 + frame*0.045;
-    const sx = cx + Math.cos(angle)*sz*0.72, sy = cy + Math.sin(angle)*sz*0.72;
     ctx.globalAlpha = 0.5 + 0.5*Math.sin(angle + frame*0.1);
-    ctx.fillText("✦", sx, sy);
+    ctx.fillText("✦", cx + Math.cos(angle)*sz*0.72, cy + Math.sin(angle)*sz*0.72);
   }
   ctx.restore();
 }
@@ -254,17 +285,14 @@ function drawCollectible(ctx: CanvasRenderingContext2D, cx: number, cy: number, 
   ctx.font = `${Math.round(sz * 0.6)}px serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.shadowBlur = 8; ctx.shadowColor = "#ffe0b2";
-  ctx.fillText("🧻", cx, cy + bob);
-  ctx.restore();
+  ctx.fillText("🧻", cx, cy + bob); ctx.restore();
 }
 
 function drawStartMarker(ctx: CanvasRenderingContext2D, x: number, y: number, sz: number) {
   ctx.save();
   ctx.font = `bold ${Math.max(7, Math.round(sz * 0.28))}px monospace`;
-  ctx.fillStyle = "rgba(80,255,150,0.8)";
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  ctx.fillText("▶", x + sz/2, y + sz/2);
-  ctx.restore();
+  ctx.fillStyle = "rgba(80,255,150,0.8)"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("▶", x + sz/2, y + sz/2); ctx.restore();
 }
 
 function drawStartOverlay(ctx: CanvasRenderingContext2D, W: number, H: number, level: number) {
@@ -281,12 +309,11 @@ function drawStartOverlay(ctx: CanvasRenderingContext2D, W: number, H: number, l
   ctx.fillText("💩", cx, cy - s*0.14);
   ctx.font = `bold ${Math.round(s*0.042)}px monospace`;
   ctx.fillStyle = "#e87a8a";
-  ctx.fillText(`LEVEL ${level}: ${LEVELS[level-1].name.toUpperCase()}`, cx, cy + s*0.0);
+  ctx.fillText(`LEVEL ${level}: ${LEVEL_NAMES[level-1].toUpperCase()}`, cx, cy);
   ctx.font = `${Math.round(s*0.034)}px sans-serif`;
   ctx.fillStyle = "rgba(255,200,200,0.65)";
-  ctx.fillText("Find 🚽 and collect 🧻 for bonus points", cx, cy + s*0.09);
+  ctx.fillText("Find 🚽 · collect 🧻 for bonus · new maze each run!", cx, cy + s*0.09);
   ctx.fillText("WASD / Arrows / Swipe / D-pad", cx, cy + s*0.16);
-  // Button
   const bw = Math.min(W*0.5, 200), bh = 40, bx = cx-bw/2, by = cy + s*0.24;
   ctx.shadowBlur = 12; ctx.shadowColor = "#c45a6a";
   ctx.fillStyle = "#c45a6a";
@@ -304,43 +331,34 @@ function drawWonOverlay(
 ) {
   ctx.save();
   ctx.fillStyle = "rgba(10,2,2,0.88)"; ctx.fillRect(0, 0, W, H);
-  const cx = W/2, cy = H/2, s = Math.min(W,H);
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-
-  // Confetti
+  const cx = W/2, cy = H/2, s = Math.min(W, H);
   for (const c of confetti) {
-    ctx.save();
-    ctx.globalAlpha = c.alpha;
-    ctx.font = `${c.size}px serif`;
-    ctx.fillText(c.emoji, c.x, c.y);
-    ctx.restore();
+    ctx.save(); ctx.globalAlpha = c.alpha;
+    ctx.font = `${c.size}px serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(c.emoji, c.x, c.y); ctx.restore();
   }
-
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.shadowBlur = 24; ctx.shadowColor = "#ffd700";
-  ctx.font = `${Math.round(s*0.12)}px serif`;
-  ctx.fillText("🚽💨", cx, cy - s*0.22);
+  ctx.font = `${Math.round(s*0.12)}px serif`; ctx.fillText("🚽💨", cx, cy - s*0.22);
   ctx.shadowBlur = 0;
   ctx.font = `bold ${Math.round(s*0.06)}px monospace`;
-  ctx.fillStyle = "#ffeecc";
-  ctx.fillText("FREEDOM!", cx, cy - s*0.07);
+  ctx.fillStyle = "#ffeecc"; ctx.fillText("FREEDOM!", cx, cy - s*0.07);
   const m = Math.floor(elapsed/60), sec = elapsed%60;
   ctx.font = `${Math.round(s*0.036)}px monospace`;
   ctx.fillStyle = "rgba(255,200,180,0.75)";
   ctx.fillText(`Time: ${m}:${String(sec).padStart(2,"0")}  Score: ${score}`, cx, cy + s*0.04);
-
-  const isLast = level >= LEVELS.length;
+  const isLast = level >= LEVEL_NAMES.length;
   const bw = Math.min(W*0.52, 210), bh = 40, bx = cx-bw/2, by = cy + s*0.14;
   ctx.shadowBlur = 12; ctx.shadowColor = "#c45a6a";
-  ctx.fillStyle = "#c45a6a";
-  rrect(ctx, bx, by, bw, bh, 20); ctx.fill();
+  ctx.fillStyle = "#c45a6a"; rrect(ctx, bx, by, bw, bh, 20); ctx.fill();
   ctx.shadowBlur = 0;
   ctx.font = `bold ${Math.round(s*0.038)}px monospace`;
   ctx.fillStyle = "#fff";
-  ctx.fillText(isLast ? "PLAY AGAIN" : `NEXT LEVEL →`, cx, by + bh/2);
+  ctx.fillText(isLast ? "PLAY AGAIN" : "NEXT LEVEL →", cx, by + bh/2);
   ctx.restore();
 }
 
-// ─── D-Pad (overlaid on canvas) ───────────────────────────────────────────────
+// ─── D-Pad ────────────────────────────────────────────────────────────────────
 function DPad({ onMove }: { onMove: (d: Dir) => void }) {
   const iv = useRef<ReturnType<typeof setInterval> | null>(null);
   const start = (d: Dir) => { onMove(d); iv.current = setInterval(() => onMove(d), 150); };
@@ -379,60 +397,61 @@ export default function MazeGame({ title }: { title: string }) {
   const dirtyRef     = useRef(true);
   const frameRef     = useRef(0);
 
-  // Game state refs
-  const phaseRef     = useRef<Phase>("idle");
-  const levelRef     = useRef(1);
-  const playerRef    = useRef({ r: 1, c: 1 });
-  const animStateRef = useRef({ active:false, fromR:1, fromC:1, toR:1, toC:1, t:0 });
-  const pendingRef   = useRef<Dir | null>(null);
-  const visitedRef   = useRef<Set<string>>(new Set(["1,1"]));
-  const collectedRef = useRef<Set<string>>(new Set());
-  const scoreRef     = useRef(0);
-  const startTimeRef = useRef(0);
-  const elapsedRef   = useRef(0);
-  const confettiRef  = useRef<Confetti[]>([]);
+  // Mutable game state
+  const phaseRef        = useRef<Phase>("idle");
+  const levelRef        = useRef(1);
+  const mazeRef         = useRef<number[][]>([]);
+  const collectiblesRef = useRef<Collectible[]>([]);
+  const playerRef       = useRef({ r: 1, c: 1 });
+  const animStateRef    = useRef({ active:false, fromR:1, fromC:1, toR:1, toC:1, t:0 });
+  const pendingRef      = useRef<Dir | null>(null);
+  const visitedRef      = useRef<Set<string>>(new Set(["1,1"]));
+  const collectedRef    = useRef<Set<string>>(new Set());
+  const scoreRef        = useRef(0);
+  const startTimeRef    = useRef(0);
+  const elapsedRef      = useRef(0);
+  const confettiRef     = useRef<Confetti[]>([]);
 
-  const [phase,   setPhase]   = useState<Phase>("idle");
-  const [level,   setLevel]   = useState(1);
-  const [,        setScore]   = useState(0);
-  const [,        setElapsed] = useState(0);
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [level, setLevel] = useState(1);
 
-  // ── Current maze helper ──────────────────────────────────────────────────
-  const getMaze = () => LEVELS[levelRef.current - 1].maze;
-
-  // ── tryMove ──────────────────────────────────────────────────────────────
+  // ── tryMove ────────────────────────────────────────────────────────────────
   const tryMove = useCallback((dir: Dir) => {
     if (phaseRef.current !== "playing") return;
     const as = animStateRef.current;
     if (as.active) { pendingRef.current = dir; return; }
     const { r, c } = playerRef.current;
-    const deltas: Record<Dir, [number,number]> = { up:[-1,0], down:[1,0], left:[0,-1], right:[0,1] };
+    const deltas: Record<Dir,[number,number]> = { up:[-1,0], down:[1,0], left:[0,-1], right:[0,1] };
     const [dr, dc] = deltas[dir];
     const nr = r+dr, nc = c+dc;
-    const maze = getMaze();
-    if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || maze[nr][nc] === 1) {
+    const maze = mazeRef.current;
+    if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || maze[nr]?.[nc] === 1) {
       playBump(); return;
     }
     playStep();
     animStateRef.current = { active:true, fromR:r, fromC:c, toR:nr, toC:nc, t:0 };
     dirtyRef.current = true;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── startLevel ───────────────────────────────────────────────────────────
+  // ── startLevel ─────────────────────────────────────────────────────────────
   const startLevel = useCallback((lv: number) => {
-    playerRef.current    = { r:1, c:1 };
-    animStateRef.current = { active:false, fromR:1, fromC:1, toR:1, toC:1, t:0 };
-    pendingRef.current   = null;
-    visitedRef.current   = new Set(["1,1"]);
-    collectedRef.current = new Set();
-    confettiRef.current  = [];
-    elapsedRef.current   = 0;
-    startTimeRef.current = Date.now();
-    phaseRef.current     = "playing";
-    levelRef.current     = lv;
-    dirtyRef.current     = true;
-    setLevel(lv); setScore(scoreRef.current); setElapsed(0); setPhase("playing");
+    const diff = (Math.min(lv, 3)) as 1|2|3;
+    const { grid, collectibles } = generateMaze(ROWS, COLS, diff);
+    mazeRef.current         = grid;
+    collectiblesRef.current = collectibles;
+    playerRef.current       = { r:1, c:1 };
+    animStateRef.current    = { active:false, fromR:1, fromC:1, toR:1, toC:1, t:0 };
+    pendingRef.current      = null;
+    visitedRef.current      = new Set(["1,1"]);
+    collectedRef.current    = new Set();
+    confettiRef.current     = [];
+    elapsedRef.current      = 0;
+    startTimeRef.current    = Date.now();
+    phaseRef.current        = "playing";
+    levelRef.current        = lv;
+    dirtyRef.current        = true;
+    setLevel(lv);
+    setPhase("playing");
   }, []);
 
   const startGame = useCallback(() => {
@@ -441,11 +460,11 @@ export default function MazeGame({ title }: { title: string }) {
   }, [startLevel]);
 
   const nextLevel = useCallback(() => {
-    if (levelRef.current >= LEVELS.length) { startGame(); return; }
+    if (levelRef.current >= LEVEL_NAMES.length) { startGame(); return; }
     startLevel(levelRef.current + 1);
   }, [startLevel, startGame]);
 
-  // ── ResizeObserver ───────────────────────────────────────────────────────
+  // ── ResizeObserver ─────────────────────────────────────────────────────────
   useEffect(() => {
     const container = containerRef.current; if (!container) return;
     const ro = new ResizeObserver(entries => {
@@ -464,7 +483,7 @@ export default function MazeGame({ title }: { title: string }) {
     return () => ro.disconnect();
   }, []);
 
-  // ── RAF loop ─────────────────────────────────────────────────────────────
+  // ── RAF loop ───────────────────────────────────────────────────────────────
   useEffect(() => {
     const loop = () => {
       frameRef.current++;
@@ -478,12 +497,11 @@ export default function MazeGame({ title }: { title: string }) {
           visitedRef.current.add(`${as.toR},${as.toC}`);
 
           // Collect toilet paper
-          const lv = LEVELS[levelRef.current - 1];
           const key = `${as.toR},${as.toC}`;
-          if (!collectedRef.current.has(key) && lv.collectibles.some(c => c.r===as.toR && c.c===as.toC)) {
+          if (!collectedRef.current.has(key) &&
+              collectiblesRef.current.some(col => col.r === as.toR && col.c === as.toC)) {
             collectedRef.current.add(key);
             scoreRef.current += 10;
-            setScore(scoreRef.current);
             playCollect();
           }
 
@@ -491,16 +509,17 @@ export default function MazeGame({ title }: { title: string }) {
           if (as.toR === EXIT_R && as.toC === EXIT_C && phaseRef.current === "playing") {
             phaseRef.current = "won";
             elapsedRef.current = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setElapsed(elapsedRef.current); setPhase("won");
+            setPhase("won");
             playWin();
-            // Spawn confetti
             const { W } = sizeRef.current;
+            const H2 = sizeRef.current.H;
             confettiRef.current = Array.from({ length: 28 }, () => ({
               x: Math.random() * W, y: -20 - Math.random() * 60,
               vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
               alpha: 1, size: 14 + Math.random() * 12,
               emoji: ["💩","🧻","🚽","✨","💨"][Math.floor(Math.random() * 5)],
             }));
+            void H2; // suppress unused warning
           }
 
           // Flush buffered input
@@ -508,9 +527,9 @@ export default function MazeGame({ title }: { title: string }) {
             const dir = pendingRef.current; pendingRef.current = null;
             const { r, c } = playerRef.current;
             const deltas: Record<Dir,[number,number]> = { up:[-1,0],down:[1,0],left:[0,-1],right:[0,1] };
-            const [dr,dc] = deltas[dir];
-            const nr=r+dr, nc=c+dc, maze=getMaze();
-            if (nr>=0&&nr<ROWS&&nc>=0&&nc<COLS&&maze[nr][nc]===0) {
+            const [dr, dc] = deltas[dir];
+            const nr = r+dr, nc = c+dc;
+            if (nr>=0 && nr<ROWS && nc>=0 && nc<COLS && mazeRef.current[nr]?.[nc] === 0) {
               animStateRef.current = { active:true, fromR:r, fromC:c, toR:nr, toC:nc, t:0 };
             }
           }
@@ -518,7 +537,6 @@ export default function MazeGame({ title }: { title: string }) {
         dirtyRef.current = true;
       }
 
-      // Tick confetti
       if (confettiRef.current.length > 0) {
         confettiRef.current = confettiRef.current
           .map(c => ({ ...c, x:c.x+c.vx, y:c.y+c.vy, alpha:c.alpha-0.008 }))
@@ -530,10 +548,15 @@ export default function MazeGame({ title }: { title: string }) {
       if (!dirtyRef.current) { animRef.current = requestAnimationFrame(loop); return; }
       dirtyRef.current = false;
 
-      const canvas = canvasRef.current; if (!canvas) { animRef.current = requestAnimationFrame(loop); return; }
-      const ctx = canvas.getContext("2d"); if (!ctx) { animRef.current = requestAnimationFrame(loop); return; }
+      const canvas = canvasRef.current;
+      if (!canvas) { animRef.current = requestAnimationFrame(loop); return; }
+      const ctx = canvas.getContext("2d");
+      if (!ctx)   { animRef.current = requestAnimationFrame(loop); return; }
+
       const { W, H } = sizeRef.current;
-      const maze = getMaze();
+      const maze = mazeRef.current;
+      if (maze.length === 0) { animRef.current = requestAnimationFrame(loop); return; }
+
       const tileSize = Math.max(4, Math.floor(Math.min(W, H) / Math.max(ROWS, COLS)));
       const mazeW = tileSize * COLS, mazeH = tileSize * ROWS;
       const pulse = computePulse();
@@ -550,10 +573,8 @@ export default function MazeGame({ title }: { title: string }) {
       if (mazeH <= H) { camY = Math.floor((H-mazeH)/2); }
       else { camY = Math.round(H/2-playerPixY); camY = Math.min(0, Math.max(H-mazeH, camY)); }
 
-      ctx.fillStyle = BG_OUTER; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle = BG_OUTER; ctx.fillRect(0, 0, W, H);
       ctx.save(); ctx.translate(camX, camY);
-
-      const lv = LEVELS[levelRef.current - 1];
 
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
@@ -564,28 +585,24 @@ export default function MazeGame({ title }: { title: string }) {
             const visited = visitedRef.current.has(`${r},${c}`);
             const current = !as.active && playerRef.current.r===r && playerRef.current.c===c;
             drawFloor(ctx, x, y, tileSize, visited, current);
-            // Start marker
             if (r===1 && c===1) drawStartMarker(ctx, x, y, tileSize);
           }
         }
       }
 
       // Collectibles
-      for (const col of lv.collectibles) {
+      for (const col of collectiblesRef.current) {
         if (!collectedRef.current.has(`${col.r},${col.c}`)) {
           drawCollectible(ctx, col.c*tileSize+tileSize/2, col.r*tileSize+tileSize/2, tileSize, frameRef.current);
         }
       }
 
-      // Goal
       drawGoal(ctx, EXIT_C*tileSize+tileSize/2, EXIT_R*tileSize+tileSize/2, tileSize, frameRef.current);
-
-      // Player
       drawPlayer(ctx, pxCol*tileSize+tileSize/2, pxRow*tileSize+tileSize/2, tileSize, frameRef.current);
 
       ctx.restore();
 
-      // HUD on canvas (score + timer)
+      // HUD
       if (phaseRef.current === "playing") {
         const live = Math.floor((Date.now()-startTimeRef.current)/1000);
         const m=Math.floor(live/60), s=live%60;
@@ -610,7 +627,7 @@ export default function MazeGame({ title }: { title: string }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── Keyboard ─────────────────────────────────────────────────────────────
+  // ── Keyboard ───────────────────────────────────────────────────────────────
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const map: Record<string,Dir> = {
@@ -627,7 +644,7 @@ export default function MazeGame({ title }: { title: string }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [tryMove, startGame, nextLevel]);
 
-  // ── Touch ────────────────────────────────────────────────────────────────
+  // ── Touch ──────────────────────────────────────────────────────────────────
   useEffect(() => {
     const canvas = canvasRef.current; if (!canvas) return;
     let sx=0, sy=0;
@@ -659,22 +676,19 @@ export default function MazeGame({ title }: { title: string }) {
       className={styles.gameInner}
       style={{ padding:0, gap:0, display:"flex", flexDirection:"column", height:"100%", width:"100%", boxSizing:"border-box" }}
     >
-      {/* Slim HUD strip */}
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"0.3rem 0.75rem", flexShrink:0 }}>
         <span style={{ color:"#e87a8a", fontWeight:700, fontSize:"0.8rem", fontFamily:"monospace" }}>
           💩 {title}
         </span>
         {phase === "playing" && (
           <span style={{ color:"rgba(232,122,138,0.7)", fontSize:"0.75rem", fontFamily:"monospace" }}>
-            Lv{level} · {LEVELS[level-1].name}
+            Lv{level} · {LEVEL_NAMES[level-1]}
           </span>
         )}
       </div>
 
-      {/* Canvas container — takes all remaining height */}
       <div ref={containerRef} style={{ flex:1, position:"relative", overflow:"hidden" }}>
         <canvas ref={canvasRef} style={{ width:"100%", height:"100%", display:"block", touchAction:"none" }} />
-        {/* D-pad overlaid on canvas */}
         {phase === "playing" && <DPad onMove={tryMove} />}
       </div>
     </div>
