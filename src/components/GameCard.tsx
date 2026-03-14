@@ -1,30 +1,26 @@
+import React from "react";
 import Link from "next/link";
 import styles from "./GameCard.module.css";
 import Image from "next/image";
+import type { Game } from "@/types/game";
 
-interface GameCardProps {
-  id: string;
-  title: string;
-  developer: string;
-  category: string;
-  imageUrl: string;
+type GameCardProps = Pick<Game, 'id' | 'title' | 'developer' | 'category' | 'imageUrl'> & {
   rating?: number;
-}
+};
 
-export default function GameCard({ id, title, developer, category, imageUrl, rating }: GameCardProps) {
-  // Using a fallback div if no actual image URL is provided initially
+function GameCard({ id, title, developer, category, imageUrl, rating }: GameCardProps) {
   const hasImage = imageUrl && imageUrl.startsWith("http");
 
   return (
     <Link href={`/games/${id}`} className={styles.card}>
       <div className={styles.imageContainer}>
         {hasImage ? (
-          <Image 
-            src={imageUrl} 
-            alt={title} 
-            fill 
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className={styles.image} 
+            className={styles.image}
           />
         ) : (
           <div className={styles.placeholderImage}>
@@ -33,7 +29,7 @@ export default function GameCard({ id, title, developer, category, imageUrl, rat
         )}
         <div className={styles.categoryBadge}>{category}</div>
       </div>
-      
+
       <div className={styles.content}>
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>
@@ -44,9 +40,11 @@ export default function GameCard({ id, title, developer, category, imageUrl, rat
             </div>
           )}
         </div>
-        
+
         <p className={styles.developer}>{developer}</p>
       </div>
     </Link>
   );
 }
+
+export default React.memo(GameCard);

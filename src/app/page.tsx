@@ -1,14 +1,10 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import GameCard from "@/components/GameCard";
-
 import gamesData from "@/data/games.json";
+import type { Game } from "@/types/game";
 
-// Only feature actual working games — update this list whenever a new game ships
-const WORKING_GAME_IDS = ['tic-tac-toe', 'ai-canvas', 'stamp-pad', 'pixel-art', 'fireworks-canvas'];
-const FEATURED_GAMES = gamesData
-  .filter(g => WORKING_GAME_IDS.includes(g.id))
-  .sort((a, b) => WORKING_GAME_IDS.indexOf(a.id) - WORKING_GAME_IDS.indexOf(b.id));
+const FEATURED_GAMES = gamesData as Game[];
 
 export default function Home() {
   return (
@@ -22,7 +18,7 @@ export default function Home() {
             <span className="gradient-text">Here and Now</span>
           </h1>
           <p className={styles.subtitle}>
-            Experience games crafted, adapted, and powered by artificial intelligence. 
+            Experience games crafted, adapted, and powered by artificial intelligence.
             No downloads required. Play instantly in your browser on any device.
           </p>
           <div className={styles.actions}>
@@ -34,8 +30,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        
-        {/* Animated Hero Background Elements */}
+
         <div className={styles.heroBackground}>
           <div className={styles.glowBlob1}></div>
           <div className={styles.glowBlob2}></div>
@@ -50,14 +45,14 @@ export default function Home() {
             View All &rarr;
           </Link>
         </div>
-        
+
         <div className={styles.grid}>
           {FEATURED_GAMES.map((game) => (
             <GameCard key={game.id} {...game} />
           ))}
         </div>
       </section>
-      
+
       {/* Call to Action Section */}
       <section className={styles.cta}>
         <div className={`glass-panel ${styles.ctaContent}`}>
