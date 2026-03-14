@@ -210,6 +210,11 @@
   .gameLayout {
     grid-template-columns: 1fr;
   }
+  
+  .gameContainer {
+    aspect-ratio: auto;
+    min-height: 500px;
+  }
 }
 
 @media (max-width: 640px) {
