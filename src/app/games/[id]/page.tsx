@@ -6,11 +6,12 @@ import gamesData from "@/data/games.json";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// A simple AI game component (Tic Tac Toe vs Random AI)
-function SimpleAIGame({ title, category }: { title: string, category: string }) {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+// A complete Tic-Tac-Toe AI game
+function TicTacToeGame({ title, category }: { title: string, category: string }) {
+  const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
+  const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
+  const [difficulty, setDifficulty] = useState<"Easy" | "Medium" | "Hard">("Medium");
 
   const checkWinner = (squares: (string | null)[]) => {
     const lines = [
@@ -28,22 +29,108 @@ function SimpleAIGame({ title, category }: { title: string, category: string }) 
     return null;
   };
 
+  const getBestMove = (squares: (string | null)[], player: "X" | "O"): number => {
+    const lines = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      const line = [squares[a], squares[b], squares[c]];
+      if (line.filter(v => v === player).length === 2 && line.includes(null)) {
+        if (squares[a] === null) return a;
+        if (squares[b] === null) return b;
+        if (squares[c] === null) return c;
+      }
+    }
+    return -1;
+  };
+
+  const minimax = (squares: (string | null)[], depth: number, isMaximizing: boolean): number => {
+    const result = checkWinner(squares);
+    if (result === "O") return 10 - depth;
+    if (result === "X") return depth - 10;
+    if (result === "Draw") return 0;
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < 9; i++) {
+        if (squares[i] === null) {
+          squares[i] = "O"; // AI is Maximizing (O)
+          let score = minimax(squares, depth + 1, false);
+          squares[i] = null;
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < 9; i++) {
+        if (squares[i] === null) {
+          squares[i] = "X"; // Player is Minimizing (X)
+          let score = minimax(squares, depth + 1, true);
+          squares[i] = null;
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  };
+
+  const getAIMove = (currentBoard: (string | null)[], currentDifficulty: string): number => {
+    const emptyIndices = currentBoard.map((val, idx) => val === null ? idx : null).filter(val => val !== null) as number[];
+    if (emptyIndices.length === 0) return -1;
+
+    if (currentDifficulty === "Easy") {
+      return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    }
+
+    if (currentDifficulty === "Medium") {
+      const winMove = getBestMove(currentBoard, "O");
+      if (winMove !== -1) return winMove;
+      
+      const blockMove = getBestMove(currentBoard, "X");
+      if (blockMove !== -1) return blockMove;
+      
+      return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    }
+
+    if (currentDifficulty === "Hard") {
+      let bestScore = -Infinity;
+      let move = emptyIndices[0];
+      for (let i = 0; i < 9; i++) {
+        if (currentBoard[i] === null) {
+          currentBoard[i] = "O";
+          let score = minimax(currentBoard, 0, false);
+          currentBoard[i] = null;
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
+        }
+      }
+      return move;
+    }
+
+    return emptyIndices[0];
+  };
+
   useEffect(() => {
     if (!isPlayerTurn && !winner) {
       const timer = setTimeout(() => {
-        const emptyIndices = board.map((val, idx) => val === null ? idx : null).filter(val => val !== null) as number[];
-        if (emptyIndices.length > 0) {
-          const randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+        const aiMoveIdx = getAIMove([...board], difficulty);
+        if (aiMoveIdx !== -1) {
           const newBoard = [...board];
-          newBoard[randomIdx] = "O"; // AI is O
+          newBoard[aiMoveIdx] = "O"; // AI is O
           setBoard(newBoard);
           setWinner(checkWinner(newBoard));
           setIsPlayerTurn(true);
         }
-      }, 600);
+      }, 500);
       return () => clearTimeout(timer);
     }
-  }, [board, isPlayerTurn, winner]);
+  }, [board, isPlayerTurn, winner, difficulty]);
 
   const handlePlay = (index: number) => {
     if (board[index] || winner || !isPlayerTurn) return;
@@ -62,8 +149,22 @@ function SimpleAIGame({ title, category }: { title: string, category: string }) 
 
   return (
     <div className={styles.gameInner}>
-      <h3 className={styles.gameTitle}>{title} - Interactive Prototype</h3>
-      <p className={styles.gameDesc}>Category: {category} | Play as X against the AI (O)</p>
+      <h3 className={styles.gameTitle}>{title}</h3>
+      <div className={styles.difficultySelector}>
+        <span className={styles.difficultyLabel}>Difficulty:</span>
+        {(["Easy", "Medium", "Hard"] as const).map((level) => (
+          <button
+            key={level}
+            className={`${styles.diffBtn} ${difficulty === level ? styles.activeDiff : ''}`}
+            onClick={() => {
+              setDifficulty(level);
+              resetGame();
+            }}
+          >
+            {level}
+          </button>
+        ))}
+      </div>
       
       <div className={styles.board}>
         {board.map((cell, idx) => (
@@ -88,6 +189,18 @@ function SimpleAIGame({ title, category }: { title: string, category: string }) 
   );
 }
 
+function ComingSoonGame({ title }: { title: string }) {
+  return (
+    <div className={styles.gameInner} style={{ textAlign: 'center' }}>
+      <h3 className={styles.gameTitle}>{title}</h3>
+      <div style={{ padding: '3rem 1rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-lg)', marginTop: '2rem', border: '1px solid var(--border-highlight)' }}>
+        <h4 style={{ fontSize: '1.5rem', color: 'var(--accent-primary)', marginBottom: '1rem' }}>Coming Soon</h4>
+        <p style={{ color: 'var(--text-secondary)' }}>The AI model for this game is currently training in the cloud.<br/>Check back soon!</p>
+      </div>
+    </div>
+  );
+}
+
 export default function GamePage({ params }: { params: { id: string } }) {
   const game = gamesData.find(g => g.id === params.id);
 
@@ -106,7 +219,11 @@ export default function GamePage({ params }: { params: { id: string } }) {
           <div className={styles.gameWrapper}>
             {/* The actual Game Container */}
             <div className={styles.gameContainer}>
-              <SimpleAIGame title={game.title} category={game.category} />
+              {game.id === 'tic-tac-toe' ? (
+                <TicTacToeGame title={game.title} category={game.category} />
+              ) : (
+                <ComingSoonGame title={game.title} />
+              )}
             </div>
             
             <div className={styles.gameDetails}>
