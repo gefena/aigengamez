@@ -258,8 +258,8 @@
 
   .gameContainer {
     aspect-ratio: auto;
-    height: min(80vw, 700px);
-    min-height: 480px;
+    height: min(90vw, 780px);
+    min-height: 520px;
   }
 }
 
@@ -270,8 +270,8 @@
 
   .gameContainer {
     aspect-ratio: auto;
-    height: calc(100vw - 2rem);
-    min-height: 300px;
+    height: min(100vw, 480px);
+    min-height: 320px;
     max-width: 100%;
   }
   

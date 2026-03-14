@@ -449,41 +449,26 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     return () => cancelAnimationFrame(animRef.current);
   }, [render]);
 
-  // ── ResizeObserver — force the board container to be square ──
+  // ── ResizeObserver — update canvas buffer when container resizes ──
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    const applySize = (width: number, height: number) => {
-      if (!width || !height) return;
-      // Constrain to a square using the smaller of the two available dimensions
-      const side = Math.floor(Math.min(width, height));
-      // Only update if meaningfully changed (avoid infinite loop)
-      if (Math.abs(side - sizeRef.current.W) < 2) return;
-      container.style.width  = `${side}px`;
-      container.style.height = `${side}px`;
-      container.style.flex   = "none";
-      container.style.margin = "0 auto";
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width  = side;
-      canvas.height = side;
-      sizeRef.current = { W: side, H: side };
-      dirtyRef.current = true;
-    };
-
     const ro = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect;
-      applySize(width, height);
+      if (!width || !height) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.width  = Math.round(width);
+      canvas.height = Math.round(height);
+      sizeRef.current = { W: canvas.width, H: canvas.height };
+      dirtyRef.current = true;
     });
     ro.observe(container);
-
-    // Initial size from parent (before the container is constrained)
-    const parent = container.parentElement;
-    const pw = parent ? parent.getBoundingClientRect().width  : 480;
-    const ph = parent ? parent.getBoundingClientRect().height : 480;
-    applySize(pw, ph > 80 ? ph : pw); // ph might be 0 on first paint
-
+    const rect = container.getBoundingClientRect();
+    const canvas = canvasRef.current!;
+    canvas.width  = rect.width  || 480;
+    canvas.height = rect.height || 480;
+    sizeRef.current = { W: canvas.width, H: canvas.height };
     return () => ro.disconnect();
   }, []);
 
