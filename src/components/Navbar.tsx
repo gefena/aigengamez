@@ -6,7 +6,7 @@ export default function Navbar() {
     <nav className={styles.navbar}>
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
-          <span className="gradient-text">AI</span> Arcade
+          <span className="gradient-text">aigen</span>gamez
         </Link>
         
         <div className={styles.navLinks}>

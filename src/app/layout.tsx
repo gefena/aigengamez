@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Arcade | Discover & Play Modern AI Games",
+  title: "aigengamez | Discover & Play Modern AI Games",
   description: "A premium platform to explore, search, and play the latest AI-powered games directly from your browser.",
 };
 

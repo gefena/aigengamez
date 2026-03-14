@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
       
       <div className={styles.bottomBar}>
-        <p>&copy; {new Date().getFullYear()} AI Arcade. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} aigengamez. All rights reserved.</p>
       </div>
     </footer>
   );
