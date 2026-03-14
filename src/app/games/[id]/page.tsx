@@ -327,7 +327,22 @@ function AICanvasGame({ title }: { title: string }) {
     }
   };
 
-  const colors = ["#ff3366", "#33ccff", "#33ff99", "#ffcc00", "#9933ff", "#ffffff", "#000000"];
+  const colors = [
+    // Reds / pinks
+    "#ff3366", "#ff6b6b", "#ff9a9e",
+    // Oranges
+    "#ff6b2b", "#ffaa33",
+    // Yellows
+    "#ffcc00", "#f9f871",
+    // Greens
+    "#33ff99", "#00c896", "#4caf50",
+    // Blues
+    "#33ccff", "#2196f3", "#1565c0",
+    // Purples / violets
+    "#9933ff", "#ce93d8", "#7c4dff",
+    // Neutrals
+    "#ffffff", "#aaaaaa", "#555555", "#000000",
+  ];
 
   return (
     <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '1rem' }}>
@@ -357,18 +372,37 @@ function AICanvasGame({ title }: { title: string }) {
       </div>
 
       {/* Horizontal Toolbar */}
-      <div style={{ display: 'flex', gap: '1rem', background: 'var(--bg-secondary)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', marginRight: '0.5rem' }}>Color</span>
+      <div style={{ display: 'flex', gap: '0.75rem', background: 'var(--bg-secondary)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center', flexWrap: 'wrap', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', marginRight: '0.25rem' }}>Color</span>
           {colors.map(c => (
             <button
               key={c}
               onClick={() => setColor(c)}
               style={{
-                width: '28px', height: '28px', borderRadius: '50%', backgroundColor: c, border: color === c ? '2px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: color === c ? '0 0 10px rgba(255,255,255,0.5)' : 'none'
+                width: '24px', height: '24px', borderRadius: '50%', backgroundColor: c, border: color === c ? '2px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: color === c ? '0 0 8px rgba(255,255,255,0.6)' : 'none', flexShrink: 0
               }}
             />
           ))}
+          {/* Custom colour picker */}
+          <label
+            title="Custom colour"
+            style={{
+              width: '24px', height: '24px', borderRadius: '50%',
+              background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)',
+              border: '2px solid transparent', cursor: 'pointer', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+              boxShadow: !colors.includes(color) ? '0 0 8px rgba(255,255,255,0.6)' : 'none',
+              outline: !colors.includes(color) ? '2px solid white' : 'none',
+            }}
+          >
+            <input
+              type="color"
+              value={color}
+              onChange={e => setColor(e.target.value)}
+              style={{ opacity: 0, position: 'absolute', width: 0, height: 0 }}
+            />
+          </label>
         </div>
         
         <div style={{ width: '1px', height: '24px', background: 'var(--border-color)', margin: '0 0.5rem' }} />
