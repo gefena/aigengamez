@@ -395,8 +395,8 @@ function AICanvasGame({ title }: { title: string }) {
       </div>
 
       {/* Canvas Area */}
-      <div style={{ flex: 1, background: 'white', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'crosshair', border: '1px solid var(--border-color)', width: '100%', minHeight: '200px' }}>
-        <canvas ref={canvasRef} id="aiCanvas" style={{ width: '100%', height: '100%', touchAction: 'none' }} />
+      <div style={{ flex: 1, alignSelf: 'stretch', background: 'white', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'crosshair', border: '1px solid var(--border-color)' }}>
+        <canvas ref={canvasRef} id="aiCanvas" style={{ width: '100%', height: '100%', touchAction: 'none', display: 'block' }} />
       </div>
     </div>
   );

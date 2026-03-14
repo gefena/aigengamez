@@ -47,8 +47,8 @@
   box-shadow: var(--shadow-md);
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
 .gameDetails {
@@ -126,7 +126,49 @@
 .gameTitle {
   font-size: 1.5rem;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.difficultySelector {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-primary);
+  padding: 0.35rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.difficultyLabel {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding-left: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+.diffBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.diffBtn:hover:not(.activeDiff) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.activeDiff {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .gameDesc {
@@ -213,14 +255,14 @@
   
   .gameContainer {
     aspect-ratio: auto;
-    min-height: 500px;
+    min-height: 560px;
   }
 }
 
 @media (max-width: 640px) {
   .gameContainer {
     aspect-ratio: auto;
-    min-height: 480px;
+    min-height: 580px;
   }
   
   .gameInner {
