@@ -9,6 +9,15 @@
     "description": "Play against our custom-built AI. Choose between Easy, Medium, or Hard (Minimax) difficulty."
   },
   {
+    "id": "ai-canvas",
+    "title": "AI Magic Canvas",
+    "developer": "aigengamez",
+    "category": "Kids",
+    "imageUrl": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800",
+    "rating": 5.0,
+    "description": "A magical free-form drawing canvas. Pick your colors and use the AI Symmetry brush to create beautiful generative art!"
+  },
+  {
     "id": "neural-racer",
     "title": "Neural Racer X",
     "developer": "AI Dynamics",

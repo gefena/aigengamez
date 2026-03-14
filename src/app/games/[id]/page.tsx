@@ -201,6 +201,201 @@ function ComingSoonGame({ title }: { title: string }) {
   );
 }
 
+// AI Magic Canvas Game
+function AICanvasGame({ title }: { title: string }) {
+  const [color, setColor] = useState<string>("#ff3366");
+  const [brushSize, setBrushSize] = useState<number>(5);
+  const [isSymmetryMode, setIsSymmetryMode] = useState<boolean>(false);
+  
+  useEffect(() => {
+    const canvas = document.getElementById('aiCanvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set real canvas dimensions to match display dimensions
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    // Fill white background for saving
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const draw = (e: MouseEvent | TouchEvent) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+
+      const r = canvas.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      const x = clientX - r.left;
+      const y = clientY - r.top;
+
+      ctx.strokeStyle = color;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.lineWidth = brushSize;
+
+      // Draw main stroke
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      // AI Symmetry Mode (Kaleidoscope effect)
+      if (isSymmetryMode) {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        // Draw 3 mirrored strokes for algorithmic symmetry
+        const points = [
+          { x: centerX + (centerX - x), y }, // Horizontal mirror
+          { x, y: centerY + (centerY - y) }, // Vertical mirror
+          { x: centerX + (centerX - x), y: centerY + (centerY - y) } // Diagonal mirror
+        ];
+
+        const lastPoints = [
+          { x: centerX + (centerX - lastX), y: lastY },
+          { x: lastX, y: centerY + (centerY - lastY) },
+          { x: centerX + (centerX - lastX), y: centerY + (centerY - lastY) }
+        ];
+
+        points.forEach((p, i) => {
+          ctx.beginPath();
+          ctx.moveTo(lastPoints[i].x, lastPoints[i].y);
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+        });
+      }
+
+      lastX = x;
+      lastY = y;
+    };
+
+    const startDraw = (e: MouseEvent | TouchEvent) => {
+      isDrawing = true;
+      const r = canvas.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      lastX = clientX - r.left;
+      lastY = clientY - r.top;
+    };
+
+    const stopDraw = () => {
+      isDrawing = false;
+    };
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseout', stopDraw);
+    
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDraw);
+
+    return () => {
+      canvas.removeEventListener('mousedown', startDraw);
+      canvas.removeEventListener('mousemove', draw);
+      canvas.removeEventListener('mouseup', stopDraw);
+      canvas.removeEventListener('mouseout', stopDraw);
+      
+      canvas.removeEventListener('touchstart', startDraw);
+      canvas.removeEventListener('touchmove', draw);
+      canvas.removeEventListener('touchend', stopDraw);
+    };
+  }, [color, brushSize, isSymmetryMode]);
+
+  const clearCanvas = () => {
+    const canvas = document.getElementById('aiCanvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  const colors = ["#ff3366", "#33ccff", "#33ff99", "#ffcc00", "#9933ff", "#ffffff", "#000000"];
+
+  return (
+    <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '1rem' }}>
+      {/* Top Header Row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <h3 className={styles.gameTitle} style={{ margin: 0 }}>{title}</h3>
+        
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <button 
+            onClick={() => setIsSymmetryMode(!isSymmetryMode)}
+            style={{
+              padding: '0.5rem 1rem',
+              borderRadius: 'var(--radius-full)',
+              border: 'none',
+              background: isSymmetryMode ? 'var(--accent-gradient)' : 'rgba(255,255,255,0.1)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            ✨ AI Symmetry {isSymmetryMode ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      </div>
+
+      {/* Horizontal Toolbar */}
+      <div style={{ display: 'flex', gap: '1rem', background: 'var(--bg-secondary)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', marginRight: '0.5rem' }}>Color</span>
+          {colors.map(c => (
+            <button
+              key={c}
+              onClick={() => setColor(c)}
+              style={{
+                width: '28px', height: '28px', borderRadius: '50%', backgroundColor: c, border: color === c ? '2px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: color === c ? '0 0 10px rgba(255,255,255,0.5)' : 'none'
+              }}
+            />
+          ))}
+        </div>
+        
+        <div style={{ width: '1px', height: '24px', background: 'var(--border-color)', margin: '0 0.5rem' }} />
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', marginRight: '0.5rem' }}>Size</span>
+          {[2, 5, 12, 24].map(size => (
+            <button
+              key={size}
+              onClick={() => setBrushSize(size)}
+              style={{
+                width: '28px', height: '28px', borderRadius: 'var(--radius-sm)', background: brushSize === size ? 'rgba(255,255,255,0.1)' : 'transparent', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'
+              }}
+            >
+              <div style={{ width: size > 16 ? 16 : size, height: size > 16 ? 16 : size, background: 'white', borderRadius: '50%' }} />
+            </button>
+          ))}
+        </div>
+
+        <div style={{ flex: 1 }} />
+        <button onClick={clearCanvas} style={{ padding: '0.4rem 1rem', background: 'rgba(255,50,50,0.2)', color: '#ff6b6b', border: '1px solid rgba(255,50,50,0.5)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600 }}>
+          Clear
+        </button>
+      </div>
+
+      {/* Canvas Area */}
+      <div style={{ flex: 1, background: 'white', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'crosshair', border: '1px solid var(--border-color)', width: '100%', minHeight: '200px' }}>
+        <canvas id="aiCanvas" style={{ width: '100%', height: '100%', touchAction: 'none' }} />
+      </div>
+    </div>
+  );
+}
+
 export default function GamePage({ params }: { params: { id: string } }) {
   const game = gamesData.find(g => g.id === params.id);
 
@@ -221,6 +416,8 @@ export default function GamePage({ params }: { params: { id: string } }) {
             <div className={styles.gameContainer}>
               {game.id === 'tic-tac-toe' ? (
                 <TicTacToeGame title={game.title} category={game.category} />
+              ) : game.id === 'ai-canvas' ? (
+                <AICanvasGame title={game.title} />
               ) : (
                 <ComingSoonGame title={game.title} />
               )}
