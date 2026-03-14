@@ -394,8 +394,8 @@ export default function MazeGame({ title }: { title: string }) {
 
   const [phase,   setPhase]   = useState<Phase>("idle");
   const [level,   setLevel]   = useState(1);
-  const [score,   setScore]   = useState(0);
-  const [elapsed, setElapsed] = useState(0);
+  const [,        setScore]   = useState(0);
+  const [,        setElapsed] = useState(0);
 
   // ── Current maze helper ──────────────────────────────────────────────────
   const getMaze = () => LEVELS[levelRef.current - 1].maze;
@@ -494,7 +494,7 @@ export default function MazeGame({ title }: { title: string }) {
             setElapsed(elapsedRef.current); setPhase("won");
             playWin();
             // Spawn confetti
-            const { W, H } = sizeRef.current;
+            const { W } = sizeRef.current;
             confettiRef.current = Array.from({ length: 28 }, () => ({
               x: Math.random() * W, y: -20 - Math.random() * 60,
               vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
