@@ -561,7 +561,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     // Update threat indicator
     threatened.current = allAttacked(blacks.current, queenPos.current).has(`${queenPos.current.r},${queenPos.current.c}`);
     dirtyRef.current   = true;
-  }, [setScoreSync, refreshSafeSquares]);
+  }, [setScoreSync]);
 
   // ── Start game ──
   const startGame = useCallback(() => {
@@ -727,7 +727,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
         {phase === "idle" && (
           <div onClick={startGame} style={{ position: "absolute", inset: 0, background: "rgba(5,5,20,0.88)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem", cursor: "pointer" }}>
             <span style={{ fontSize: "2.8rem", filter: "drop-shadow(0 0 16px #33ccff)" }}>♛</span>
-            <h2 style={{ color: "#33ccff", fontFamily: "monospace", fontSize: "1.4rem", margin: 0, textShadow: "0 0 20px #33ccff" }}>QUEEN'S GAUNTLET</h2>
+            <h2 style={{ color: "#33ccff", fontFamily: "monospace", fontSize: "1.4rem", margin: 0, textShadow: "0 0 20px #33ccff" }}>QUEEN&apos;S GAUNTLET</h2>
             <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.85rem", textAlign: "center", maxWidth: 280, margin: 0, lineHeight: 1.6 }}>
               Click ♛ to select your queen, then click a square to move.<br/>
               <span style={{ color: "rgba(80,255,150,0.8)" }}>Green dots</span> = safe. <span style={{ color: "rgba(255,120,50,0.9)" }}>Orange dots</span> = danger zone.
@@ -746,7 +746,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
 
         {phase === "over" && (
           <div onClick={startGame} style={{ position: "absolute", inset: 0, background: "rgba(5,5,20,0.92)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.8rem", cursor: "pointer" }}>
-            <h2 style={{ color: "#ec4899", fontFamily: "monospace", fontSize: "1.6rem", margin: 0, textShadow: "0 0 20px #ec4899" }}>TIME'S UP</h2>
+            <h2 style={{ color: "#ec4899", fontFamily: "monospace", fontSize: "1.6rem", margin: 0, textShadow: "0 0 20px #ec4899" }}>TIME&apos;S UP</h2>
             <p style={{ color: "#ffcc00", fontFamily: "monospace", fontSize: "1.3rem", margin: 0 }}>Score: {score}</p>
             {score >= highScore && score > 0 && <p style={{ color: "#33ff99", fontFamily: "monospace", fontSize: "0.9rem", margin: 0 }}>✨ NEW BEST!</p>}
             {score < highScore && <p style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: "0.85rem", margin: 0 }}>Best: {highScore}</p>}
