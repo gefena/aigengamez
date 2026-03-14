@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import GameCard from "@/components/GameCard";
 import gamesData from "@/data/games.json";
 
-const CATEGORIES = ["All", "Action", "Strategy", "Racing", "Simulation", "Puzzle"];
+const CATEGORIES = ["All", "Action", "Puzzle", "Kids", "Strategy", "Racing", "Simulation"];
 
 export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
