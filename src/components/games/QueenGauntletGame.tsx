@@ -184,6 +184,7 @@ function drawBoard(
   flash:          { r:number; c:number; color:string } | null,
   grace:          number,
   frame:          number,
+  captureFlash:   { frames: number; penalty: number; glyph: string } | null,
 ) {
   // Board sizing — use nearly the full shorter dimension so the board is large on mobile
   const sqSz = Math.floor(Math.min(W, H) / 8);
@@ -194,9 +195,19 @@ function drawBoard(
   // Only show coordinate labels if there is surplus space around the board
   const showLabels = (W - bw > 20) || (H - bh > 20);
 
-  ctx.clearRect(0, 0, W, H);
+  // Screen shake during capture flash (first 10 frames)
+  let shakeX = 0, shakeY = 0;
+  if (captureFlash && captureFlash.frames > 18) {
+    const mag = Math.min(6, (captureFlash.frames - 18) * 1.5);
+    shakeX = (Math.random() * 2 - 1) * mag;
+    shakeY = (Math.random() * 2 - 1) * mag;
+    ctx.save();
+    ctx.translate(shakeX, shakeY);
+  }
+
+  ctx.clearRect(-8, -8, W + 16, H + 16);
   ctx.fillStyle = COL_BG;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(-8, -8, W + 16, H + 16);
 
   // ── Squares ──
   for (let r = 0; r < 8; r++) {
@@ -343,6 +354,37 @@ function drawBoard(
     ctx.fillText("♛", cx, cy + sqSz * 0.04);
     ctx.restore();
   }
+
+  // ── Capture flash: full-canvas red wash + penalty text (drawn last, on top) ──
+  if (captureFlash) {
+    const t = captureFlash.frames / 28;            // 1.0 → 0.0 as it fades
+    const alpha = Math.min(0.68, t * 0.8);
+    ctx.fillStyle = `rgba(220,20,60,${alpha})`;
+    ctx.fillRect(0, 0, W, H);
+
+    const textAlpha = Math.min(1, t * 2.5);
+    const s = Math.min(W, H);
+    const scale = 0.7 + t * 0.3;                  // pop-in: starts small, grows
+    ctx.save();
+    ctx.globalAlpha = textAlpha;
+    ctx.translate(W / 2, H / 2);
+    ctx.scale(scale, scale);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `bold ${Math.round(s * 0.13)}px monospace`;
+    ctx.fillStyle = "#fff";
+    ctx.shadowBlur = 28;
+    ctx.shadowColor = "#ff2244";
+    ctx.fillText(`${captureFlash.glyph} CAPTURED!`, 0, -s * 0.075);
+    ctx.font = `bold ${Math.round(s * 0.1)}px monospace`;
+    ctx.fillStyle = "#ffcc00";
+    ctx.shadowColor = "#ff9900";
+    ctx.fillText(`−${captureFlash.penalty}`, 0, s * 0.075);
+    ctx.restore();
+  }
+
+  // Restore shake transform
+  if (captureFlash && captureFlash.frames > 18) ctx.restore();
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -365,7 +407,8 @@ export default function QueenGauntletGame({ title }: { title: string }) {
   const validMoves    = useRef<Set<string>>(new Set());
   const safeSquares   = useRef<Set<string>>(new Set());
   const threatened    = useRef(false);
-  const flashRef      = useRef<{ r:number; c:number; color:string; frames:number } | null>(null);
+  const flashRef        = useRef<{ r:number; c:number; color:string; frames:number } | null>(null);
+  const captureFlashRef = useRef<{ frames:number; penalty:number; glyph:string } | null>(null);
   const animsRef      = useRef<PieceAnim[]>([]);
   const scoreRef      = useRef(0);
   const phaseRef      = useRef<Phase>("idle");
@@ -416,6 +459,13 @@ export default function QueenGauntletGame({ title }: { title: string }) {
       dirtyRef.current = true;
     }
 
+    // Tick capture flash
+    if (captureFlashRef.current) {
+      captureFlashRef.current.frames--;
+      if (captureFlashRef.current.frames <= 0) captureFlashRef.current = null;
+      dirtyRef.current = true;
+    }
+
     // Grace pulses need redraws
     if (graceRef.current > 0) dirtyRef.current = true;
 
@@ -440,6 +490,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
       flashRef.current ? { r: flashRef.current.r, c: flashRef.current.c, color: flashRef.current.color } : null,
       graceRef.current,
       frameRef.current,
+      captureFlashRef.current,
     );
   }, []);
 
@@ -522,6 +573,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
         const penalty  = captor ? PIECE_PENALTY[captor.type] : 20;
         setScoreSync(Math.max(0, scoreRef.current - penalty));
         flashRef.current = { r: qp.r, c: qp.c, color: "rgba(236,72,153,0.8)", frames: 22 };
+        captureFlashRef.current = { frames: 28, penalty, glyph: captor ? PIECE_GLYPH[captor.type] : "♟" };
 
         const occupied = new Set(bs.map(b => `${b.r},${b.c}`));
         queenPos.current = randomEmpty(occupied, qp);
@@ -576,8 +628,9 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     validMoves.current  = new Set();
     safeSquares.current = new Set();
     threatened.current  = false;
-    flashRef.current    = null;
-    animsRef.current    = [];
+    flashRef.current        = null;
+    captureFlashRef.current = null;
+    animsRef.current        = [];
     scoreRef.current    = 0;
     phaseRef.current    = "playing";
     turnsRef.current    = 0;
@@ -728,9 +781,9 @@ export default function QueenGauntletGame({ title }: { title: string }) {
       {/* Board */}
       <div
         ref={containerRef}
-        style={{ flex: 1, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
+        style={{ flex: 1, minHeight: 0, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
       >
-        <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block", touchAction: "none" }} />
+        <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block", touchAction: "none" }} />
 
         {phase === "idle" && (
           <div onClick={startGame} style={{ position: "absolute", inset: 0, background: "rgba(5,5,20,0.88)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem", cursor: "pointer" }}>
