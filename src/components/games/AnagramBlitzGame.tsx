@@ -286,7 +286,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
       {phase === "over" && (
         <div style={{ textAlign: "center", padding: "2rem 0" }}>
           <div style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>🎉</div>
-          <div style={{ fontSize: "1.1rem", color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Time's up!</div>
+          <div style={{ fontSize: "1.1rem", color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Time&apos;s up!</div>
           <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "var(--accent-primary)", marginBottom: "0.25rem" }}>{score}</div>
           <div style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>points</div>
           <button className={styles.resetBtn} onClick={startGame}>Play Again</button>
