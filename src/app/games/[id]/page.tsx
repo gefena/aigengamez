@@ -13,6 +13,9 @@ import EndlessRunnerGame from "@/components/games/EndlessRunnerGame";
 import QueenGauntletGame from "@/components/games/QueenGauntletGame";
 import MazeGame from "@/components/games/MazeGame";
 import NatureMazeGame from "@/components/games/NatureMazeGame";
+import AnagramBlitzGame from "@/components/games/AnagramBlitzGame";
+import WordLadderGame from "@/components/games/WordLadderGame";
+import GhostGame from "@/components/games/GhostGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = {
@@ -25,6 +28,9 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'queen-gauntlet': QueenGauntletGame,
   'maze-game': MazeGame,
   'forest-maze': NatureMazeGame,
+  'anagram-blitz': AnagramBlitzGame,
+  'word-ladder': WordLadderGame,
+  'ghost': GhostGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
