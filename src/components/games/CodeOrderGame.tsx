@@ -421,11 +421,15 @@ export default function CodeOrderGame({ title }: { title: string }) {
   // ── Derived ───────────────────────────────────────────────────────────────
   const gridRows  = puzzle?.grid.length ?? 0;
   const gridCols  = puzzle?.grid[0]?.length ?? 0;
-  const maxCell   = difficulty === "Kids" ? 62 : 52;
-  // Fit grid inside container with 12px padding each side + 2px gaps
-  const cellPx    = gridCols > 0
-    ? Math.min(maxCell, Math.floor((containerWidth - 24 - (gridCols - 1) * 2) / gridCols))
-    : maxCell;
+  // Cap grid height so it never exceeds ~45% of viewport height on mobile
+  const maxCellByWidth  = gridCols > 0
+    ? Math.floor((containerWidth - 24 - (gridCols - 1) * 2) / gridCols)
+    : 62;
+  const maxCellByHeight = gridRows > 0
+    ? Math.floor((Math.min(window?.innerHeight ?? 800, 800) * 0.42) / gridRows)
+    : 62;
+  const maxCell   = difficulty === "Kids" ? 60 : 50;
+  const cellPx    = Math.min(maxCell, maxCellByWidth, maxCellByHeight);
   const robotRot  = DIR_ROT[robotDir];
 
   // Palette: count available per kind
@@ -469,7 +473,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
 
       {/* ── PLAYING ─────────────────────────────────────────────────────── */}
       {phase === "playing" && puzzle && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", animation: "co-fade-in 0.3s ease-out" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", animation: "co-fade-in 0.3s ease-out", width: "100%" }}>
 
           {/* HUD */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
