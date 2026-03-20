@@ -144,6 +144,15 @@
     "description": "Catch falling fruits in your basket before they hit the ground! Dodge bombs and rotten items. Build combos for score multipliers across Kids, Medium, and Hard modes."
   },
   {
+    "id": "memory-match",
+    "title": "Memory Match",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.8,
+    "description": "Flip cards to find matching pairs! Kids mode has three themed decks — Animals, Food, and Space — with no timer. Adult mode adds bigger grids, a 90-second countdown, and score bonuses for speedy matches."
+  },
+  {
     "id": "logic-gates",
     "title": "Logic Gates",
     "developer": "aigengamez",
