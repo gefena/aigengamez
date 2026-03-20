@@ -271,10 +271,22 @@ export default function CodeOrderGame({ title }: { title: string }) {
   const [totalStars, setTotalStars] = useState(0);
   const [showHint, setShowHint]     = useState(false);
   const [hintLevel, setHintLevel]   = useState(0);
+  const [containerWidth, setContainerWidth] = useState(400);
 
-  const runTimers  = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const nextIdRef  = useRef(0);
-  const diffRef    = useRef<Difficulty>("Kids");
+  const runTimers    = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const nextIdRef    = useRef(0);
+  const diffRef      = useRef<Difficulty>("Kids");
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Measure container width for responsive grid
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   useEffect(() => { diffRef.current = difficulty; }, [difficulty]);
 
@@ -407,10 +419,14 @@ export default function CodeOrderGame({ title }: { title: string }) {
   };
 
   // ── Derived ───────────────────────────────────────────────────────────────
-  const gridRows = puzzle?.grid.length ?? 0;
-  const gridCols = puzzle?.grid[0]?.length ?? 0;
-  const cellPx   = difficulty === "Kids" ? 64 : 54;
-  const robotRot = DIR_ROT[robotDir];
+  const gridRows  = puzzle?.grid.length ?? 0;
+  const gridCols  = puzzle?.grid[0]?.length ?? 0;
+  const maxCell   = difficulty === "Kids" ? 62 : 52;
+  // Fit grid inside container with 12px padding each side + 2px gaps
+  const cellPx    = gridCols > 0
+    ? Math.min(maxCell, Math.floor((containerWidth - 24 - (gridCols - 1) * 2) / gridCols))
+    : maxCell;
+  const robotRot  = DIR_ROT[robotDir];
 
   // Palette: count available per kind
   const paletteKinds = puzzle
@@ -418,7 +434,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
     : [];
 
   return (
-    <div className={styles.gameInner}>
+    <div className={styles.gameInner} ref={containerRef}>
       <style>{KEYFRAMES}</style>
       <h3 className={styles.gameTitle}>{title}</h3>
 
@@ -456,17 +472,19 @@ export default function CodeOrderGame({ title }: { title: string }) {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", animation: "co-fade-in 0.3s ease-out" }}>
 
           {/* HUD */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>
-              Puzzle <strong style={{ color: "var(--text-primary)" }}>{puzzleIdx + 1}</strong> / {puzzles.length}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+                Puzzle <strong style={{ color: "var(--text-primary)" }}>{puzzleIdx + 1}</strong> / {puzzles.length}
+              </div>
+              <div style={{ display: "flex", gap: "2px" }}>
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <span key={i} style={{ fontSize: "1rem", opacity: runState === "won" && i < stars ? 1 : 0.2 }}>⭐</span>
+                ))}
+              </div>
             </div>
-            <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", fontStyle: "italic", textAlign: "center", flex: 1, padding: "0 0.5rem" }}>
+            <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", fontStyle: "italic" }}>
               {puzzle.concept}
-            </div>
-            <div style={{ display: "flex", gap: "2px" }}>
-              {Array.from({ length: 3 }).map((_, i) => (
-                <span key={i} style={{ fontSize: "1rem", opacity: runState === "won" && i < stars ? 1 : 0.2 }}>⭐</span>
-              ))}
             </div>
           </div>
 
@@ -590,13 +608,14 @@ export default function CodeOrderGame({ title }: { title: string }) {
                 <button
                   key={b.id}
                   onClick={() => removeBlock(b.id)}
-                  title="Click to remove"
+                  title="Tap to remove"
                   style={{
                     background: failBlock === b.id ? undefined : BLOCK_COLOR[b.kind],
                     border: `2px solid ${failBlock === b.id ? "#e53935" : BLOCK_COLOR[b.kind]}`,
                     borderRadius: "var(--radius-sm)",
-                    color: "#fff", fontWeight: 700, fontSize: "0.8rem",
-                    padding: "0.3rem 0.65rem",
+                    color: "#fff", fontWeight: 700, fontSize: "0.82rem",
+                    padding: "0.4rem 0.7rem",
+                    minHeight: 40,
                     cursor: "pointer",
                     animation: failBlock === b.id ? "co-block-fail 0.5s ease-in-out infinite" : undefined,
                     opacity: runState === "running" ? 0.8 : 1,
@@ -624,8 +643,9 @@ export default function CodeOrderGame({ title }: { title: string }) {
                     background: BLOCK_COLOR[kind],
                     border: `2px solid ${BLOCK_COLOR[kind]}`,
                     borderRadius: "var(--radius-sm)",
-                    color: "#fff", fontWeight: 700, fontSize: "0.82rem",
-                    padding: "0.35rem 0.75rem",
+                    color: "#fff", fontWeight: 700, fontSize: "0.85rem",
+                    padding: "0.45rem 0.85rem",
+                    minHeight: 44,
                     cursor: runState === "running" ? "default" : "pointer",
                     opacity: runState === "running" ? 0.6 : 1,
                   }}
@@ -637,7 +657,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
           </div>
 
           {/* Controls */}
-          <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             <button
               className={styles.resetBtn}
               onClick={runProgram}
@@ -648,23 +668,25 @@ export default function CodeOrderGame({ title }: { title: string }) {
             </button>
             <button onClick={resetPuzzle} style={{
               background: "transparent", border: "1px solid var(--border-color)",
-              color: "var(--text-secondary)", padding: "0.5rem 1rem",
+              color: "var(--text-secondary)", padding: "0.55rem 1rem",
               borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.85rem",
+              minHeight: 44,
             }}>
               ↺ Reset
             </button>
             {program.length > 0 && (
               <button onClick={clearProgram} style={{
                 background: "transparent", border: "1px solid var(--border-color)",
-                color: "var(--text-secondary)", padding: "0.5rem 1rem",
+                color: "var(--text-secondary)", padding: "0.55rem 1rem",
                 borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.85rem",
+                minHeight: 44,
               }}>
                 🗑 Clear
               </button>
             )}
           </div>
           <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
-            Click a block in your program to remove it · Click Available Blocks to add
+            Tap a block in your program to remove it · Tap Available Blocks to add
           </div>
         </div>
       )}
