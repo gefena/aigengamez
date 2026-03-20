@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "@/app/games/[id]/page.module.css";
 
 const checkWinner = (squares: (string | null)[]) => {
@@ -109,6 +109,17 @@ export default function TicTacToeGame({ title }: { title: string }) {
   const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
   const [difficulty, setDifficulty] = useState<"Easy" | "Medium" | "Hard">("Medium");
+  const [containerWidth, setContainerWidth] = useState(360);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
@@ -141,8 +152,11 @@ export default function TicTacToeGame({ title }: { title: string }) {
     }
   }, [board, isPlayerTurn, winner, difficulty]);
 
+  const cellPx = Math.min(120, Math.floor(containerWidth * 0.72 / 3));
+  const cellFs = Math.round(cellPx * 0.45);
+
   return (
-    <div className={styles.gameInner}>
+    <div ref={containerRef} className={styles.gameInner}>
       <h3 className={styles.gameTitle}>{title}</h3>
       <div className={styles.difficultySelector}>
         <span className={styles.difficultyLabel}>Difficulty:</span>
@@ -160,13 +174,32 @@ export default function TicTacToeGame({ title }: { title: string }) {
         ))}
       </div>
 
-      <div className={styles.board}>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(3, ${cellPx}px)`,
+        gap: 8,
+        background: "var(--border-color)",
+        padding: 8,
+        borderRadius: "var(--radius-md)",
+        marginBottom: "1.5rem",
+      }}>
         {board.map((cell, idx) => (
           <button
             key={idx}
-            className={`${styles.cell} ${cell ? (cell === 'X' ? styles.cellX : styles.cellO) : ''}`}
             onClick={() => handlePlay(idx)}
             disabled={cell !== null || !isPlayerTurn || winner !== null}
+            style={{
+              width: cellPx, height: cellPx,
+              background: "var(--bg-primary)",
+              border: "none",
+              borderRadius: "var(--radius-sm)",
+              fontSize: cellFs,
+              fontWeight: 800,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: cell !== null || !isPlayerTurn || winner !== null ? "not-allowed" : "pointer",
+              transition: "background var(--transition-fast)",
+              color: cell === "X" ? "var(--accent-secondary)" : cell === "O" ? "var(--accent-primary)" : undefined,
+            }}
           >
             {cell}
           </button>

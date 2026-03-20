@@ -445,7 +445,7 @@ export default function WhackAMoleGame({ title }: { title: string }) {
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
             gap: "clamp(0.5rem, 2vw, 0.9rem)",
-            width: "100%", maxWidth: 390,
+            width: "100%", maxWidth: 520,
             background: cfg.groundBg,
             borderRadius: "var(--radius-md)",
             padding: "1.1rem",

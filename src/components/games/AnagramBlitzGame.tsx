@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styles from "@/app/games/[id]/page.module.css";
 
 // ── Word pools ──────────────────────────────────────────────────────────────
@@ -55,6 +55,18 @@ type Feedback = "correct" | "wrong" | "skipped" | null;
 
 // ── Component ────────────────────────────────────────────────────────────────
 export default function AnagramBlitzGame({ title }: { title: string }) {
+  const [containerWidth, setContainerWidth] = useState(360);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   const [mode, setMode] = useState<"Kids" | "Adult">("Kids");
   const [phase, setPhase] = useState<Phase>("idle");
   const [pool, setPool] = useState<string[]>([]);
@@ -150,11 +162,12 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
     feedback === "wrong"   ? "rgba(239,68,68,0.12)" :
     feedback === "skipped" ? "rgba(99,102,241,0.12)" : "transparent";
 
+  const tilePx = Math.min(62, Math.max(40, Math.floor((containerWidth - 48) / Math.max(tiles.length, 1)) - 6));
   const tileBase: React.CSSProperties = {
-    width: 46, height: 46,
+    width: tilePx, height: tilePx,
     border: "2px solid var(--border-highlight)",
     borderRadius: "var(--radius-sm)",
-    fontSize: "1.2rem", fontWeight: 700, cursor: "pointer",
+    fontSize: Math.round(tilePx * 0.38), fontWeight: 700, cursor: "pointer",
     transition: "all 0.15s", textTransform: "uppercase",
     fontFamily: "monospace",
   };
@@ -190,7 +203,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className={styles.gameInner}>
+    <div ref={containerRef} className={styles.gameInner}>
       <h3 className={styles.gameTitle}>{title}</h3>
 
       <div className={styles.difficultySelector}>
@@ -242,7 +255,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
 
           {/* Tiles area */}
           <div style={{
-            width: "100%", maxWidth: 420,
+            width: "100%", maxWidth: 600,
             background: feedbackBg,
             border: "1px solid var(--border-color)",
             borderRadius: "var(--radius-md)",

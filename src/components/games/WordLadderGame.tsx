@@ -322,7 +322,7 @@ export default function WordLadderGame({ title }: { title: string }) {
 
           {/* Chain */}
           <div style={{
-            width: "100%", maxWidth: 340,
+            width: "100%", maxWidth: 500,
             border: "1px solid var(--border-color)",
             borderRadius: "var(--radius-md)",
             padding: "1rem",
