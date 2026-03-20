@@ -108,6 +108,15 @@
     "description": "Take turns adding letters with a strategic AI opponent. The first player to complete a real word loses! The AI uses a trie and minimax to outplay you."
   },
   {
+    "id": "bubble-pop",
+    "title": "Bubble Pop",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.8,
+    "description": "Pop colorful bubbles before they float away! Star bubbles give bonus points, freeze bubbles slow everything down, and bomb bubbles will punish the trigger-happy. Build combos for ×2/×3/×4 multipliers!"
+  },
+  {
     "id": "fruit-catcher",
     "title": "Fruit Catcher",
     "developer": "aigengamez",

@@ -18,6 +18,7 @@ import WordLadderGame from "@/components/games/WordLadderGame";
 import GhostGame from "@/components/games/GhostGame";
 import WhackAMoleGame from "@/components/games/WhackAMoleGame";
 import FruitCatcherGame from "@/components/games/FruitCatcherGame";
+import BubblePopGame from "@/components/games/BubblePopGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = {
@@ -35,6 +36,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'ghost': GhostGame,
   'whack-a-mole': WhackAMoleGame,
   'fruit-catcher': FruitCatcherGame,
+  'bubble-pop': BubblePopGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
