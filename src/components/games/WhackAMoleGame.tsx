@@ -192,8 +192,6 @@ export default function WhackAMoleGame({ title }: { title: string }) {
   useEffect(() => {
     if (phase !== "playing") return;
 
-    const cfg = CONFIGS[difficulty];
-
     function hideHole(id: number) {
       const c = CONFIGS[difficultyRef.current];
       updateHoles(prev => prev.map(h =>
