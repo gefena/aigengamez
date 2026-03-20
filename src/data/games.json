@@ -108,6 +108,15 @@
     "description": "Take turns adding letters with a strategic AI opponent. The first player to complete a real word loses! The AI uses a trie and minimax to outplay you."
   },
   {
+    "id": "code-order",
+    "title": "Code Order",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Arrange command blocks in the right order to guide the robot to the star! Build programs from Forward, Turn Left and Turn Right blocks. Use Repeat blocks in Adult mode for bonus stars. 8 puzzles per mode."
+  },
+  {
     "id": "trivia",
     "title": "Trivia Challenge",
     "developer": "aigengamez",
