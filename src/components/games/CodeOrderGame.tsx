@@ -266,7 +266,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
   const [robotDir, setRobotDir]     = useState<Dir>("E");
   const [runState, setRunState]     = useState<RunState>("idle");
   const [failBlock, setFailBlock]   = useState<string | null>(null);
-  const [attempts, setAttempts]     = useState(0);
+  const attemptsRef = useRef(0);
   const [stars, setStars]           = useState(0);
   const [totalStars, setTotalStars] = useState(0);
   const [showHint, setShowHint]     = useState(false);
@@ -293,7 +293,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
     const p = (diffRef.current === "Kids" ? KIDS_PUZZLES : ADULT_PUZZLES)[0];
     setRobotR(p.startR); setRobotC(p.startC); setRobotDir(p.startDir);
     setProgram([]); setRunState("idle"); setFailBlock(null);
-    setAttempts(0); setStars(0); setTotalStars(0);
+    attemptsRef.current = 0; setStars(0); setTotalStars(0);
     setShowHint(false); setHintLevel(0);
     setPuzzleIdx(0);
     setPhase("playing");
@@ -306,7 +306,7 @@ export default function CodeOrderGame({ title }: { title: string }) {
     clearRun();
     setRobotR(p.startR); setRobotC(p.startC); setRobotDir(p.startDir);
     setProgram([]); setRunState("idle"); setFailBlock(null);
-    setAttempts(0); setShowHint(false); setHintLevel(0);
+    attemptsRef.current = 0; setShowHint(false); setHintLevel(0);
     setPuzzleIdx(idx);
   }, [clearRun]);
 
@@ -371,11 +371,8 @@ export default function CodeOrderGame({ title }: { title: string }) {
           }
           setFailBlock(fid);
           setRunState("crashed");
-          setAttempts(a => {
-            const next = a + 1;
-            if (next >= 2) setShowHint(true);
-            return next;
-          });
+          attemptsRef.current += 1;
+          if (attemptsRef.current >= 2) setShowHint(true);
           return;
         }
         r = nr; c = nc;
