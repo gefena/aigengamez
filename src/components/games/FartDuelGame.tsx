@@ -59,7 +59,7 @@ function Btn({ icon, onDown, onUp, size = 46 }: { icon: string; onDown: () => vo
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function FartDuelGame({ title }: { title: string }) {
+export default function FartDuelGame({ title: _title }: { title: string }) {
   const [difficulty, setDifficulty] = useState<Difficulty>("kids");
   const [phase, setPhase]           = useState<Phase>("idle");
   const [playerLives, setPlayerLives] = useState(MAX_LIVES);
