@@ -171,6 +171,15 @@
     "description": "Spot the bug in the code before time runs out! Kids mode uses friendly pseudocode with emoji hints. Adult mode features real JavaScript bugs — off-by-one errors, wrong operators, broken async. Can you find them all?"
   },
   {
+    "id": "fart-duel",
+    "title": "Skunk Duel",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1474511320723-9a56873867b5?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
+  },
+  {
     "id": "whack-a-mole",
     "title": "Alien Invasion!",
     "developer": "aigengamez",
