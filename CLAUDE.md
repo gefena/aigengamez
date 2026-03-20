@@ -4,9 +4,19 @@
 
 These rules must be followed when building any new game component to prevent content clipping on mobile screens.
 
+### How the three viewport tiers work
+
+| Tier | Width | `.gameContainer` height | `.gameInner` |
+|------|-------|------------------------|--------------|
+| Desktop | >1024px | `aspect-ratio: 4/3` — gives an **explicit** computed height | `height: 100%` fills it; `overflow: hidden`; `justify-content: center` |
+| Tablet | 641–1024px | `min(75vh, 720px)` — **explicit** viewport-relative height | `overflow: visible`; `justify-content: flex-start` |
+| Mobile | ≤640px | `height: auto` — shrinks to content | `overflow: visible`; `justify-content: flex-start` |
+
+**The key rule:** `height: 100%` on `.gameInner` only works when the parent has an **explicit** height (not `height: auto`). Desktop uses `aspect-ratio`; tablet uses `min(75vh, 720px)`; mobile abandons the percentage chain entirely and lets content flow naturally.
+
 ### Root Cause
 
-`.gameContainer` has a fixed height on desktop but switches to `height: auto` on mobile. `.gameInner` is `overflow: visible; justify-content: flex-start` on mobile. This means the **game component itself** must manage its own layout — it cannot rely on the outer container to bound its height.
+`.gameContainer` has a fixed height on desktop and tablet but switches to `height: auto` on mobile. `.gameInner` is `overflow: visible; justify-content: flex-start` on tablet and mobile. This means the **game component itself** must manage its own layout — it cannot rely on the outer container to bound its height.
 
 ### Rules
 
@@ -53,7 +63,7 @@ const cellPx = Math.min(maxCellByWidth, maxCellByHeight, MAX_CELL);
 `justify-content: center` on a tall flex column in a bounded container pushes overflow in both directions. Use `flex-start` for any game with: title + difficulty selector + playfield + palette/controls stacked vertically.
 
 #### 5. Never rely on outer `.gameInner` overflow for clipping
-`.gameInner` is `overflow: visible` on mobile. Each game component is responsible for its own overflow boundaries. Use `overflow: hidden` only on specific inner containers (the playfield div), not the whole component.
+`.gameInner` is `overflow: visible` on tablet and mobile. Each game component is responsible for its own overflow boundaries. Use `overflow: hidden` only on specific inner containers (the playfield div), not the whole component.
 
 #### 6. Content stack audit before shipping
 Mentally stack the content heights: title + difficulty row + description + playfield + palette + program area + action buttons. If this stack could exceed ~480px on a phone, you need either:

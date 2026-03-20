@@ -256,10 +256,18 @@
     grid-template-columns: 1fr;
   }
 
+  /* Explicit height so gameInner's height:100% resolves correctly on tablets.
+     height:auto breaks the percentage chain — min(75vh, 720px) fixes it. */
   .gameContainer {
     aspect-ratio: auto;
-    height: auto;
-    min-height: 520px;
+    height: min(75vh, 720px);
+    min-height: 500px;
+  }
+
+  /* Mirror mobile pattern: let content-heavy games flow without clipping */
+  .gameInner {
+    overflow: visible;
+    justify-content: flex-start;
   }
 }
 
