@@ -144,6 +144,15 @@
     "description": "Catch falling fruits in your basket before they hit the ground! Dodge bombs and rotten items. Build combos for score multipliers across Kids, Medium, and Hard modes."
   },
   {
+    "id": "bug-hunt",
+    "title": "Bug Hunt",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Spot the bug in the code before time runs out! Kids mode uses friendly pseudocode with emoji hints. Adult mode features real JavaScript bugs — off-by-one errors, wrong operators, broken async. Can you find them all?"
+  },
+  {
     "id": "whack-a-mole",
     "title": "Alien Invasion!",
     "developer": "aigengamez",
