@@ -22,6 +22,7 @@ import BubblePopGame from "@/components/games/BubblePopGame";
 import TriviaGame from "@/components/games/TriviaGame";
 import CodeOrderGame from "@/components/games/CodeOrderGame";
 import BugHuntGame from "@/components/games/BugHuntGame";
+import LogicGatesGame from "@/components/games/LogicGatesGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = {
@@ -43,6 +44,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'trivia': TriviaGame,
   'code-order': CodeOrderGame,
   'bug-hunt': BugHuntGame,
+  'logic-gates': LogicGatesGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

@@ -144,6 +144,15 @@
     "description": "Catch falling fruits in your basket before they hit the ground! Dodge bombs and rotten items. Build combos for score multipliers across Kids, Medium, and Hard modes."
   },
   {
+    "id": "logic-gates",
+    "title": "Logic Gates",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Learn how computers think! Kids mode: see AND, OR, NOT and XOR gates in action — will the lamp light up? Adult mode: decode mystery gates from their truth tables. Boolean logic made fun!"
+  },
+  {
     "id": "bug-hunt",
     "title": "Bug Hunt",
     "developer": "aigengamez",
