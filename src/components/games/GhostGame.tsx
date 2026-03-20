@@ -4,13 +4,12 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import styles from "@/app/games/[id]/page.module.css";
 
 // ── Word list ─────────────────────────────────────────────────────────────────
-// ~350 common English words, 3-8 letters, used to build the trie
 const GHOST_WORDS = [
   // A
   "ape","apt","arc","arm","art","ask","ace","add","age","ago","aid","aim","air","ale","all",
-  "and","ant","any","ape","apt","arc","are","ark",
+  "and","ant","any","are","ark",
   "able","acid","aged","arch","area","army","away",
-  "apple","apply","angel","agree","ahead","alert","allow","alone","along","also",
+  "apple","apply","angel","agree","ahead","alert","allow","alone","along",
   // B
   "bad","bag","ban","bar","bat","bay","bed","beg","bet","big","bit","bog","bow","bud","bug","bun","bus","but","buy",
   "back","bail","bake","ball","band","bank","bare","barn","base","bath","bear","beat","beer","bell","best","bill","bird","bite","bike","blow","blue","boat","body","bond","bone","book","born","boss","bowl","burn",
@@ -18,27 +17,27 @@ const GHOST_WORDS = [
   // C
   "cab","can","cap","car","cat","cob","cop","cot","cow","cup","cut",
   "cage","cake","call","came","card","care","cart","case","cave","cell","chip","coal","coat","code","coin","cold","come","cook","cool","cope","cord","core","cost","crop","cure",
-  "cabin","cable","cargo","carry","catch","cause","chain","chair","chalk","chance","change","charm","chart","chase","cheap","check","chest","chief","child","claim","clap","clear","click","cliff","climb","clip","clock","close","cloth","cloud","coach","crane","crash","cream","crisp","cross","crowd","crown","crush","curve",
+  "cabin","cable","cargo","carry","catch","cause","chain","chair","chalk","chance","change","charm","chart","chase","cheap","check","chest","chief","child","claim","clear","click","cliff","climb","clock","close","cloth","cloud","coach","crane","crash","cream","crisp","cross","crowd","crown","crush","curve",
   // D
   "den","dig","dim","dip","dog","dot","dry","dab","dam",
   "dare","dark","dash","data","date","dead","deal","dear","deep","deer","deny","desk","diet","dish","dive","done","door","dove","down","draw","drop","drum","dusk","dust","dote",
-  "daily","dance","delay","depot","depth","dirty","doing","doubt","draft","drain","drama","dream","dress","drift","drill","drink","drive","drove","drums","dunes","dwarf",
+  "daily","dance","delay","depot","depth","dirty","doing","doubt","draft","drain","drama","dream","dress","drift","drill","drink","drive","drove","dwarf",
   // E
-  "ear","eat","egg","elm","end","err","eve","eye",
+  "ear","eat","egg","elm","end","eve","eye",
   "each","earn","east","edge","emit","even","ever","evil","exam",
   "eagle","early","earth","eight","elder","elite","empty","enemy","enjoy","enter","equal","error","essay","every",
   // F
   "fan","far","fat","fin","fit","fly","fog","fur","fun",
   "face","fact","fail","fair","fall","fame","farm","fast","fate","feel","feet","fell","felt","fern","fill","film","find","fine","fire","firm","fish","fist","flag","flat","flaw","flip","flow","foam","fold","fond","fool","fore","fork","form","fort","free","frog","fuel","full","fund","fuse",
-  "fable","faith","falls","fancy","fault","feast","fence","fetch","fever","fiber","field","fight","final","fixed","flame","flair","flash","fleet","flesh","float","flood","floor","flora","flour","flute","focus","force","forge","forth","forum","found","frame","frank","fresh","front","frost","fruit","funny","furry",
+  "fable","faith","fancy","fault","feast","fence","fetch","fever","fiber","field","fight","final","fixed","flame","flair","flash","fleet","flesh","float","flood","floor","flour","flute","focus","force","forge","forth","forum","found","frame","frank","fresh","front","frost","fruit","funny","furry",
   // G
   "gap","gas","god","got","gun","gut","guy",
   "gain","game","gang","gate","gave","gear","gift","girl","give","glad","glow","glue","goal","gold","golf","gone","good","grab","gram","gray","grew","grid","grim","grip","grit","grow","gulf","gust",
-  "giant","ghost","given","glare","glass","glaze","globe","gloom","gloss","glove","gnome","grace","grade","grain","grand","grant","grape","grasp","grass","grave","green","greet","grill","groan","groin","groom","group","grove","growl","guard","guest","guide","guild","guilt","guise","gusto",
+  "giant","ghost","given","glare","glass","glaze","globe","gloom","gloss","glove","gnome","grace","grade","grain","grand","grant","grape","grasp","grass","grave","green","greet","grill","groan","groom","group","grove","growl","guard","guest","guide","guild","guilt","gusto",
   // H
   "had","ham","hat","hay","hen","her","him","hip","hit","hop","hot","hub","hug","hum",
   "hall","halt","hand","hang","hard","harm","harp","hate","have","haze","heal","heap","heat","help","herb","hero","hill","hint","hire","hold","hole","holy","home","hope","horn","host","hour","huge","hull","hung","hunt","hurt","hymn",
-  "habit","happy","hardy","harsh","haste","haven","heart","heavy","hence","hilly","hinge","hoary","honor","horse","hotel","house","human","humid","humor","hurry",
+  "habit","happy","hardy","harsh","haste","haven","heart","heavy","hence","hinge","honor","horse","hotel","house","human","humid","humor","hurry",
   // I
   "ill","ink","ion","icy",
   "icon","idea","idle","inch","into","iron","item",
@@ -70,19 +69,19 @@ const GHOST_WORDS = [
   // P
   "pad","pal","pan","par","pat","paw","pay","peg","pen","pet","pig","pin","pit","pod","pop","pot","pub","pun","pup","put",
   "pace","page","pain","pale","palm","park","part","path","peak","pile","pine","plan","play","plot","plug","pole","pool","poor","pore","pose","pray","prey","pull","pure","push",
-  "paced","padre","paint","panel","panic","party","pasta","patch","pause","peace","pearl","pedal","phase","phone","photo","piano","piece","pilot","pirate","pitch","pixel","place","plain","plane","plant","plate","plaza","plead","pluck","plumb","plume","point","polar","porch","pound","power","press","price","pride","prime","print","prior","prize","probe","prone","proof","proud","prove","prune","pulse","punch","purse",
+  "paced","padre","paint","panel","panic","party","pasta","patch","pause","peace","pearl","pedal","phase","phone","photo","piano","piece","pilot","pitch","pixel","place","plain","plane","plant","plate","plaza","plead","pluck","plumb","plume","point","polar","porch","pound","power","press","price","pride","prime","print","prior","prize","probe","prone","proof","proud","prove","prune","pulse","punch","purse",
   // R
   "rag","ram","ran","rap","rat","raw","ray","red","rib","rid","rim","rip","rob","rod","rot","row","rub","rug","rum","run","rut",
   "race","rain","rake","rang","rank","rash","rate","read","real","reel","rely","rent","rest","rich","ride","ring","riot","ripe","risk","road","roam","roar","robe","rock","rode","role","roll","roof","room","rope","rose","rule","rush","rust",
-  "radar","radio","raise","rally","ranch","range","rapid","ratio","reach","react","ready","realm","rebel","refer","reign","relax","relay","relic","repay","reply","rider","rifle","right","risky","rival","river","robin","rocky","roman","rough","round","route","royal","ruler","rural","rusty",
+  "radar","radio","raise","rally","ranch","range","rapid","ratio","reach","react","ready","realm","rebel","refer","reign","relax","relay","relic","repay","reply","rider","rifle","right","risky","rival","river","robin","rocky","rough","round","route","royal","ruler","rural","rusty",
   // S
   "sad","sap","sat","saw","say","set","sin","sip","sit","sob","son","sow","sub","sum","sun","sup",
   "safe","sage","sail","sake","sale","salt","same","sand","sang","seal","sell","send","shed","ship","shoe","shop","shot","show","sick","side","silk","sing","sink","size","skin","slim","slip","slow","snow","soak","soar","soft","soil","sold","sole","some","song","sort","soul","span","spin","spot","star","stay","stem","step","stew","stop","stun","suck","suit","sung","sunk","sure","swap","swim",
-  "scald","scale","scamp","scant","scare","scene","scone","scope","scout","screw","scrub","seize","sense","serve","seven","shade","shaft","shake","shall","shame","shape","share","shark","sharp","shelf","shell","shift","shine","shirt","shock","shore","short","shout","shove","sight","since","sixth","sixty","skill","skull","skunk","slave","sleek","sleep","sleet","slice","slide","slime","slope","sloth","smart","smell","smile","smoke","snake","solar","solve","sorry","south","space","spare","spark","speak","spear","speed","spell","spend","spice","spill","spike","spine","spoke","spoon","spray","sprig","squad","squat","squib","stack","staff","stage","stain","stair","stake","stale","stall","stamp","stand","stark","start","stash","state","stave","stays","steal","steam","steep","steer","stern","stick","stiff","still","stock","stomp","stone","stool","store","storm","story","stout","stove","strap","straw","stray","strut","study","stuff","stump","stung","stunt","style","sugar","suite","sunny","super","surge","swamp","swear","sweep","sweet","swept","swift","swipe","swirl","swoop",
+  "scald","scale","scant","scare","scene","scone","scope","scout","screw","scrub","seize","sense","serve","seven","shade","shaft","shake","shall","shame","shape","share","shark","sharp","shelf","shell","shift","shine","shirt","shock","shore","short","shout","shove","sight","since","sixth","sixty","skill","skull","slave","sleek","sleep","slice","slide","slime","slope","smart","smell","smile","smoke","snake","solar","solve","sorry","south","space","spare","spark","speak","spear","speed","spell","spend","spice","spill","spike","spine","spoke","spoon","spray","stack","staff","stage","stain","stair","stake","stale","stall","stamp","stand","stark","start","stash","state","steal","steam","steep","steer","stern","stick","stiff","still","stock","stomp","stone","stool","store","storm","story","stout","stove","strap","straw","stray","strut","study","stuff","stump","stung","stunt","style","sugar","suite","sunny","super","surge","swamp","swear","sweep","sweet","swept","swift","swipe","swirl","swoop",
   // T
   "tab","tan","tap","tar","tax","tea","ten","tin","tip","toe","ton","top","tot","tow","toy","tug","tub",
   "tail","take","tale","talk","tame","tank","tape","task","teal","team","tear","tell","tall","tick","tide","till","time","tire","told","toll","tone","tool","tore","toss","tour","town","trap","tray","tree","trim","trip","true","tube","tune","turn","twin","type",
-  "table","taunt","teach","tease","tempo","tense","tenth","thank","theft","their","theme","there","thick","thing","think","third","thorn","those","three","threw","throw","thumb","thump","tiara","tiger","tight","timer","tired","title","today","token","tonic","topic","torch","total","touch","tough","toxic","trace","track","trade","trail","train","trait","tramp","trash","treat","trend","trial","tribe","trick","trite","trout","trove","truce","truck","truly","trump","trunk","trust","truth","tulip","tumor","tuner","tunic","tuple","tutor","tweak","twine","twist","tycoon",
+  "table","taunt","teach","tease","tempo","tense","tenth","thank","theft","their","theme","there","thick","thing","think","third","thorn","those","three","threw","throw","thumb","thump","tiger","tight","timer","tired","title","today","token","tonic","topic","torch","total","touch","tough","toxic","trace","track","trade","trail","train","trait","tramp","trash","treat","trend","trial","tribe","trick","trout","trove","truce","truck","truly","trump","trunk","trust","truth","tulip","tumor","tunic","tutor","tweak","twine","twist",
   // U
   "unit","upon","urge","used",
   "under","unfit","union","unity","until","upper","upset","urban","usher",
@@ -93,7 +92,7 @@ const GHOST_WORDS = [
   // W
   "war","wax","way","web","wit","woe",
   "wade","wage","wait","wake","walk","wall","wand","ward","warm","wash","wave","weed","week","well","west","wide","wind","wine","wing","wire","wish","woke","word","worm","wrap",
-  "waist","waste","watch","water","weary","weave","wedge","weigh","weird","wheat","wheel","where","which","while","whiff","whirl","whisk","white","whole","whose","widen","wider","wield","wimpy","witch","woman","women","wrath","wreck","wring","write","wrong",
+  "waist","waste","watch","water","weary","weave","wedge","weigh","weird","wheat","wheel","where","which","while","whiff","whirl","whisk","white","whole","whose","widen","wield","witch","woman","women","wrath","wreck","wring","write","wrong",
   // Y-Z
   "yell","your","zone","zoom","zero",
   "yacht","yield","young","youth",
@@ -143,51 +142,67 @@ function wordsWithPrefix(root: TrieNode, prefix: string): string[] {
   return results;
 }
 
-// Minimax: returns true if current player can WIN from this position
-// Called AFTER a letter was added — so this is the OPPONENT's turn to add next
-const miniMemo = new Map<string, boolean>();
-
-function ghostWins(node: TrieNode, prefix: string, minLoseLen: number): boolean {
-  const key = `${prefix}:${minLoseLen}`;
-  if (miniMemo.has(key)) return miniMemo.get(key)!;
+// ── Minimax (memo is local per AI call) ─────────────────────────────────────
+// Returns true if the player whose turn it is CAN win from this position
+function ghostWins(
+  node: TrieNode,
+  prefix: string,
+  minLoseLen: number,
+  memo: Map<string, boolean>
+): boolean {
+  const key = prefix;
+  if (memo.has(key)) return memo.get(key)!;
 
   let anyWin = false;
   for (const [letter, child] of Object.entries(node.children)) {
     const np = prefix + letter;
-    // Would completing this word make US lose? (we added the letter)
-    if (child.isWord && np.length >= minLoseLen) continue; // skip: we'd lose, not a win
-    // Recurse: after we add letter, opponent takes their turn
-    const opponentWins = ghostWins(child, np, minLoseLen);
-    if (!opponentWins) { anyWin = true; break; } // opponent loses → we win
+    if (child.isWord && np.length >= minLoseLen) continue; // this move loses for us
+    const opponentWins = ghostWins(child, np, minLoseLen, memo);
+    if (!opponentWins) { anyWin = true; break; }
   }
 
-  miniMemo.set(key, anyWin);
+  memo.set(key, anyWin);
   return anyWin;
 }
 
-function aiChooseLetter(root: TrieNode, prefix: string, minLoseLen: number): string | null {
-  miniMemo.clear();
+function aiChooseLetter(
+  root: TrieNode,
+  prefix: string,
+  minLoseLen: number,
+  noisy: boolean
+): string | null {
   const node = trieNode(root, prefix);
   if (!node) return null;
 
-  // First pass: look for a winning move
-  for (const [letter, child] of Object.entries(node.children)) {
-    const np = prefix + letter;
-    if (child.isWord && np.length >= minLoseLen) continue; // don't complete a word
-    const opponentWins = ghostWins(child, np, minLoseLen);
-    if (!opponentWins) return letter;
-  }
-
-  // Second pass: any move that doesn't immediately complete a word
+  // Collect moves that don't immediately complete a losing word
+  const validMoves: string[] = [];
   for (const [letter, child] of Object.entries(node.children)) {
     const np = prefix + letter;
     if (child.isWord && np.length >= minLoseLen) continue;
-    return letter;
+    validMoves.push(letter);
   }
 
-  // Forced to complete a word — pick first child and lose
-  const firstLetter = Object.keys(node.children)[0];
-  return firstLetter ?? null;
+  if (validMoves.length === 0) {
+    // Forced to complete a word — pick any and lose gracefully
+    return Object.keys(node.children)[0] ?? null;
+  }
+
+  // 20% chance: pick a random valid move (makes AI beatable)
+  if (noisy && Math.random() < 0.2) {
+    return validMoves[Math.floor(Math.random() * validMoves.length)];
+  }
+
+  // Minimax: find a move that makes the opponent lose
+  const memo = new Map<string, boolean>();
+  for (const letter of validMoves) {
+    const child = node.children[letter];
+    const np = prefix + letter;
+    const opponentWins = ghostWins(child, np, minLoseLen, memo);
+    if (!opponentWins) return letter; // winning move
+  }
+
+  // No winning move found — pick first valid move
+  return validMoves[0];
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -205,11 +220,14 @@ export default function GhostGame({ title }: { title: string }) {
   const [loseMsg, setLoseMsg] = useState("");
   const [aiThinking, setAiThinking] = useState(false);
   const [challengeResult, setChallengeResult] = useState<string | null>(null);
+  const [record, setRecord] = useState({ wins: 0, losses: 0 });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const trie = useMemo(() => buildTrie(GHOST_WORDS), []);
-  // Kids: 3+ letter word = lose | Adult: 4+ letter word = lose
-  const minLoseLen = mode === "Kids" ? 3 : 4;
+
+  // Kids = easier: 4+ letter words lose (short words safe)
+  // Adult = harder: 3+ letter words lose (even "cat" counts)
+  const minLoseLen = mode === "Kids" ? 4 : 3;
 
   const startGame = useCallback(() => {
     setPrefix("");
@@ -228,9 +246,16 @@ export default function GhostGame({ title }: { title: string }) {
     setHistory([]);
     setLoseMsg("");
     setChallengeResult(null);
+    // record intentionally preserved across sessions
   }, []);
 
-  // Focus input on player's turn
+  // Track wins/losses
+  useEffect(() => {
+    if (phase === "ai-lost")     setRecord(r => ({ ...r, wins: r.wins + 1 }));
+    if (phase === "player-lost") setRecord(r => ({ ...r, losses: r.losses + 1 }));
+  }, [phase]);
+
+  // Focus input on player turn
   useEffect(() => {
     if (phase === "playing" && turn === "player") {
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -243,11 +268,10 @@ export default function GhostGame({ title }: { title: string }) {
     setAiThinking(true);
     const t = setTimeout(() => {
       setAiThinking(false);
-      const letter = aiChooseLetter(trie, prefix, minLoseLen);
+      const letter = aiChooseLetter(trie, prefix, minLoseLen, true);
 
       if (!letter) {
-        // AI is stuck — no valid extension
-        setLoseMsg("AI can't continue — AI loses!");
+        setLoseMsg("AI is stuck — AI loses!");
         setPhase("ai-lost");
         return;
       }
@@ -276,8 +300,7 @@ export default function GhostGame({ title }: { title: string }) {
 
     const node = trieNode(trie, prefix);
     if (!node || !node.children[letter]) {
-      // Invalid extension — player challenged into dead end, loses
-      setLoseMsg(`"${(prefix + letter).toUpperCase()}" can't start any word — you lose!`);
+      setLoseMsg(`"${(prefix + letter).toUpperCase()}" leads nowhere — you lose!`);
       setPhase("player-lost");
       setInputLetter("");
       return;
@@ -300,7 +323,6 @@ export default function GhostGame({ title }: { title: string }) {
   };
 
   const handleChallenge = () => {
-    // Player challenges: claims current prefix can't form any word
     const words = wordsWithPrefix(trie, prefix);
     if (words.length === 0) {
       setChallengeResult(`Challenge success! No word starts with "${prefix.toUpperCase()}" — AI loses!`);
@@ -328,6 +350,19 @@ export default function GhostGame({ title }: { title: string }) {
   const endIcon = phase === "player-lost" ? "💀" : "🎉";
   const endTitle = phase === "player-lost" ? "You lost!" : "AI lost!";
 
+  const recordPill = (record.wins + record.losses) > 0 && (
+    <div style={{
+      display: "inline-flex", gap: "0.75rem", fontSize: "0.78rem",
+      background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
+      borderRadius: "var(--radius-full, 999px)", padding: "0.25rem 0.75rem",
+      color: "var(--text-secondary)",
+    }}>
+      <span style={{ color: "#22c55e" }}>W: {record.wins}</span>
+      <span>|</span>
+      <span style={{ color: "#ef4444" }}>L: {record.losses}</span>
+    </div>
+  );
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className={styles.gameInner}>
@@ -349,15 +384,20 @@ export default function GhostGame({ title }: { title: string }) {
         <div style={{ textAlign: "center", padding: "2rem 0" }}>
           <p style={{ color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: "0.75rem" }}>
             Take turns adding one letter to a growing word.<br />
-            The first player to <strong>complete a real word</strong> loses!<br />
-            <span style={{ fontSize: "0.85rem" }}>
-              {mode === "Kids" ? "Completing any 3+ letter word loses." : "Completing any 4+ letter word loses."}
-            </span>
+            The first player to <strong>complete a real word</strong> loses!
+          </p>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginBottom: "0.5rem" }}>
+            {mode === "Kids"
+              ? "🟢 Kids: only 4+ letter words lose. Short words (3 letters) are safe!"
+              : "🔴 Adult: even 3-letter words lose. Every letter is a trap!"}
           </p>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", marginBottom: "1.5rem" }}>
-            You can also <strong>Challenge</strong> if you think the AI has no valid word to make.
+            You can <strong>Challenge</strong> if you think the AI has no valid word.
           </p>
-          <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
+          {recordPill}
+          <div style={{ marginTop: "1.25rem" }}>
+            <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
+          </div>
         </div>
       )}
 
@@ -365,7 +405,10 @@ export default function GhostGame({ title }: { title: string }) {
       {phase === "playing" && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
 
-          {/* Growing prefix */}
+          {/* Record pill */}
+          {recordPill}
+
+          {/* Growing prefix display */}
           <div style={{
             background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             borderRadius: "var(--radius-md)", padding: "1rem 1.5rem",
@@ -391,7 +434,7 @@ export default function GhostGame({ title }: { title: string }) {
             )}
           </div>
 
-          {/* Turn indicator */}
+          {/* Turn status */}
           <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
             {aiThinking
               ? "🤔 AI is thinking…"
@@ -437,7 +480,7 @@ export default function GhostGame({ title }: { title: string }) {
             <span><span style={{ color: "var(--accent-primary)" }}>■</span> AI</span>
           </div>
 
-          {/* Challenge button */}
+          {/* Challenge */}
           {turn === "player" && !aiThinking && prefix.length >= 1 && (
             <button
               onClick={handleChallenge}
@@ -447,7 +490,7 @@ export default function GhostGame({ title }: { title: string }) {
                 borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.82rem",
               }}
             >
-              Challenge AI (can they make a word?)
+              Challenge AI (can they form a word?)
             </button>
           )}
         </div>
@@ -461,15 +504,16 @@ export default function GhostGame({ title }: { title: string }) {
             {endTitle}
           </div>
 
-          {challengeResult
-            ? <div style={{ color: "var(--text-secondary)", marginBottom: "0.75rem" }}>{challengeResult}</div>
-            : <div style={{ color: "var(--text-secondary)", marginBottom: "0.75rem" }}>{loseMsg}</div>
-          }
+          <div style={{ color: "var(--text-secondary)", marginBottom: "0.75rem" }}>
+            {challengeResult ?? loseMsg}
+          </div>
 
-          {/* Show the full word chain */}
-          <div style={{ display: "flex", gap: "0.3rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.25rem" }}>
+          <div style={{ display: "flex", gap: "0.3rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem" }}>
             {history.map((e, i) => letterChip(e, i))}
           </div>
+
+          {/* Session record */}
+          <div style={{ marginBottom: "1.25rem" }}>{recordPill}</div>
 
           <button className={styles.resetBtn} onClick={startGame}>Play Again</button>
         </div>

@@ -48,7 +48,8 @@ const VALID_4 = new Set([
   "once","only","open","oral","over",
   "pace","page","pain","pair","pale","palm","park","part","pass","past","path","pave","peak","peel","peer","pile","pine","pink","pipe","plan","play","plot","plow","plug","plum","plus","poem","pole","poll","pool","poor","pore","port","pose","pour","pray","prey","prop","pull","pure","push",
   "race","rack","rage","raid","rail","rain","rake","ramp","rang","rank","rant","rash","rate","read","real","rear","reel","rein","rely","rent","rest","rich","ride","ring","riot","ripe","risk","road","roam","roar","robe","rock","rode","role","roll","roof","room","rope","rose","rout","rule","ruse","rush","rust",
-  "safe","sage","sake","sale","salt","same","sane","sang","sank","scar","seal","seam","seem","seen","self","sell","send","sent","shed","ship","shoe","shop","shot","show","shut","sick","side","silk","sing","sink","size","skin","slim","slip","slot","slow","slug","snap","snow","soak","soar","sock","soft","soil","sold","sole","some","song","sort","soul","span","spar","spin","spit","spot","star","stay","stem","step","stew","stop","stub","stun","suck","suit","sung","sunk","sure","swap","swim","tail","take","tale","talk","tame","tank","tape","task","teal","team","tear","tell","tall","text","thin","tick","tide","till","time","tire","told","toll","tomb","tone","took","tool","tore","torn","toss","tour","town","trap","tray","tree","trek","trim","trip","true","tube","tune","turn","twin","type",
+  "safe","sage","sake","sale","salt","same","sane","sang","sank","scar","seal","seam","seem","seen","self","sell","send","sent","shed","ship","shoe","shop","shot","show","shut","sick","side","silk","sing","sink","size","skin","slim","slip","slot","slow","slug","snap","snow","soak","soar","sock","soft","soil","sold","sole","some","song","sort","soul","span","spar","spin","spit","spot","star","stay","stem","step","stew","stop","stub","stun","suck","suit","sung","sunk","sure","swap","swim",
+  "tail","take","tale","talk","tame","tank","tape","task","teal","team","tear","tell","tall","text","thin","tick","tide","till","time","tire","told","toll","tomb","tone","took","tool","tore","torn","toss","tour","town","trap","tray","tree","trek","trim","trip","true","tube","tune","turn","twin","type",
   "vale","vane","veil","very","vine","vote",
   "wade","wage","wait","wake","walk","wall","wand","want","ward","warm","wash","wave","weed","week","well","went","west","wide","wind","wine","wing","wire","wish","woke","word","worm","worn","wrap","writ",
   "yell","your","zero","zone","zoom",
@@ -58,25 +59,58 @@ const VALID_4 = new Set([
 interface Puzzle { start: string; end: string; optimal: number; hint: string[] }
 
 const KIDS_PUZZLES: Puzzle[] = [
-  { start: "cat", end: "bag", optimal: 3, hint: ["cat","bat","bad","bag"] },
-  { start: "hot", end: "cap", optimal: 3, hint: ["hot","hop","cop","cap"] },
-  { start: "dog", end: "bat", optimal: 3, hint: ["dog","bog","bag","bat"] },
+  // 2-step
+  { start: "hop", end: "hit", optimal: 2, hint: ["hop","hip","hit"] },
+  { start: "mud", end: "bad", optimal: 2, hint: ["mud","mad","bad"] },
+  { start: "cup", end: "but", optimal: 2, hint: ["cup","cut","but"] },
+  { start: "sat", end: "wet", optimal: 2, hint: ["sat","set","wet"] },
+  { start: "sit", end: "sun", optimal: 2, hint: ["sit","sin","sun"] },
+  { start: "fan", end: "bun", optimal: 2, hint: ["fan","fun","bun"] },
   { start: "man", end: "hen", optimal: 2, hint: ["man","men","hen"] },
   { start: "sun", end: "gut", optimal: 2, hint: ["sun","gun","gut"] },
   { start: "big", end: "bad", optimal: 2, hint: ["big","bid","bad"] },
+  // 3-step
+  { start: "cat", end: "bag", optimal: 3, hint: ["cat","bat","bad","bag"] },
+  { start: "hot", end: "cap", optimal: 3, hint: ["hot","hop","cop","cap"] },
+  { start: "dog", end: "bat", optimal: 3, hint: ["dog","bog","bag","bat"] },
+  { start: "got", end: "cap", optimal: 3, hint: ["got","cot","cop","cap"] },
+  { start: "wet", end: "leg", optimal: 3, hint: ["wet","let","led","leg"] },
+  { start: "ran", end: "pot", optimal: 3, hint: ["ran","rat","rot","pot"] },
+  { start: "log", end: "cop", optimal: 3, hint: ["log","lot","cot","cop"] },
+  { start: "top", end: "lot", optimal: 3, hint: ["top","hop","hot","lot"] },
+  // 4-step
   { start: "man", end: "tan", optimal: 4, hint: ["man","men","hen","ten","tan"] },
   { start: "hot", end: "cat", optimal: 4, hint: ["hot","hop","cop","cap","cat"] },
+  { start: "rot", end: "fun", optimal: 4, hint: ["rot","rat","ran","run","fun"] },
 ];
 
 const ADULT_PUZZLES: Puzzle[] = [
+  // 2-step
+  { start: "dare", end: "gate", optimal: 2, hint: ["dare","date","gate"] },
+  { start: "lime", end: "tide", optimal: 2, hint: ["lime","time","tide"] },
+  { start: "lake", end: "bike", optimal: 2, hint: ["lake","bake","bike"] },
+  { start: "band", end: "bone", optimal: 2, hint: ["band","bond","bone"] },
+  { start: "love", end: "lime", optimal: 2, hint: ["love","live","lime"] },
+  { start: "bone", end: "tune", optimal: 2, hint: ["bone","tone","tune"] },
+  { start: "pale", end: "pine", optimal: 2, hint: ["pale","pile","pine"] },
+  // 3-step
   { start: "cake", end: "bite", optimal: 3, hint: ["cake","bake","bike","bite"] },
-  { start: "cold", end: "warm", optimal: 4, hint: ["cold","cord","word","ward","warm"] },
   { start: "love", end: "note", optimal: 3, hint: ["love","dove","dote","note"] },
+  { start: "cold", end: "ward", optimal: 3, hint: ["cold","cord","word","ward"] },
+  { start: "ring", end: "link", optimal: 3, hint: ["ring","sing","sink","link"] },
+  { start: "road", end: "dead", optimal: 3, hint: ["road","load","lead","dead"] },
+  { start: "lake", end: "wine", optimal: 3, hint: ["lake","lane","line","wine"] },
+  { start: "game", end: "lane", optimal: 3, hint: ["game","tame","tale","lane"] },
+  { start: "most", end: "last", optimal: 3, hint: ["most","lost","lust","last"] },
+  { start: "sail", end: "wall", optimal: 3, hint: ["sail","bail","ball","wall"] },
+  // 4-step
+  { start: "cold", end: "warm", optimal: 4, hint: ["cold","cord","word","ward","warm"] },
+  { start: "cake", end: "kite", optimal: 4, hint: ["cake","bake","bike","bite","kite"] },
+  { start: "dark", end: "lane", optimal: 4, hint: ["dark","lark","lack","lake","lane"] },
+  { start: "fire", end: "king", optimal: 4, hint: ["fire","fine","find","kind","king"] },
+  // 5-step
   { start: "love", end: "rose", optimal: 5, hint: ["love","dove","dote","note","nose","rose"] },
   { start: "head", end: "tail", optimal: 5, hint: ["head","heal","teal","tell","tall","tail"] },
-  { start: "cold", end: "ward", optimal: 3, hint: ["cold","cord","word","ward"] },
-  { start: "dare", end: "gate", optimal: 2, hint: ["dare","date","gate"] },
-  { start: "cake", end: "kite", optimal: 4, hint: ["cake","bake","bike","bite","kite"] },
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -108,6 +142,7 @@ export default function WordLadderGame({ title }: { title: string }) {
   const [error, setError] = useState<string | null>(null);
   const [steps, setSteps] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [showOptimal, setShowOptimal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const puzzleList = mode === "Kids" ? KIDS_PUZZLES : ADULT_PUZZLES;
@@ -120,6 +155,7 @@ export default function WordLadderGame({ title }: { title: string }) {
     setError(null);
     setSteps(0);
     setShowHint(false);
+    setShowOptimal(false);
     setPhase("playing");
   }, [puzzleList]);
 
@@ -131,14 +167,13 @@ export default function WordLadderGame({ title }: { title: string }) {
     setError(null);
     setSteps(0);
     setShowHint(false);
+    setShowOptimal(false);
   }, []);
 
-  // Focus input when playing
   useEffect(() => {
     if (phase === "playing") setTimeout(() => inputRef.current?.focus(), 50);
   }, [phase, chain]);
 
-  // Clear error after delay
   useEffect(() => {
     if (!error) return;
     const t = setTimeout(() => setError(null), 2000);
@@ -168,9 +203,8 @@ export default function WordLadderGame({ title }: { title: string }) {
     }
 
     const newChain = [...chain, word];
-    const newSteps = steps + 1;
     setChain(newChain);
-    setSteps(newSteps);
+    setSteps(s => s + 1);
     setInput("");
     setError(null);
 
@@ -182,7 +216,7 @@ export default function WordLadderGame({ title }: { title: string }) {
     setPhase("lost");
   };
 
-  // ── Chip styles ──────────────────────────────────────────────────────────
+  // ── Styles ────────────────────────────────────────────────────────────────
   const chipStyle = (isTarget: boolean, isCurrent: boolean): React.CSSProperties => ({
     display: "inline-block",
     padding: "0.4rem 1.25rem",
@@ -269,7 +303,21 @@ export default function WordLadderGame({ title }: { title: string }) {
             <span style={chipStyle(false, false)}>{puzzle.start}</span>
             <span style={{ color: "var(--text-secondary)", fontSize: "1.5rem" }}>→</span>
             <span style={chipStyle(true, false)}>{puzzle.end}</span>
-            <span style={{ color: "var(--text-secondary)", fontSize: "0.82rem" }}>optimal: {puzzle.optimal} steps</span>
+            <button
+              onClick={() => setShowOptimal(v => !v)}
+              title="Reveal optimal step count"
+              style={{
+                background: "transparent",
+                border: "1px solid var(--border-color)",
+                borderRadius: "var(--radius-full, 999px)",
+                color: showOptimal ? "var(--accent-primary)" : "var(--text-secondary)",
+                width: 24, height: 24, cursor: "pointer", fontSize: "0.75rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              {showOptimal ? `${puzzle.optimal}` : "?"}
+            </button>
           </div>
 
           {/* Chain */}
@@ -291,7 +339,6 @@ export default function WordLadderGame({ title }: { title: string }) {
               ))}
             </div>
 
-            {/* Input row */}
             <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.5rem", justifyContent: "center" }}>
               <input
                 ref={inputRef}
@@ -326,12 +373,10 @@ export default function WordLadderGame({ title }: { title: string }) {
             </div>
           </div>
 
-          {/* Error */}
           {error && (
             <div style={{ color: "#ef4444", fontSize: "0.9rem", fontWeight: 600 }}>{error}</div>
           )}
 
-          {/* Steps counter */}
           <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
             Steps taken: <strong style={{ color: "var(--text-primary)" }}>{steps}</strong>
           </div>
@@ -370,7 +415,7 @@ export default function WordLadderGame({ title }: { title: string }) {
         </div>
       )}
 
-      {/* ── LOST / HINT ── */}
+      {/* ── LOST ── */}
       {phase === "lost" && puzzle && (
         <div style={{ textAlign: "center", padding: "1.5rem 0" }}>
           <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔍</div>

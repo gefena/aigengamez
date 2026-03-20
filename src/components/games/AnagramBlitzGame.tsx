@@ -21,7 +21,7 @@ const ADULT_WORDS = [
   "candle","mirror","dragon","wizard","sunset","flower","jungle",
   "rocket","magnet","pencil","pillow","window","hammer","button",
   "silver","frozen","stream","battle","planet","travel","hunter",
-  "bronze","frozen","velvet","marble","gravel","cinder","cobalt",
+  "bronze","crayon","velvet","marble","gravel","cinder","cobalt",
   "captain","compass","crystal","diamond","chimney","lantern",
   "feather","bicycle","dolphin","blanket","harvest","kingdom",
   "leather","painter","rainbow","scatter","thunder","village",
@@ -51,7 +51,7 @@ function scrambleWord(word: string): string[] {
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type Phase = "idle" | "playing" | "over";
-type Feedback = "correct" | "wrong" | null;
+type Feedback = "correct" | "wrong" | "skipped" | null;
 
 // ── Component ────────────────────────────────────────────────────────────────
 export default function AnagramBlitzGame({ title }: { title: string }) {
@@ -112,17 +112,18 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
   // Handle feedback resolution
   useEffect(() => {
     if (!feedback) return;
+    const delay = feedback === "skipped" ? 900 : 700;
     const t = setTimeout(() => {
       setFeedback(null);
-      if (feedback === "correct") {
-        setScore(s => s + pointsPerWord);
+      if (feedback === "correct" || feedback === "skipped") {
+        if (feedback === "correct") setScore(s => s + pointsPerWord);
         const next = poolIdx + 1;
         if (next < pool.length) { setPoolIdx(next); loadWord(pool, next); }
         else setPhase("over");
       } else {
         setSelected([]);
       }
-    }, 700);
+    }, delay);
     return () => clearTimeout(t);
   }, [feedback, poolIdx, pool, loadWord, pointsPerWord]);
 
@@ -137,9 +138,8 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
   };
 
   const handleSkip = () => {
-    const next = poolIdx + 1;
-    if (next < pool.length) { setPoolIdx(next); loadWord(pool, next); }
-    else setPhase("over");
+    if (feedback) return;
+    setFeedback("skipped");
   };
 
   // ── Styles ────────────────────────────────────────────────────────────────
@@ -147,7 +147,8 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
 
   const feedbackBg =
     feedback === "correct" ? "rgba(34,197,94,0.12)" :
-    feedback === "wrong"   ? "rgba(239,68,68,0.12)" : "transparent";
+    feedback === "wrong"   ? "rgba(239,68,68,0.12)" :
+    feedback === "skipped" ? "rgba(99,102,241,0.12)" : "transparent";
 
   const tileBase: React.CSSProperties = {
     width: 46, height: 46,
@@ -171,6 +172,20 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
     background: "var(--accent-primary)",
     borderColor: "var(--accent-primary)",
     color: "#fff", cursor: "pointer",
+  };
+
+  const feedbackMsg = () => {
+    if (feedback === "correct") return `✓ ${currentWord.toUpperCase()}! +${pointsPerWord}`;
+    if (feedback === "wrong")   return "✗ Not quite — try again!";
+    if (feedback === "skipped") return `→ ${currentWord.toUpperCase()} (skipped)`;
+    return null;
+  };
+
+  const feedbackColor = () => {
+    if (feedback === "correct") return "#22c55e";
+    if (feedback === "wrong")   return "#ef4444";
+    if (feedback === "skipped") return "var(--text-secondary)";
+    return undefined;
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -259,26 +274,23 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
 
           {/* Feedback */}
           {feedback && (
-            <div style={{
-              fontSize: "1.4rem", fontWeight: 700,
-              color: feedback === "correct" ? "#22c55e" : "#ef4444",
-            }}>
-              {feedback === "correct"
-                ? `✓ ${currentWord.toUpperCase()}! +${pointsPerWord}`
-                : "✗ Not quite — try again!"}
+            <div style={{ fontSize: "1.4rem", fontWeight: 700, color: feedbackColor() }}>
+              {feedbackMsg()}
             </div>
           )}
 
-          <button
-            style={{
-              background: "transparent", border: "1px solid var(--border-color)",
-              color: "var(--text-secondary)", padding: "0.4rem 1.25rem",
-              borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.82rem",
-            }}
-            onClick={handleSkip}
-          >
-            Skip word
-          </button>
+          {!feedback && (
+            <button
+              style={{
+                background: "transparent", border: "1px solid var(--border-color)",
+                color: "var(--text-secondary)", padding: "0.4rem 1.25rem",
+                borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.82rem",
+              }}
+              onClick={handleSkip}
+            >
+              Skip (reveals word)
+            </button>
+          )}
         </div>
       )}
 
