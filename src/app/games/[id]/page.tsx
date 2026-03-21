@@ -30,6 +30,7 @@ import FartDuelGame from "@/components/games/FartDuelGame";
 import FourInARowGame from "@/components/games/FourInARowGame";
 import LawnMowerGame from "@/components/games/LawnMowerGame";
 import MathBlitzGame from "@/components/games/MathBlitzGame";
+import BalanceScalesGame from "@/components/games/BalanceScalesGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -58,6 +59,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'four-in-a-row': FourInARowGame,
   'lawn-mower': LawnMowerGame,
   'math-blitz': MathBlitzGame,
+  'balance-scales': BalanceScalesGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

@@ -189,6 +189,15 @@
     "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
   },
   {
+    "id": "balance-scales",
+    "title": "Balance Scales",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "The scale is perfectly balanced — but what does the mystery box weigh? Kids mode: find the unknown weight using subtraction. Adult mode: multiple identical boxes, solve for the unknown like a real algebra problem! 8 rounds of visual equation solving."
+  },
+  {
     "id": "math-blitz",
     "title": "Math Blitz",
     "developer": "aigengamez",
