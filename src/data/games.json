@@ -189,6 +189,15 @@
     "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
   },
   {
+    "id": "fraction-slices",
+    "title": "Fraction Slices",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Tap the right number of pizza slices to match the fraction shown! Kids mode: halves, thirds, and quarters. Adult mode: equivalent fractions — the pizza has more slices than the denominator, so you'll need to think deeper. 8 rounds of delicious fraction fun!"
+  },
+  {
     "id": "balance-scales",
     "title": "Balance Scales",
     "developer": "aigengamez",
