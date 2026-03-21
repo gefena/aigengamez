@@ -304,5 +304,14 @@
     "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
     "rating": 4.9,
     "description": "Play music on a keyboard made entirely of toilets! Each key is a 🚽 that flushes with a real piano note blended with a subtle fart sound. Kids mode: 8 white keys (C4–C5). Adult mode: 15 keys spanning two full octaves. Tap or use your keyboard!"
+  },
+  {
+    "id": "mandala-painter",
+    "title": "Mandala Painter",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Create stunning mandalas with radial symmetry! Draw freely or stamp shapes — dots, rings, diamonds, and petals — that mirror across 8, 12, or 16 segments automatically. Concentric guide rings help you build balanced designs. Save your mandala as a PNG!"
   }
 ]
