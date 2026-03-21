@@ -56,13 +56,21 @@ function formatMoney(cents: number): string {
 function moneyWrongs(correctCents: number): string[] {
   const seen = new Set([correctCents]);
   const result: string[] = [];
-  const spread = Math.max(5, Math.round(correctCents * 0.28));
-  while (result.length < 3) {
+  const spread = Math.max(30, Math.round(correctCents * 0.28));
+  let attempts = 0;
+  while (result.length < 3 && attempts < 60) {
+    attempts++;
     const delta = Math.round(rnd(5, spread) / 5) * 5;
-    const w = Math.random() < 0.5 ? correctCents + delta : Math.max(1, correctCents - delta);
+    const w = Math.random() < 0.5 ? correctCents + delta : Math.max(5, correctCents - delta);
     if (!seen.has(w) && w > 0) { seen.add(w); result.push(formatMoney(w)); }
   }
-  return result;
+  // Safety fallback — guaranteed unique values
+  const fallbacks = [5, 10, 15, 25, 50, 75, 100, 125];
+  for (const f of fallbacks) {
+    if (result.length >= 3) break;
+    if (!seen.has(f)) { seen.add(f); result.push(formatMoney(f)); }
+  }
+  return result.slice(0, 3);
 }
 
 // ── Question factories ───────────────────────────────────────────────────────
