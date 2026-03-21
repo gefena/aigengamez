@@ -120,9 +120,23 @@
   overflow: hidden;
 }
 
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  gap: 0.5rem;
+}
+
 .developer {
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin: 0;
-  margin-top: auto;
+}
+
+.plays {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  opacity: 0.7;
 }

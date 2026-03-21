@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import GameCard from "@/components/GameCard";
 import gamesData from "@/data/games.json";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getAllPlayCounts } from "@/lib/playCounts";
 import type { Game } from "@/types/game";
 
 const CATEGORIES = ["All", "Action", "Puzzle", "Kids", "Word"];
@@ -23,6 +24,11 @@ export default function ExplorePage() {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    setPlayCounts(getAllPlayCounts());
+  }, []);
 
   const handleSurprise = (audience: "kids" | "adult") => {
     const pool = audience === "kids" ? KIDS_IDS : ALL_IDS;
@@ -100,7 +106,7 @@ export default function ExplorePage() {
         {filteredGames.length > 0 ? (
           <div className={styles.grid}>
             {filteredGames.map((game) => (
-              <GameCard key={game.id} {...game} />
+              <GameCard key={game.id} {...game} playCount={playCounts[game.id] ?? 0} />
             ))}
           </div>
         ) : (

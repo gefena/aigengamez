@@ -6,9 +6,10 @@ import type { Game } from "@/types/game";
 type GameCardProps = Pick<Game, 'id' | 'title' | 'developer' | 'category' | 'emoji' | 'thumbBg'> & {
   rating?: number;
   description?: string;
+  playCount?: number;
 };
 
-function GameCard({ id, title, developer, category, emoji, thumbBg, rating, description }: GameCardProps) {
+function GameCard({ id, title, developer, category, emoji, thumbBg, rating, description, playCount }: GameCardProps) {
   return (
     <Link href={`/games/${id}`} className={styles.card}>
       <div
@@ -31,7 +32,12 @@ function GameCard({ id, title, developer, category, emoji, thumbBg, rating, desc
         </div>
 
         {description && <p className={styles.description}>{description}</p>}
-        <p className={styles.developer}>{developer}</p>
+        <div className={styles.meta}>
+          <p className={styles.developer}>{developer}</p>
+          {playCount !== undefined && playCount > 0 && (
+            <span className={styles.plays}>🎮 {playCount}</span>
+          )}
+        </div>
       </div>
     </Link>
   );

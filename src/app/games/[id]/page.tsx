@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./page.module.css";
 import gamesData from "@/data/games.json";
+import { incrementPlayCount } from "@/lib/playCounts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Game } from "@/types/game";
@@ -97,6 +98,10 @@ export default function GamePage({ params }: { params: { id: string } }) {
   if (!game) {
     notFound();
   }
+
+  useEffect(() => {
+    incrementPlayCount(game!.id);
+  }, [game]);
 
   const localTitle = t.games[game.id]?.title ?? game.title;
   const localDescription = t.games[game.id]?.description ?? game.description;
