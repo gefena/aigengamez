@@ -32,6 +32,7 @@ import LawnMowerGame from "@/components/games/LawnMowerGame";
 import MathBlitzGame from "@/components/games/MathBlitzGame";
 import BalanceScalesGame from "@/components/games/BalanceScalesGame";
 import FractionSlicesGame from "@/components/games/FractionSlicesGame";
+import TimesTableGame from "@/components/games/TimesTableGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -62,6 +63,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'math-blitz': MathBlitzGame,
   'balance-scales': BalanceScalesGame,
   'fraction-slices': FractionSlicesGame,
+  'times-table': TimesTableGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

@@ -189,6 +189,15 @@
     "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
   },
   {
+    "id": "times-table",
+    "title": "Times Table Treasure",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1605870445919-838d190e8e1b?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "A pirate hid treasure in 9 chests — only one holds the correct multiplication answer! Tap the right chest before the decoys fool you. Kids: ×2 to ×9. Adult: ×2 to ×12 with a 10-second timer per round. Build streaks for bonus loot!"
+  },
+  {
     "id": "fraction-slices",
     "title": "Fraction Slices",
     "developer": "aigengamez",
