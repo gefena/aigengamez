@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (32 total)
+## ✅ Games Shipped (33 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -40,6 +40,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Toilet Piano | toilet-piano | Web Audio piano + fart blend |
 | Kaleidoscope Painter | kaleidoscope-painter | Real-time mirror symmetry, glow mode |
 | Marble Drop | marble-drop | Column-drop color match, chain clears |
+| Socks Match | socks-match | CSS-patterned sock pairs, 90s adult timer |
 
 ---
 
@@ -53,7 +54,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [ ] **Research & brainstorm engineering games** — ideas to explore: bridge builder, circuit builder, gear/pulley puzzles, simple machines, rocket launch trajectory, architecture/load bearing. Pick 1–2 to build after brainstorm.
 
 ### Kids / Casual
-- [ ] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
+- [x] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
 
 ### Math (kids + adult)
 - [ ] **Number Rocket** — math game, mechanic TBD

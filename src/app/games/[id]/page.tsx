@@ -38,6 +38,7 @@ import TetrisGame from "@/components/games/TetrisGame";
 import ToiletPianoGame from "@/components/games/ToiletPianoGame";
 import KaleidoscopePainter from "@/components/games/KaleidoscopePainter";
 import MarbleDropGame from "@/components/games/MarbleDropGame";
+import SocksMatchGame from "@/components/games/SocksMatchGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -74,6 +75,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'toilet-piano': ToiletPianoGame,
   'kaleidoscope-painter': KaleidoscopePainter,
   'marble-drop': MarbleDropGame,
+  'socks-match': SocksMatchGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

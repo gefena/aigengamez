@@ -261,6 +261,15 @@
     "description": "Aliens are popping up from crater holes — whack them before they escape! Build combos, catch bonus UFOs, and survive 60 seconds of escalating alien chaos. Kids, Medium, and Hard modes."
   },
   {
+    "id": "socks-match",
+    "title": "Socks Match",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Match the loose socks before the laundry pile takes over! Click two matching socks to pair them. Kids mode: 6 brightly colored pairs. Adult mode: 8 pairs with stripes, dots, and diagonal patterns — some look nearly identical. Beat the 90-second clock!"
+  },
+  {
     "id": "marble-drop",
     "title": "Marble Drop",
     "developer": "aigengamez",
