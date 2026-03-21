@@ -350,6 +350,16 @@
     "description": "Answer math questions to fuel your rocket and blast off! Fill the tank by solving + and − problems (Kids) or all 4 operations (Adult). Launch as many rockets as you can in 60 seconds — wrong answers drain fuel in Adult mode!"
   },
   {
+    "id": "shape-sorter",
+    "title": "Shape Sorter",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "emoji": "🔷",
+    "thumbBg": "135deg, #1e3a5f 0%, #6366f1 50%, #ec4899 100%",
+    "rating": 4.9,
+    "description": "Name shapes and count their sides — or tackle area and perimeter! Kids mode: identify circles, triangles, pentagons, and more. Adult mode: calculate areas of rectangles, squares, and triangles plus geometry knowledge questions. Streak bonuses for 3 and 6 in a row!"
+  },
+  {
     "id": "mandala-painter",
     "title": "Mandala Painter",
     "developer": "aigengamez",

@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (36 total)
+## ✅ Games Shipped (37 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -44,6 +44,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Color by Numbers | color-by-numbers | SVG tap-to-fill, 4 pictures (House/Flower/Owl/Fish) |
 | Mandala Painter | mandala-painter | Radial stamp + draw, 8/12/16 segments, guide rings |
 | Number Rocket | number-rocket | Math questions → fuel gauge → rocket launch, 60s |
+| Shape Sorter | shape-sorter | Name shapes + area/perimeter calculations, 60s |
 
 ---
 
@@ -61,7 +62,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ### Math (kids + adult)
 - [x] **Number Rocket** — math game, mechanic TBD
-- [ ] **Shape Sorter** — math/geometry game
+- [x] **Shape Sorter** — math/geometry game
 - [ ] **Estimation Station** — estimate quantities/measurements
 - [ ] **Money Market** — coins and change game
 
@@ -84,6 +85,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 🐛 Bugs & UX
 
 - [x] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
+- [ ] **Queen's Gauntlet chess board** — board looks small on mobile and tablet; investigate enlarging it.
 - [x] **Pixel Art Maker broken on mobile/tablet** — fixed: responsive cellPx from containerRef, pointer events on container for touch drag painting.
 - [ ] **Socks Match patterns** — add visible CSS patterns (stripes, dots, diagonals, argyle) to sock cards so pairs are harder to distinguish visually.
 - [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
