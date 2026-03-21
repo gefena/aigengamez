@@ -13,8 +13,8 @@ const TAGS = ["All", "Math", "Word", "Art", "Logic", "Coding", "Action", "Memory
 
 // Kids pool: all games that don't require adult reasoning (exclude pure STEM/Coding for kids Surprise Me)
 const KIDS_TAGS = ["Math", "Art", "Action", "Memory", "Maze", "Music", "Word"];
-const ALL_IDS = (gamesData as import("@/types/game").Game[]).map((g) => g.id);
-const KIDS_IDS = (gamesData as import("@/types/game").Game[])
+const ALL_IDS = (gamesData as Game[]).map((g) => g.id);
+const KIDS_IDS = (gamesData as Game[])
   .filter((g) => g.tags?.some((tag) => KIDS_TAGS.includes(tag)))
   .map((g) => g.id);
 

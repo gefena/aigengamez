@@ -168,6 +168,16 @@ npm run build
 ```
 Fix every error before committing. Warnings are fine; errors are not.
 
+**This is a hard rule: never commit without a passing `npm run build`.** If the build fails on Vercel it blocks the deploy for everyone.
+
+### Code review before committing
+Before committing any new game or significant change, self-review for:
+- **Security**: no `dangerouslySetInnerHTML` with user content, no `eval()`, no exposed secrets, no XSS vectors
+- **Correctness**: all types match, no `as any` casts hiding real type errors
+- **Unused code**: no dead variables, imports, or functions that ESLint will flag
+- **Mobile layout**: content stack audit (see Mobile Layout Rules above)
+- **Tags**: new game has `tags` array in games.json
+
 ### ESLint: no unused variables (`no-unused-vars`)
 The most common build killer. Rules:
 - **Only declare `useState` if JSX renders it.** If a value is only read inside callbacks/timers, use `useRef` instead.

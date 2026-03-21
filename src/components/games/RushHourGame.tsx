@@ -214,6 +214,210 @@ const PUZZLES: { label: string; board: Board }[] = [
       { id: "I", dir: "v", size: 2, row: 1, col: 5 },
     ],
   },
+  // ── Additional Easy puzzles ──────────────────────────────────────────────
+  {
+    label: "Easy",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "v", size: 3, row: 1, col: 5 },
+      { id: "B", dir: "v", size: 2, row: 0, col: 0 },
+      { id: "C", dir: "h", size: 2, row: 0, col: 4 },
+      { id: "D", dir: "v", size: 3, row: 2, col: 2 },
+    ],
+  },
+  {
+    label: "Easy",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
+      { id: "A", dir: "h", size: 2, row: 1, col: 2 },
+      { id: "B", dir: "v", size: 2, row: 2, col: 4 },
+      { id: "C", dir: "h", size: 3, row: 5, col: 0 },
+      { id: "D", dir: "v", size: 2, row: 2, col: 1 },
+      { id: "E", dir: "v", size: 3, row: 2, col: 5 },
+      { id: "F", dir: "h", size: 3, row: 4, col: 0 },
+      { id: "G", dir: "h", size: 2, row: 0, col: 4 },
+    ],
+  },
+  {
+    label: "Easy",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "h", size: 2, row: 5, col: 0 },
+      { id: "B", dir: "h", size: 2, row: 2, col: 0 },
+      { id: "C", dir: "v", size: 2, row: 2, col: 5 },
+      { id: "D", dir: "v", size: 2, row: 1, col: 2 },
+      { id: "E", dir: "h", size: 3, row: 1, col: 3 },
+      { id: "F", dir: "h", size: 3, row: 5, col: 2 },
+      { id: "G", dir: "h", size: 2, row: 4, col: 3 },
+      { id: "H", dir: "h", size: 2, row: 3, col: 2 },
+    ],
+  },
+  {
+    label: "Easy",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
+      { id: "B", dir: "h", size: 2, row: 4, col: 1 },
+      { id: "C", dir: "h", size: 2, row: 5, col: 3 },
+      { id: "D", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "E", dir: "v", size: 2, row: 1, col: 0 },
+    ],
+  },
+  {
+    label: "Easy",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "v", size: 2, row: 1, col: 2 },
+      { id: "B", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "C", dir: "h", size: 2, row: 0, col: 2 },
+    ],
+  },
+  // ── Additional Medium puzzles ────────────────────────────────────────────
+  {
+    label: "Medium",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "h", size: 2, row: 1, col: 1 },
+      { id: "B", dir: "h", size: 3, row: 4, col: 0 },
+      { id: "C", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "D", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "E", dir: "v", size: 2, row: 0, col: 4 },
+      { id: "F", dir: "v", size: 2, row: 0, col: 0 },
+    ],
+  },
+  {
+    label: "Medium",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
+      { id: "A", dir: "h", size: 2, row: 4, col: 0 },
+      { id: "B", dir: "h", size: 2, row: 1, col: 3 },
+      { id: "C", dir: "v", size: 2, row: 3, col: 3 },
+      { id: "D", dir: "v", size: 3, row: 3, col: 2 },
+      { id: "E", dir: "h", size: 2, row: 0, col: 2 },
+      { id: "F", dir: "v", size: 2, row: 4, col: 4 },
+      { id: "G", dir: "v", size: 3, row: 0, col: 5 },
+      { id: "H", dir: "v", size: 2, row: 2, col: 1 },
+    ],
+  },
+  {
+    label: "Medium",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "A", dir: "v", size: 3, row: 1, col: 5 },
+      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
+      { id: "C", dir: "h", size: 2, row: 1, col: 1 },
+      { id: "D", dir: "v", size: 2, row: 3, col: 0 },
+    ],
+  },
+  {
+    label: "Medium",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 0 },
+      { id: "A", dir: "v", size: 2, row: 2, col: 3 },
+      { id: "B", dir: "h", size: 2, row: 0, col: 1 },
+      { id: "C", dir: "h", size: 2, row: 3, col: 0 },
+      { id: "D", dir: "v", size: 2, row: 0, col: 3 },
+      { id: "E", dir: "v", size: 2, row: 4, col: 0 },
+      { id: "F", dir: "h", size: 2, row: 3, col: 4 },
+      { id: "G", dir: "v", size: 3, row: 2, col: 2 },
+      { id: "H", dir: "h", size: 2, row: 4, col: 4 },
+    ],
+  },
+  {
+    label: "Medium",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
+      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
+      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
+    ],
+  },
+  // ── Additional Hard puzzles ──────────────────────────────────────────────
+  {
+    label: "Hard",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 0 },
+      { id: "A", dir: "v", size: 2, row: 1, col: 2 },
+      { id: "B", dir: "h", size: 2, row: 0, col: 4 },
+      { id: "C", dir: "v", size: 2, row: 2, col: 3 },
+      { id: "D", dir: "h", size: 3, row: 4, col: 3 },
+      { id: "E", dir: "v", size: 2, row: 0, col: 3 },
+      { id: "F", dir: "h", size: 2, row: 0, col: 1 },
+    ],
+  },
+  {
+    label: "Hard",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
+      { id: "A", dir: "h", size: 3, row: 1, col: 0 },
+      { id: "B", dir: "h", size: 3, row: 1, col: 3 },
+      { id: "C", dir: "v", size: 2, row: 3, col: 0 },
+      { id: "D", dir: "v", size: 2, row: 3, col: 3 },
+      { id: "E", dir: "h", size: 2, row: 0, col: 0 },
+      { id: "F", dir: "v", size: 2, row: 4, col: 1 },
+      { id: "G", dir: "v", size: 2, row: 4, col: 4 },
+      { id: "H", dir: "v", size: 2, row: 2, col: 5 },
+    ],
+  },
+  {
+    label: "Hard",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "B", dir: "h", size: 3, row: 0, col: 3 },
+      { id: "C", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "D", dir: "h", size: 2, row: 3, col: 0 },
+      { id: "E", dir: "v", size: 2, row: 0, col: 2 },
+    ],
+  },
+  {
+    label: "Hard",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
+      { id: "A", dir: "h", size: 3, row: 4, col: 1 },
+      { id: "B", dir: "v", size: 2, row: 2, col: 1 },
+      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
+    ],
+  },
+  // ── Additional Expert puzzles ────────────────────────────────────────────
+  {
+    label: "Expert",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "A", dir: "v", size: 2, row: 4, col: 0 },
+      { id: "B", dir: "v", size: 2, row: 1, col: 0 },
+      { id: "C", dir: "h", size: 2, row: 1, col: 4 },
+      { id: "D", dir: "v", size: 3, row: 0, col: 3 },
+      { id: "E", dir: "h", size: 2, row: 3, col: 4 },
+    ],
+  },
+  {
+    label: "Expert",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "B", dir: "h", size: 2, row: 3, col: 3 },
+      { id: "C", dir: "v", size: 2, row: 0, col: 1 },
+    ],
+  },
+  {
+    label: "Expert",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
+      { id: "A", dir: "v", size: 3, row: 3, col: 3 },
+      { id: "B", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "C", dir: "h", size: 2, row: 5, col: 4 },
+    ],
+  },
+  {
+    label: "Expert",
+    board: [
+      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
+      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
+      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
+      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
+    ],
+  },
 ];
 
 // ── Colors ────────────────────────────────────────────────────────────────────
