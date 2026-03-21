@@ -79,7 +79,6 @@ function bfsSolve(board: Board): number {
   visited.add(stateKey(board));
   while (queue.length > 0) {
     const [cur, depth] = queue.shift()!;
-    if (depth > 25) continue;
     for (const next of allMoves(cur)) {
       if (isSolved(next)) return depth + 1;
       const key = stateKey(next);
@@ -107,10 +106,10 @@ const PUZZLES: { label: string; board: Board }[] = [
     label: "Easy",
     board: [
       { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 3, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 0, col: 3 },
-      { id: "C", dir: "v", size: 2, row: 3, col: 2 },
-      { id: "D", dir: "h", size: 2, row: 5, col: 3 },
+      { id: "A", dir: "v", size: 2, row: 1, col: 3 },
+      { id: "B", dir: "h", size: 2, row: 5, col: 3 },
+      { id: "C", dir: "h", size: 2, row: 3, col: 2 },
+      { id: "D", dir: "v", size: 2, row: 1, col: 2 },
     ],
   },
   {
@@ -138,12 +137,12 @@ const PUZZLES: { label: string; board: Board }[] = [
     label: "Medium",
     board: [
       { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 1, col: 3 },
-      { id: "C", dir: "v", size: 3, row: 0, col: 5 },
-      { id: "D", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "E", dir: "v", size: 2, row: 4, col: 2 },
-      { id: "F", dir: "h", size: 2, row: 4, col: 3 },
+      { id: "A", dir: "v", size: 3, row: 2, col: 2 },
+      { id: "B", dir: "v", size: 2, row: 3, col: 5 },
+      { id: "C", dir: "h", size: 2, row: 1, col: 4 },
+      { id: "D", dir: "h", size: 2, row: 4, col: 3 },
+      { id: "E", dir: "v", size: 2, row: 3, col: 1 },
+      { id: "F", dir: "v", size: 3, row: 0, col: 3 },
     ],
   },
   {
@@ -162,29 +161,27 @@ const PUZZLES: { label: string; board: Board }[] = [
     label: "Hard",
     board: [
       { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 0, col: 3 },
-      { id: "C", dir: "v", size: 3, row: 0, col: 5 },
+      { id: "A", dir: "v", size: 3, row: 2, col: 2 },
+      { id: "B", dir: "h", size: 3, row: 5, col: 1 },
+      { id: "C", dir: "h", size: 2, row: 4, col: 4 },
       { id: "D", dir: "v", size: 2, row: 0, col: 0 },
-      { id: "E", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "F", dir: "v", size: 2, row: 3, col: 2 },
-      { id: "G", dir: "h", size: 3, row: 3, col: 3 },
-      { id: "H", dir: "v", size: 2, row: 4, col: 0 },
+      { id: "E", dir: "v", size: 2, row: 3, col: 0 },
+      { id: "F", dir: "v", size: 3, row: 1, col: 5 },
+      { id: "G", dir: "h", size: 2, row: 0, col: 2 },
     ],
   },
   {
     label: "Hard",
     board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 0 },
-      { id: "B", dir: "h", size: 2, row: 0, col: 1 },
-      { id: "C", dir: "v", size: 3, row: 0, col: 3 },
-      { id: "D", dir: "h", size: 2, row: 1, col: 4 },
-      { id: "E", dir: "v", size: 2, row: 2, col: 4 },
-      { id: "F", dir: "v", size: 2, row: 2, col: 5 },
-      { id: "G", dir: "h", size: 2, row: 3, col: 0 },
-      { id: "H", dir: "v", size: 2, row: 4, col: 3 },
-      { id: "I", dir: "h", size: 2, row: 5, col: 1 },
+      { id: "R", dir: "h", size: 2, row: 2, col: 0 },
+      { id: "A", dir: "v", size: 2, row: 4, col: 3 },
+      { id: "B", dir: "h", size: 2, row: 1, col: 2 },
+      { id: "C", dir: "h", size: 2, row: 5, col: 4 },
+      { id: "D", dir: "v", size: 2, row: 1, col: 5 },
+      { id: "E", dir: "v", size: 3, row: 0, col: 4 },
+      { id: "F", dir: "v", size: 2, row: 3, col: 0 },
+      { id: "G", dir: "v", size: 2, row: 0, col: 1 },
+      { id: "H", dir: "v", size: 2, row: 2, col: 3 },
     ],
   },
   {
@@ -206,17 +203,15 @@ const PUZZLES: { label: string; board: Board }[] = [
     label: "Expert",
     board: [
       { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 0 },
-      { id: "B", dir: "h", size: 3, row: 0, col: 1 },
-      { id: "C", dir: "v", size: 2, row: 0, col: 4 },
-      { id: "D", dir: "v", size: 2, row: 1, col: 2 },
-      { id: "E", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "F", dir: "v", size: 2, row: 2, col: 5 },
-      { id: "G", dir: "h", size: 2, row: 3, col: 0 },
-      { id: "H", dir: "v", size: 3, row: 3, col: 2 },
-      { id: "I", dir: "h", size: 2, row: 4, col: 3 },
-      { id: "J", dir: "v", size: 2, row: 4, col: 5 },
-      { id: "K", dir: "h", size: 2, row: 5, col: 0 },
+      { id: "A", dir: "h", size: 3, row: 1, col: 2 },
+      { id: "B", dir: "v", size: 2, row: 4, col: 2 },
+      { id: "C", dir: "v", size: 2, row: 4, col: 0 },
+      { id: "D", dir: "v", size: 3, row: 2, col: 3 },
+      { id: "E", dir: "h", size: 2, row: 5, col: 4 },
+      { id: "F", dir: "v", size: 2, row: 2, col: 2 },
+      { id: "G", dir: "h", size: 2, row: 3, col: 4 },
+      { id: "H", dir: "h", size: 3, row: 0, col: 2 },
+      { id: "I", dir: "v", size: 2, row: 1, col: 5 },
     ],
   },
 ];
