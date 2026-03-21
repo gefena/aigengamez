@@ -393,7 +393,9 @@ let _nextId = 1;
 export default function QueenGauntletGame({ title }: { title: string }) {
   const canvasRef    = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const outerRef     = useRef<HTMLDivElement>(null);
   const sizeRef      = useRef({ W: 480, H: 480 });
+  const [boardPx, setBoardPx] = useState(320);
 
   const [phase,     setPhase]     = useState<Phase>("idle");
   const [score,     setScore]     = useState(0);
@@ -521,6 +523,18 @@ export default function QueenGauntletGame({ title }: { title: string }) {
     canvas.height = rect.height || 480;
     sizeRef.current = { W: canvas.width, H: canvas.height };
     return () => ro.disconnect();
+  }, []);
+
+  // ── Board size (square, fills available space) ──
+  useEffect(() => {
+    const compute = () => {
+      const w = outerRef.current?.offsetWidth ?? window.innerWidth;
+      const h = Math.floor(window.innerHeight * 0.60);
+      setBoardPx(Math.max(260, Math.min(w, h)));
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
   }, []);
 
   // ── Load high score ──
@@ -755,7 +769,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
   const timerColor = timeLeft <= 10 ? "#ec4899" : timeLeft <= 20 ? "#ffaa33" : "#33ccff";
 
   return (
-    <div className={styles.gameInner} style={{ padding: "1rem", display: "flex", flexDirection: "column", alignItems: "center", height: "100%", width: "100%", gap: "0.6rem", boxSizing: "border-box" }}>
+    <div className={styles.gameInner} style={{ padding: "1rem", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", gap: "0.6rem", boxSizing: "border-box" }}>
       {/* HUD */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", width: "100%" }}>
         <h3 className={styles.gameTitle} style={{ margin: 0, fontSize: "1rem" }}>{title}</h3>
@@ -779,9 +793,10 @@ export default function QueenGauntletGame({ title }: { title: string }) {
       </div>
 
       {/* Board */}
+      <div ref={outerRef} style={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <div
         ref={containerRef}
-        style={{ flex: 1, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
+        style={{ width: boardPx, height: boardPx, flexShrink: 0, borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid rgba(109,40,217,0.5)", cursor: "pointer", position: "relative" }}
       >
         <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block", touchAction: "none" }} />
 
@@ -816,6 +831,7 @@ export default function QueenGauntletGame({ title }: { title: string }) {
             </div>
           </div>
         )}
+      </div>
       </div>
 
       {/* Piece legend */}

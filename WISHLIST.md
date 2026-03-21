@@ -87,9 +87,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 🐛 Bugs & UX
 
 - [x] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
-- [ ] **Queen's Gauntlet chess board** — board looks small on mobile and tablet; investigate enlarging it.
+- [x] **Queen's Gauntlet chess board** — fixed: explicit square boardPx computed from outerRef width + 60vh cap; no longer relies on broken height:100% chain on mobile.
 - [x] **Pixel Art Maker broken on mobile/tablet** — fixed: responsive cellPx from containerRef, pointer events on container for touch drag painting.
-- [ ] **Socks Match patterns** — add visible CSS patterns (stripes, dots, diagonals, argyle) to sock cards so pairs are harder to distinguish visually.
+- [x] **Socks Match patterns** — stripes, dots, diagonal patterns already implemented in CSS.
 - [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
 - [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
 - [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21
