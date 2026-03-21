@@ -208,14 +208,29 @@ export default function FartDuelGame({ title: _title }: { title: string }) {
       }
       if (Math.abs(aimDiff) < 0.5) tryFire(cpu, "cpu", PROJ_R, PROJ_SPD, 85);
     } else {
-      cpu.angle += Math.sign(aimDiff) * Math.min(Math.abs(aimDiff), 0.044);
-      if (dist > idealDist) {
-        cpu.vx += Math.cos(cpu.angle) * MOVE_SPD * 0.14;
-        cpu.vy += Math.sin(cpu.angle) * MOVE_SPD * 0.14;
-      } else if (dist < idealDist * 0.5) {
-        cpu.vx -= Math.cos(cpu.angle) * MOVE_SPD * 0.1;
-        cpu.vy -= Math.sin(cpu.angle) * MOVE_SPD * 0.1;
+      // Adult AI: move → aim → shoot
+      // 1. MOVE: strafe-orbit + range control
+      const strafeDir = frame % 260 < 130 ? 1 : -1;          // flip orbit direction every ~4 s
+      const perpAngle = toPlayer + (Math.PI / 2) * strafeDir; // perpendicular to player vector
+
+      if (dist > idealDist * 1.25) {
+        // Close in
+        cpu.vx += Math.cos(toPlayer) * MOVE_SPD * 0.18;
+        cpu.vy += Math.sin(toPlayer) * MOVE_SPD * 0.18;
+      } else if (dist < idealDist * 0.55) {
+        // Retreat
+        cpu.vx -= Math.cos(toPlayer) * MOVE_SPD * 0.16;
+        cpu.vy -= Math.sin(toPlayer) * MOVE_SPD * 0.16;
+      } else {
+        // Orbit: strafe perpendicular to player
+        cpu.vx += Math.cos(perpAngle) * MOVE_SPD * 0.15;
+        cpu.vy += Math.sin(perpAngle) * MOVE_SPD * 0.15;
       }
+
+      // 2. AIM: rotate to face player
+      cpu.angle += Math.sign(aimDiff) * Math.min(Math.abs(aimDiff), 0.055);
+
+      // 3. SHOOT: fire when aimed
       if (Math.abs(aimDiff) < 0.14) tryFire(cpu, "cpu", PROJ_R, PROJ_SPD, 52);
     }
 
