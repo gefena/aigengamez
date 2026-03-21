@@ -259,5 +259,32 @@
     "imageUrl": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800",
     "rating": 4.9,
     "description": "Aliens are popping up from crater holes — whack them before they escape! Build combos, catch bonus UFOs, and survive 60 seconds of escalating alien chaos. Kids, Medium, and Hard modes."
+  },
+  {
+    "id": "marble-drop",
+    "title": "Marble Drop",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Drop colored marbles into columns and match 3 or more of the same color to clear them! Chain clears for big points. Kids mode: 3 colors, easy stacking. Adult mode: 5 colors, faster chains. How long can you keep the columns from overflowing?"
+  },
+  {
+    "id": "kaleidoscope-painter",
+    "title": "Kaleidoscope Painter",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Draw and watch your art bloom into a living kaleidoscope! Every stroke mirrors symmetrically in real time. Kids mode: 4-fold symmetry with vibrant colors. Adult mode: choose 4, 6, 8, or 12-fold symmetry, a custom color picker, and a glow blend mode for psychedelic patterns. Save your creation as a PNG!"
+  },
+  {
+    "id": "toilet-piano",
+    "title": "Toilet Piano",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Play music on a keyboard made entirely of toilets! Each key is a 🚽 that flushes with a real piano note blended with a subtle fart sound. Kids mode: 8 white keys (C4–C5). Adult mode: 15 keys spanning two full octaves. Tap or use your keyboard!"
   }
 ]

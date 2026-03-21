@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (29 total)
+## ✅ Games Shipped (32 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -37,17 +37,23 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Block Drop | block-drop | Tetris-style |
 | Ice Cream Memory | ice-cream-memory | |
 | Alien Invasion! | whack-a-mole | |
+| Toilet Piano | toilet-piano | Web Audio piano + fart blend |
+| Kaleidoscope Painter | kaleidoscope-painter | Real-time mirror symmetry, glow mode |
+| Marble Drop | marble-drop | Column-drop color match, chain clears |
 
 ---
 
 ## 🎮 New Games To Build
 
 ### Action / Fun
-- [ ] **Marble Drop / Color Match** — falling colored marbles, match-3 or stack-to-clear mechanic. Plan before building.
-- [ ] **Toilet Piano** — piano keyboard where each key is a toilet/bathroom; plays real piano note + subtle fart sound blend. Tap keys to make music.
+- [x] **Marble Drop / Color Match** — falling colored marbles, match-3 or stack-to-clear mechanic. Plan before building.
+- [x] **Toilet Piano** — piano keyboard where each key is a toilet/bathroom; plays real piano note + subtle fart sound blend. Tap keys to make music.
 
 ### Engineering / STEM
 - [ ] **Research & brainstorm engineering games** — ideas to explore: bridge builder, circuit builder, gear/pulley puzzles, simple machines, rocket launch trajectory, architecture/load bearing. Pick 1–2 to build after brainstorm.
+
+### Kids / Casual
+- [ ] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
 
 ### Math (kids + adult)
 - [ ] **Number Rocket** — math game, mechanic TBD
@@ -56,7 +62,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [ ] **Money Market** — coins and change game
 
 ### Painting / Creative
-- [ ] **Kaleidoscope Painter** — draw and it mirrors symmetrically in real time
+- [x] **Kaleidoscope Painter** — draw and it mirrors symmetrically in real time
 - [ ] **Mandala Drawer** — radial symmetry drawing tool
 - [ ] **Color by Numbers** — tap numbered regions to fill with color
 
@@ -74,6 +80,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 🐛 Bugs & UX
 
 - [ ] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
+- [ ] **Pixel Art Maker broken on mobile/tablet** — grid too small, touch painting doesn't work well. Needs responsive cell sizing + touch event handling.
 - [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
 - [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
 - [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21
@@ -94,9 +101,18 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
+## 🎨 Design & Visual Polish
+
+- [ ] **Improve game tags/categories** — current tags (Puzzle, Action) are too broad. Add richer tags per game (e.g. "Word", "Math", "Art", "Multiplayer", "Hebrew", "Coding") and make Explore page filterable by them.
+- [ ] **Replace generic Unsplash photos** — most game cards use stock photos unrelated to gameplay. Replace with on-brand custom thumbnails or generated art that reflects each game's actual visuals.
+- [ ] **Site visual identity overhaul** — the site looks like a generic Next.js template. Ideas to make it feel unique: custom color palette, hand-drawn / pixel-art logo, animated homepage hero, card hover effects, a mascot character, and a coherent "arcade" or "retro-future" theme throughout.
+
+---
+
 ## 💡 Future / Long-term Ideas
 
 - [ ] Leaderboard / high scores (localStorage first, backend later)
 - [ ] Sound effects toggle / mute button site-wide
 - [ ] More languages beyond EN/HE
+- [ ] **Spanish (🇪🇸)** — add ES translations for UI + word game content (Anagram Blitz, Word Ladder, Ghost, Trivia) with Spanish word lists for kids and adults
 - [ ] More Hebrew word game content once a Hebrew dictionary is sourced
