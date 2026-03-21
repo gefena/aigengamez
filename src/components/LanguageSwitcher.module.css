@@ -1,0 +1,50 @@
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.langBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-fast);
+}
+
+.langBtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.active {
+  background: rgba(109, 40, 217, 0.2);
+  border-color: rgba(109, 40, 217, 0.4);
+  color: var(--text-primary);
+}
+
+.flag {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .label {
+    display: none;
+  }
+  .langBtn {
+    padding: 0.3rem 0.4rem;
+  }
+}

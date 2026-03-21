@@ -33,6 +33,13 @@
   gap: 2rem;
 }
 
+/* wrapper that holds the language switcher + hamburger on mobile */
+.navRight {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .navLink {
   font-size: 0.95rem;
   font-weight: 500;
@@ -104,6 +111,10 @@
 @media (max-width: 640px) {
   .navLinks {
     display: none;
+  }
+
+  .navRight {
+    display: flex;
   }
 
   .hamburger {
