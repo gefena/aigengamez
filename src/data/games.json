@@ -234,6 +234,15 @@
     "description": "Program your lawn mower using if-condition commands! Red, Blue, and Yellow tiles change your direction. Write a 4-rule program to mow all the grass within the step limit. Kids mode uses a 6×6 grid; Adult mode challenges you on an 8×8 field. Every level is uniquely generated!"
   },
   {
+    "id": "ice-cream-memory",
+    "title": "Ice Cream Memory",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Study the ice cream cone for a few seconds, then rebuild it from memory! Match the flavor order exactly. Kids mode: 3 scoops, 30 seconds. Adult mode: 5 scoops, just 15 seconds. How good is your memory?"
+  },
+  {
     "id": "whack-a-mole",
     "title": "Alien Invasion!",
     "developer": "aigengamez",

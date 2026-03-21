@@ -33,6 +33,7 @@ import MathBlitzGame from "@/components/games/MathBlitzGame";
 import BalanceScalesGame from "@/components/games/BalanceScalesGame";
 import FractionSlicesGame from "@/components/games/FractionSlicesGame";
 import TimesTableGame from "@/components/games/TimesTableGame";
+import IceCreamMemoryGame from "@/components/games/IceCreamMemoryGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -64,6 +65,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'balance-scales': BalanceScalesGame,
   'fraction-slices': FractionSlicesGame,
   'times-table': TimesTableGame,
+  'ice-cream-memory': IceCreamMemoryGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
