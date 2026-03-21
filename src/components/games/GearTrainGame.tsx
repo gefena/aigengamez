@@ -111,8 +111,6 @@ const BASE_DUR = 3.5;
 function animDur(puzzle: Puzzle, gi: number) {
   return BASE_DUR * puzzle.gears[gi].teeth / puzzle.gears[0].teeth;
 }
-function gearDir(_: Puzzle, gi: number): Dir { return gi % 2 === 0 ? "cw" : "ccw"; }
-
 const GAME_SEC = 60;
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -249,8 +247,7 @@ export default function GearTrainGame({ title }: { title: string }) {
               {puzzle.gears.map((g, i) => {
                 const cx = layout.cxs[i];
                 const cy = layout.cy;
-                const dir = gearDir(puzzle, i);
-                const dur = animDur(puzzle, i);
+                const dur = i === 0 ? animDur(puzzle, 0) : 0;
                 const isDriver = i === 0;
                 const isOutput = i === puzzle.gears.length - 1;
                 const or = outerR(g.teeth);
@@ -258,7 +255,9 @@ export default function GearTrainGame({ title }: { title: string }) {
                   <g key={i} transform={`translate(${cx.toFixed(1)},${cy.toFixed(1)})`}>
                     {/* Rotating gear */}
                     <g style={{
-                      animation: `${dir === "cw" ? "spin-cw" : "spin-ccw"} ${dur.toFixed(2)}s linear infinite`,
+                      animation: i === 0
+                        ? `spin-cw ${dur.toFixed(2)}s linear infinite`
+                        : "none",
                       transformOrigin: "50% 50%",
                       transformBox: "fill-box",
                     } as React.CSSProperties}>
