@@ -44,6 +44,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ### Action / Fun
 - [ ] **Marble Drop / Color Match** — falling colored marbles, match-3 or stack-to-clear mechanic. Plan before building.
+- [ ] **Toilet Piano** — piano keyboard where each key is a toilet/bathroom; plays real piano note + subtle fart sound blend. Tap keys to make music.
 
 ### Math (kids + adult)
 - [ ] **Number Rocket** — math game, mechanic TBD
@@ -81,6 +82,12 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 - [ ] **Vercel Analytics** — install `@vercel/analytics` package, add `<Analytics />` to layout.tsx to track page views and game engagement
 - [ ] **SEO audit** — check meta tags, Open Graph, site title/description for Google discoverability; verify site appears in Google Search
+
+---
+
+## 🎯 Content Improvements
+
+- [ ] **Trivia — more questions** — research and add more EN + HE questions for kids and adult pools (currently 20 each). Aim for 50+ per pool for better variety.
 
 ---
 

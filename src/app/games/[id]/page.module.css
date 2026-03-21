@@ -135,11 +135,12 @@
 .difficultySelector {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.25rem;
   margin-bottom: 1.5rem;
   background: var(--bg-primary);
   padding: 0.35rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
 }
 
