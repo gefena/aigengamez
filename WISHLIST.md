@@ -77,6 +77,13 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
+## 📊 Analytics & SEO
+
+- [ ] **Vercel Analytics** — install `@vercel/analytics` package, add `<Analytics />` to layout.tsx to track page views and game engagement
+- [ ] **SEO audit** — check meta tags, Open Graph, site title/description for Google discoverability; verify site appears in Google Search
+
+---
+
 ## 💡 Future / Long-term Ideas
 
 - [ ] Leaderboard / high scores (localStorage first, backend later)

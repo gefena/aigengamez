@@ -55,6 +55,54 @@ const VALID_4 = new Set([
   "yell","your","zero","zone","zoom",
 ]);
 
+// ── Hebrew valid words (3-letter, no nikud) ──────────────────────────────────
+const HE_VALID_3 = new Set([
+  // ש-מ group
+  "שמש","שמח","שמן","שמע","שמר","שמד","שמם",
+  // ש-ל group
+  "שלג","שלב","שלח","שלט","שלם","שלף",
+  // כ-ל / ח-ל group
+  "כלב","כלי","כלא","כלה","חלב","חלה","חלש","חלם","חלף","חלד",
+  // פ-ר group
+  "פרח","פרה","פרא","פרד","פרס","פרק",
+  // נ-ח group
+  "נחש","נחל","נחר","נחת",
+  // ג-ש / א-ש group
+  "גשם","גשר","אשר","אשם",
+  // ע-נ group
+  "ענב","ענן","ענף","ענם",
+  // ע-י group
+  "עין","עיר","עיף","עיט",
+  // ד-ב group
+  "דבש","דבק","דבר",
+  // א-ר group
+  "ארץ","ארז","ארס","ארח","ארך",
+  // ז-ה / ז-מ group
+  "זהב","זהר","זמר","זמן","זמם",
+  // ג-מ group
+  "גמל","גמד","גמר",
+  // ע-פ / ע-ב / ע-ז group
+  "עפר","עבר","עזר","עבד","עבל",
+  // א-ב group
+  "אבר","אבד","אבל","אבן",
+  // common nouns / verbs
+  "ילד","ספר","בית","ראש","יום","לחם","שיר","ארח",
+  "רגל","אור","דגל","עיר","כוס","שלג","ספג","ספד",
+  "נחש","גשם","גשר","כלי","כלא","כלה",
+  "מים","סוס","שנה","חדש","בוא",
+  // ו-pattern words
+  "טוב","טוס","קוף","קול","קום","קוץ",
+  "רוח","רום","שור","תוך","תום","תור",
+  "חוט","חוב","חוג","חור",
+  // more common words
+  "אמא","אבא","עמל","עמד","ירד","עלה",
+  "ישב","כתב","שתה","נפל","נפח","נפש",
+  "חיה","חיל","כבד","כבה","כבש",
+  "לבן","לבד","לבש","דגה","דגם",
+  "אגם","יון","יום","יוד",
+  "חלק","חלף","שמם","זחל","זהם",
+]);
+
 // ── Puzzle packs ─────────────────────────────────────────────────────────────
 interface Puzzle { start: string; end: string; optimal: number; hint: string[] }
 
@@ -113,6 +161,54 @@ const ADULT_PUZZLES: Puzzle[] = [
   { start: "head", end: "tail", optimal: 5, hint: ["head","heal","teal","tell","tall","tail"] },
 ];
 
+// ── Hebrew puzzle packs ───────────────────────────────────────────────────────
+// All chains verified: each step changes exactly 1 letter
+const HE_KIDS_PUZZLES: Puzzle[] = [
+  // 2-step (כלב→חלב: כ→ח; חלב→חלה: ב→ה)
+  { start: "כלב", end: "חלה", optimal: 2, hint: ["כלב","חלב","חלה"] },
+  // 2-step (פרח→פרה: ח→ה; פרה→פרא: ה→א)
+  { start: "פרח", end: "פרא", optimal: 2, hint: ["פרח","פרה","פרא"] },
+  // 2-step (שמש→שמח: ש→ח; שמח→שמן: ח→נ)
+  { start: "שמש", end: "שמן", optimal: 2, hint: ["שמש","שמח","שמן"] },
+  // 2-step (ענב→ענן: ב→נ; ענן→ענף: נ→פ)
+  { start: "ענב", end: "ענף", optimal: 2, hint: ["ענב","ענן","ענף"] },
+  // 2-step (עין→עיר: נ→ר; עיר→עיף: ר→פ)
+  { start: "עין", end: "עיף", optimal: 2, hint: ["עין","עיר","עיף"] },
+  // 2-step (שלג→שלב: ג→ב; שלב→שלח: ב→ח)
+  { start: "שלג", end: "שלח", optimal: 2, hint: ["שלג","שלב","שלח"] },
+  // 3-step (pos 2: ש→ח→נ→ע)
+  { start: "שמש", end: "שמע", optimal: 3, hint: ["שמש","שמח","שמן","שמע"] },
+  // 3-step (כ→ח then ב→ה then ה→ש)
+  { start: "כלב", end: "חלש", optimal: 3, hint: ["כלב","חלב","חלה","חלש"] },
+  // 3-step (ח→ה→א→ס)
+  { start: "פרח", end: "פרס", optimal: 3, hint: ["פרח","פרה","פרא","פרס"] },
+];
+
+const HE_ADULT_PUZZLES: Puzzle[] = [
+  // 2-step (דבש→דבק: ש→ק; דבק→דבר: ק→ר)
+  { start: "דבש", end: "דבר", optimal: 2, hint: ["דבש","דבק","דבר"] },
+  // 2-step (גמל→גמד: ל→ד; גמד→גמר: ד→ר)
+  { start: "גמל", end: "גמר", optimal: 2, hint: ["גמל","גמד","גמר"] },
+  // 2-step (עפר→עבר: פ→ב; עבר→עזר: ב→ז)
+  { start: "עפר", end: "עזר", optimal: 2, hint: ["עפר","עבר","עזר"] },
+  // 2-step (ארץ→ארז: צ→ז; ארז→ארס: ז→ס)
+  { start: "ארץ", end: "ארס", optimal: 2, hint: ["ארץ","ארז","ארס"] },
+  // 2-step (דבר→אבר: ד→א; אבר→אבד: ר→ד)
+  { start: "דבר", end: "אבד", optimal: 2, hint: ["דבר","אבר","אבד"] },
+  // 3-step (pos 2: ב→ג→ח→ט)
+  { start: "שלב", end: "שלט", optimal: 3, hint: ["שלב","שלג","שלח","שלט"] },
+  // 3-step (pos 2: ח→נ→ע→ר)
+  { start: "שמח", end: "שמר", optimal: 3, hint: ["שמח","שמן","שמע","שמר"] },
+  // 3-step (זהב→זהר: ב→ר; זהר→זמר: ה→מ; זמר→זמן: ר→נ)
+  { start: "זהב", end: "זמן", optimal: 3, hint: ["זהב","זהר","זמר","זמן"] },
+  // 3-step (נחש→נחל: ש→ל; נחל→נחר: ל→ר; נחר→נחת: ר→ת)
+  { start: "נחש", end: "נחת", optimal: 3, hint: ["נחש","נחל","נחר","נחת"] },
+  // 4-step (כ→ח; ב→ה; ה→ש; ש→מ)
+  { start: "כלב", end: "חלם", optimal: 4, hint: ["כלב","חלב","חלה","חלש","חלם"] },
+  // 4-step (pos 2: ש→ח→נ→ע→ר)
+  { start: "שמש", end: "שמר", optimal: 4, hint: ["שמש","שמח","שמן","שמע","שמר"] },
+];
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function diffByOne(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -121,7 +217,8 @@ function diffByOne(a: string, b: string): boolean {
   return diffs === 1;
 }
 
-function isValidWord(word: string, mode: "Kids" | "Adult"): boolean {
+function isValidWord(word: string, mode: "Kids" | "Adult", lang: "en" | "he"): boolean {
+  if (lang === "he") return HE_VALID_3.has(word);
   return mode === "Kids" ? VALID_3.has(word) : VALID_4.has(word);
 }
 
@@ -135,6 +232,7 @@ type Phase = "idle" | "playing" | "won" | "lost";
 // ── Component ────────────────────────────────────────────────────────────────
 export default function WordLadderGame({ title }: { title: string }) {
   const [mode, setMode] = useState<"Kids" | "Adult">("Kids");
+  const [lang, setLang] = useState<"en" | "he">("en");
   const [phase, setPhase] = useState<Phase>("idle");
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [chain, setChain] = useState<string[]>([]);
@@ -145,7 +243,10 @@ export default function WordLadderGame({ title }: { title: string }) {
   const [showOptimal, setShowOptimal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const puzzleList = mode === "Kids" ? KIDS_PUZZLES : ADULT_PUZZLES;
+  const puzzleList =
+    lang === "he"
+      ? mode === "Kids" ? HE_KIDS_PUZZLES : HE_ADULT_PUZZLES
+      : mode === "Kids" ? KIDS_PUZZLES     : ADULT_PUZZLES;
 
   const startGame = useCallback(() => {
     const p = pickRandom(puzzleList);
@@ -182,23 +283,24 @@ export default function WordLadderGame({ title }: { title: string }) {
 
   const handleSubmit = () => {
     if (!puzzle) return;
-    const word = input.toLowerCase().trim();
+    const word = lang === "he" ? input.trim() : input.toLowerCase().trim();
     const last = chain[chain.length - 1];
+    const wordLen = puzzle.start.length;
 
-    if (word.length !== puzzle.start.length) {
-      setError(`Must be ${puzzle.start.length} letters`);
+    if (word.length !== wordLen) {
+      setError(lang === "he" ? `חייב להיות ${wordLen} אותיות` : `Must be ${wordLen} letters`);
       return;
     }
     if (!diffByOne(last, word)) {
-      setError("Must change exactly one letter");
+      setError(lang === "he" ? "יש לשנות בדיוק אות אחת" : "Must change exactly one letter");
       return;
     }
-    if (!isValidWord(word, mode)) {
-      setError(`"${word.toUpperCase()}" isn't a valid word`);
+    if (!isValidWord(word, mode, lang)) {
+      setError(lang === "he" ? `"${word}" אינה מילה תקנית` : `"${word.toUpperCase()}" isn't a valid word`);
       return;
     }
     if (chain.includes(word)) {
-      setError("Already used that word");
+      setError(lang === "he" ? "כבר השתמשת במילה זו" : "Already used that word");
       return;
     }
 
@@ -217,15 +319,18 @@ export default function WordLadderGame({ title }: { title: string }) {
   };
 
   // ── Styles ────────────────────────────────────────────────────────────────
+  const isHe = lang === "he";
+
   const chipStyle = (isTarget: boolean, isCurrent: boolean): React.CSSProperties => ({
     display: "inline-block",
     padding: "0.4rem 1.25rem",
     borderRadius: "var(--radius-sm)",
-    fontFamily: "monospace",
-    letterSpacing: "0.2em",
+    fontFamily: isHe ? "inherit" : "monospace",
+    letterSpacing: isHe ? "0" : "0.2em",
     fontSize: "1.2rem",
     fontWeight: 700,
-    textTransform: "uppercase",
+    textTransform: isHe ? "none" : "uppercase",
+    direction: isHe ? "rtl" : "ltr",
     background: isTarget
       ? "rgba(236,72,153,0.18)"
       : isCurrent
@@ -239,11 +344,12 @@ export default function WordLadderGame({ title }: { title: string }) {
     display: "inline-block",
     padding: "0.35rem 1rem",
     borderRadius: "var(--radius-sm)",
-    fontFamily: "monospace",
-    letterSpacing: "0.15em",
+    fontFamily: isHe ? "inherit" : "monospace",
+    letterSpacing: isHe ? "0" : "0.15em",
     fontSize: "1rem",
     fontWeight: 600,
-    textTransform: "uppercase",
+    textTransform: isHe ? "none" : "uppercase",
+    direction: isHe ? "rtl" : "ltr",
     background: "rgba(109,40,217,0.12)",
     border: "1px solid var(--accent-primary)",
     color: "var(--text-secondary)",
@@ -251,10 +357,10 @@ export default function WordLadderGame({ title }: { title: string }) {
 
   const starRating = puzzle
     ? steps <= puzzle.optimal
-      ? "⭐⭐⭐ Perfect!"
+      ? "⭐⭐⭐ " + (isHe ? "מושלם!" : "Perfect!")
       : steps <= puzzle.optimal + 2
-      ? "⭐⭐ Great!"
-      : "⭐ Solved!"
+      ? "⭐⭐ " + (isHe ? "מצוין!" : "Great!")
+      : "⭐ " + (isHe ? "פתרת!" : "Solved!")
     : "";
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -263,27 +369,44 @@ export default function WordLadderGame({ title }: { title: string }) {
       <h3 className={styles.gameTitle}>{title}</h3>
 
       <div className={styles.difficultySelector}>
-        <span className={styles.difficultyLabel}>Mode:</span>
+        <span className={styles.difficultyLabel}>{isHe ? "רמה:" : "Mode:"}</span>
         {(["Kids", "Adult"] as const).map(m => (
           <button
             key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
             onClick={() => { setMode(m); resetGame(); }}
-          >{m}</button>
+          >{isHe ? (m === "Kids" ? "ילדים" : "מבוגרים") : m}</button>
+        ))}
+        <span style={{ marginInlineStart: "0.5rem", opacity: 0.4 }}>|</span>
+        {(["en","he"] as const).map(l => (
+          <button
+            key={l}
+            className={`${styles.diffBtn} ${lang === l ? styles.activeDiff : ""}`}
+            onClick={() => { setLang(l); resetGame(); }}
+          >{l === "en" ? "🇺🇸 EN" : "🇮🇱 עב"}</button>
         ))}
       </div>
 
       {/* ── IDLE ── */}
       {phase === "idle" && (
-        <div style={{ textAlign: "center", padding: "2rem 0" }}>
+        <div style={{ textAlign: "center", padding: "2rem 0", direction: isHe ? "rtl" : "ltr" }}>
           <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: "0.75rem" }}>
-            Transform the <strong>start word</strong> into the <strong>target word</strong>.<br />
-            Change <strong>one letter</strong> at a time — each step must be a real word.
+            {isHe ? (
+              <>שנה את <strong>מילת הפתיחה</strong> למילת <strong>המטרה</strong>.<br />
+              כל שלב — <strong>אות אחת בלבד</strong> — וכל מילה חייבת להיות מילה אמיתית.</>
+            ) : (
+              <>Transform the <strong>start word</strong> into the <strong>target word</strong>.<br />
+              Change <strong>one letter</strong> at a time — each step must be a real word.</>
+            )}
           </p>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginBottom: "1.5rem" }}>
-            Mode: <strong>{mode}</strong> &mdash; {mode === "Kids" ? "3-letter words" : "4-letter words"}
+            {isHe
+              ? `רמה: ${mode === "Kids" ? "ילדים" : "מבוגרים"} — מילים בנות 3 אותיות`
+              : `Mode: ${mode} — ${mode === "Kids" ? "3-letter words" : "4-letter words"}`}
           </p>
-          <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
+          <button className={styles.resetBtn} onClick={startGame}>
+            {isHe ? "התחל משחק" : "Start Game"}
+          </button>
         </div>
       )}
 
@@ -299,13 +422,16 @@ export default function WordLadderGame({ title }: { title: string }) {
             borderRadius: "var(--radius-md)",
             padding: "0.75rem 1.5rem",
             flexWrap: "wrap", justifyContent: "center",
+            direction: isHe ? "rtl" : "ltr",
           }}>
             <span style={chipStyle(false, false)}>{puzzle.start}</span>
-            <span style={{ color: "var(--text-secondary)", fontSize: "1.5rem" }}>→</span>
+            <span style={{ color: "var(--text-secondary)", fontSize: "1.5rem" }}>
+              {isHe ? "←" : "→"}
+            </span>
             <span style={chipStyle(true, false)}>{puzzle.end}</span>
             <button
               onClick={() => setShowOptimal(v => !v)}
-              title="Reveal optimal step count"
+              title={isHe ? "מספר הצעדים האופטימלי" : "Reveal optimal step count"}
               style={{
                 background: "transparent",
                 border: "1px solid var(--border-color)",
@@ -343,21 +469,29 @@ export default function WordLadderGame({ title }: { title: string }) {
               <input
                 ref={inputRef}
                 value={input}
-                onChange={e => setInput(e.target.value.toLowerCase().replace(/[^a-z]/g, ""))}
+                onChange={e => {
+                  const val = e.target.value;
+                  if (isHe) {
+                    setInput(val.replace(/[^\u05D0-\u05EA]/g, ""));
+                  } else {
+                    setInput(val.toLowerCase().replace(/[^a-z]/g, ""));
+                  }
+                }}
                 onKeyDown={e => e.key === "Enter" && handleSubmit()}
                 maxLength={puzzle.start.length}
                 placeholder={"_".repeat(puzzle.start.length)}
+                dir={isHe ? "rtl" : "ltr"}
                 style={{
                   width: 100, textAlign: "center",
                   background: "var(--bg-primary)",
                   border: "2px solid var(--accent-primary)",
                   borderRadius: "var(--radius-sm)",
                   color: "var(--text-primary)",
-                  fontFamily: "monospace",
+                  fontFamily: isHe ? "inherit" : "monospace",
                   fontSize: "1.1rem",
                   fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
+                  letterSpacing: isHe ? "0" : "0.15em",
+                  textTransform: isHe ? "none" : "uppercase",
                   padding: "0.4rem 0.5rem",
                   outline: "none",
                 }}
@@ -369,16 +503,17 @@ export default function WordLadderGame({ title }: { title: string }) {
                   border: "none", borderRadius: "var(--radius-sm)",
                   padding: "0.4rem 0.9rem", cursor: "pointer", fontWeight: 600,
                 }}
-              >Go</button>
+              >{isHe ? "הכנס" : "Go"}</button>
             </div>
           </div>
 
           {error && (
-            <div style={{ color: "#ef4444", fontSize: "0.9rem", fontWeight: 600 }}>{error}</div>
+            <div style={{ color: "#ef4444", fontSize: "0.9rem", fontWeight: 600, direction: isHe ? "rtl" : "ltr" }}>{error}</div>
           )}
 
-          <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-            Steps taken: <strong style={{ color: "var(--text-primary)" }}>{steps}</strong>
+          <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", direction: isHe ? "rtl" : "ltr" }}>
+            {isHe ? "צעדים שנעשו:" : "Steps taken:"}{" "}
+            <strong style={{ color: "var(--text-primary)" }}>{steps}</strong>
           </div>
 
           <button
@@ -388,49 +523,56 @@ export default function WordLadderGame({ title }: { title: string }) {
               borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.82rem",
             }}
             onClick={handleGiveUp}
-          >Give Up / Show Solution</button>
+          >{isHe ? "ויתרתי / הראה פתרון" : "Give Up / Show Solution"}</button>
         </div>
       )}
 
       {/* ── WON ── */}
       {phase === "won" && puzzle && (
-        <div style={{ textAlign: "center", padding: "1.5rem 0" }}>
+        <div style={{ textAlign: "center", padding: "1.5rem 0", direction: isHe ? "rtl" : "ltr" }}>
           <div style={{ fontSize: "2.5rem", marginBottom: "0.25rem" }}>🎉</div>
           <div style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.25rem" }}>
             {starRating}
           </div>
           <div style={{ color: "var(--text-secondary)", marginBottom: "1rem" }}>
-            {puzzle.start.toUpperCase()} → {puzzle.end.toUpperCase()} in <strong>{steps} step{steps !== 1 ? "s" : ""}</strong>
-            {steps <= puzzle.optimal && " — optimal!"}
+            {isHe
+              ? `${puzzle.start} ← ${puzzle.end} ב-${steps} צעד${steps !== 1 ? "ים" : ""}${steps <= puzzle.optimal ? " — אופטימלי!" : ""}`
+              : `${puzzle.start.toUpperCase()} → ${puzzle.end.toUpperCase()} in ${steps} step${steps !== 1 ? "s" : ""}${steps <= puzzle.optimal ? " — optimal!" : ""}`}
           </div>
           <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.5rem" }}>
             {chain.map((w, i) => (
               <React.Fragment key={i}>
                 <span style={chipStyle(i === chain.length - 1, false)}>{w}</span>
-                {i < chain.length - 1 && <span style={{ color: "var(--text-secondary)" }}>→</span>}
+                {i < chain.length - 1 && <span style={{ color: "var(--text-secondary)" }}>{isHe ? "←" : "→"}</span>}
               </React.Fragment>
             ))}
           </div>
-          <button className={styles.resetBtn} onClick={startGame}>Play Again</button>
+          <button className={styles.resetBtn} onClick={startGame}>
+            {isHe ? "שחק שוב" : "Play Again"}
+          </button>
         </div>
       )}
 
       {/* ── LOST ── */}
       {phase === "lost" && puzzle && (
-        <div style={{ textAlign: "center", padding: "1.5rem 0" }}>
+        <div style={{ textAlign: "center", padding: "1.5rem 0", direction: isHe ? "rtl" : "ltr" }}>
           <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔍</div>
-          <div style={{ color: "var(--text-secondary)", marginBottom: "0.75rem" }}>One solution:</div>
+          <div style={{ color: "var(--text-secondary)", marginBottom: "0.75rem" }}>
+            {isHe ? "פתרון אפשרי:" : "One solution:"}
+          </div>
           {showHint && (
             <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.5rem" }}>
               {puzzle.hint.map((w, i) => (
                 <React.Fragment key={i}>
                   <span style={hintChipStyle}>{w}</span>
-                  {i < puzzle.hint.length - 1 && <span style={{ color: "var(--text-secondary)" }}>→</span>}
+                  {i < puzzle.hint.length - 1 && <span style={{ color: "var(--text-secondary)" }}>{isHe ? "←" : "→"}</span>}
                 </React.Fragment>
               ))}
             </div>
           )}
-          <button className={styles.resetBtn} onClick={startGame}>Try Another</button>
+          <button className={styles.resetBtn} onClick={startGame}>
+            {isHe ? "נסה שוב" : "Try Another"}
+          </button>
         </div>
       )}
     </div>

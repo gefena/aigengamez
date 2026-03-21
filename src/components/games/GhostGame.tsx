@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "@/app/games/[id]/page.module.css";
 
-// ── Word list ─────────────────────────────────────────────────────────────────
+// ── English word list ─────────────────────────────────────────────────────────
 const GHOST_WORDS = [
   // A
   "ape","apt","arc","arm","art","ask","ace","add","age","ago","aid","aim","air","ale","all",
@@ -98,6 +98,52 @@ const GHOST_WORDS = [
   "yacht","yield","young","youth",
 ];
 
+// ── Hebrew word list (no nikud) ───────────────────────────────────────────────
+const HE_GHOST_WORDS = [
+  // א
+  "אבד","אבל","אבן","אבר","אור","ארץ","ארז","ארס","ארח","ארך",
+  "אריה","ארנב","אמון","ארמון",
+  // ב
+  "בית","בוא","ברוך",
+  // ג
+  "גשם","גשר","גמל","גמד","גמר","גדול",
+  // ד
+  "דבש","דבק","דבר","דגל","דגה","דגם",
+  // ה
+  "הרים",
+  // ז
+  "זהב","זהר","זמר","זמן","זחל",
+  // ח
+  "חיה","חיל","חדש","חלב","חלה","חלש","חלם","חלף","חדרה",
+  // ט
+  "טוב","טוס",
+  // י
+  "ילד","יום","יון","יוד","ילדה","ילקוט",
+  // כ
+  "כלב","כלי","כלא","כלה","כוס","כוח","כיסא","כובע","כוכב","כלכלה",
+  // ל
+  "לחם","לחן","לחץ","לבן","לבד",
+  // מ
+  "מים","מחשב","מלכה","מנחה","מדינה","מנהיג","ממשלה",
+  // נ
+  "נחש","נחל","נחר","נחת","נפש","נפל","נפח",
+  // ס
+  "סוס","ספר","ספג","ספרן","ספריה",
+  // ע
+  "עין","עיר","עיף","עיט","ענב","ענן","ענף","עפר","עבר","עזר","עמל",
+  // פ
+  "פרח","פרה","פרא","פרד","פרס","פרק",
+  // ק
+  "קול","קום","קוץ","קוף",
+  // ר
+  "רגל","ראש","רוח","רום",
+  // ש
+  "שמש","שמח","שמן","שמע","שמר","שמד","שיר","שלג","שלב","שלח","שלט","שלם",
+  "שנה","שור","שמחה","שלמה","שולחן",
+  // ת
+  "תום","תור","תוך","תפוח",
+];
+
 // ── Trie ─────────────────────────────────────────────────────────────────────
 interface TrieNode {
   children: Record<string, TrieNode>;
@@ -121,6 +167,10 @@ function buildTrie(words: string[]): TrieNode {
   return root;
 }
 
+// Build tries once at module level
+const EN_TRIE = buildTrie(GHOST_WORDS);
+const HE_TRIE = buildTrie(HE_GHOST_WORDS);
+
 function trieNode(root: TrieNode, prefix: string): TrieNode | null {
   let node = root;
   for (const ch of prefix) {
@@ -143,7 +193,6 @@ function wordsWithPrefix(root: TrieNode, prefix: string): string[] {
 }
 
 // ── Minimax (memo is local per AI call) ─────────────────────────────────────
-// Returns true if the player whose turn it is CAN win from this position
 function ghostWins(
   node: TrieNode,
   prefix: string,
@@ -156,7 +205,7 @@ function ghostWins(
   let anyWin = false;
   for (const [letter, child] of Object.entries(node.children)) {
     const np = prefix + letter;
-    if (child.isWord && np.length >= minLoseLen) continue; // this move loses for us
+    if (child.isWord && np.length >= minLoseLen) continue;
     const opponentWins = ghostWins(child, np, minLoseLen, memo);
     if (!opponentWins) { anyWin = true; break; }
   }
@@ -174,7 +223,6 @@ function aiChooseLetter(
   const node = trieNode(root, prefix);
   if (!node) return null;
 
-  // Collect moves that don't immediately complete a losing word
   const validMoves: string[] = [];
   for (const [letter, child] of Object.entries(node.children)) {
     const np = prefix + letter;
@@ -183,25 +231,21 @@ function aiChooseLetter(
   }
 
   if (validMoves.length === 0) {
-    // Forced to complete a word — pick any and lose gracefully
     return Object.keys(node.children)[0] ?? null;
   }
 
-  // 20% chance: pick a random valid move (makes AI beatable)
   if (noisy && Math.random() < 0.2) {
     return validMoves[Math.floor(Math.random() * validMoves.length)];
   }
 
-  // Minimax: find a move that makes the opponent lose
   const memo = new Map<string, boolean>();
   for (const letter of validMoves) {
     const child = node.children[letter];
     const np = prefix + letter;
     const opponentWins = ghostWins(child, np, minLoseLen, memo);
-    if (!opponentWins) return letter; // winning move
+    if (!opponentWins) return letter;
   }
 
-  // No winning move found — pick first valid move
   return validMoves[0];
 }
 
@@ -212,6 +256,7 @@ interface HistoryEntry { letter: string; by: "player" | "ai" }
 // ── Component ────────────────────────────────────────────────────────────────
 export default function GhostGame({ title }: { title: string }) {
   const [mode, setMode] = useState<"Kids" | "Adult">("Kids");
+  const [lang, setLang] = useState<"en" | "he">("en");
   const [phase, setPhase] = useState<Phase>("idle");
   const [prefix, setPrefix] = useState("");
   const [inputLetter, setInputLetter] = useState("");
@@ -223,10 +268,10 @@ export default function GhostGame({ title }: { title: string }) {
   const [record, setRecord] = useState({ wins: 0, losses: 0 });
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const trie = useMemo(() => buildTrie(GHOST_WORDS), []);
+  const isHe = lang === "he";
+  const trie = isHe ? HE_TRIE : EN_TRIE;
 
-  // Kids = easier: 4+ letter words lose (short words safe)
-  // Adult = harder: 3+ letter words lose (even "cat" counts)
+  // Kids = easier: 4+ letter words lose; Adult = harder: 3+ letter words lose
   const minLoseLen = mode === "Kids" ? 4 : 3;
 
   const startGame = useCallback(() => {
@@ -246,16 +291,13 @@ export default function GhostGame({ title }: { title: string }) {
     setHistory([]);
     setLoseMsg("");
     setChallengeResult(null);
-    // record intentionally preserved across sessions
   }, []);
 
-  // Track wins/losses
   useEffect(() => {
     if (phase === "ai-lost")     setRecord(r => ({ ...r, wins: r.wins + 1 }));
     if (phase === "player-lost") setRecord(r => ({ ...r, losses: r.losses + 1 }));
   }, [phase]);
 
-  // Focus input on player turn
   useEffect(() => {
     if (phase === "playing" && turn === "player") {
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -271,7 +313,7 @@ export default function GhostGame({ title }: { title: string }) {
       const letter = aiChooseLetter(trie, prefix, minLoseLen, true);
 
       if (!letter) {
-        setLoseMsg("AI is stuck — AI loses!");
+        setLoseMsg(isHe ? "הבינה המלאכותית תקועה — הבינה מלאכותית הפסידה!" : "AI is stuck — AI loses!");
         setPhase("ai-lost");
         return;
       }
@@ -284,23 +326,33 @@ export default function GhostGame({ title }: { title: string }) {
       setPrefix(np);
 
       if (isWord) {
-        setLoseMsg(`AI completed "${np.toUpperCase()}" — AI loses!`);
+        setLoseMsg(isHe
+          ? `הבינה המלאכותית השלימה "${np}" — הבינה מלאכותית הפסידה!`
+          : `AI completed "${np.toUpperCase()}" — AI loses!`);
         setPhase("ai-lost");
       } else {
         setTurn("player");
       }
     }, 800);
     return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, turn, prefix, trie, minLoseLen]);
 
   const handleAddLetter = () => {
     if (phase !== "playing" || turn !== "player" || !inputLetter) return;
-    const letter = inputLetter.toLowerCase();
-    if (!/^[a-z]$/.test(letter)) { setInputLetter(""); return; }
+    const letter = isHe ? inputLetter : inputLetter.toLowerCase();
+
+    if (isHe) {
+      if (!/^[\u05D0-\u05EA]$/.test(letter)) { setInputLetter(""); return; }
+    } else {
+      if (!/^[a-z]$/.test(letter)) { setInputLetter(""); return; }
+    }
 
     const node = trieNode(trie, prefix);
     if (!node || !node.children[letter]) {
-      setLoseMsg(`"${(prefix + letter).toUpperCase()}" leads nowhere — you lose!`);
+      setLoseMsg(isHe
+        ? `"${prefix + letter}" לא מוביל לשום מילה — הפסדת!`
+        : `"${(prefix + letter).toUpperCase()}" leads nowhere — you lose!`);
       setPhase("player-lost");
       setInputLetter("");
       return;
@@ -315,7 +367,9 @@ export default function GhostGame({ title }: { title: string }) {
     setPrefix(np);
 
     if (isWord) {
-      setLoseMsg(`You completed "${np.toUpperCase()}" — you lose!`);
+      setLoseMsg(isHe
+        ? `השלמת את "${np}" — הפסדת!`
+        : `You completed "${np.toUpperCase()}" — you lose!`);
       setPhase("player-lost");
     } else {
       setTurn("ai");
@@ -325,10 +379,14 @@ export default function GhostGame({ title }: { title: string }) {
   const handleChallenge = () => {
     const words = wordsWithPrefix(trie, prefix);
     if (words.length === 0) {
-      setChallengeResult(`Challenge success! No word starts with "${prefix.toUpperCase()}" — AI loses!`);
+      setChallengeResult(isHe
+        ? `אתגר הצליח! אין מילה שמתחילה ב-"${prefix}" — הבינה המלאכותית הפסידה!`
+        : `Challenge success! No word starts with "${prefix.toUpperCase()}" — AI loses!`);
       setPhase("ai-lost");
     } else {
-      setChallengeResult(`Challenge failed! "${words[0].toUpperCase()}" is a valid word — you lose!`);
+      setChallengeResult(isHe
+        ? `אתגר נכשל! "${words[0]}" היא מילה תקנית — הפסדת!`
+        : `Challenge failed! "${words[0].toUpperCase()}" is a valid word — you lose!`);
       setPhase("player-lost");
     }
   };
@@ -342,13 +400,17 @@ export default function GhostGame({ title }: { title: string }) {
       border: `2px solid ${entry.by === "player" ? "var(--accent-secondary, #ec4899)" : "var(--accent-primary)"}`,
       borderRadius: "var(--radius-sm)",
       color: "var(--text-primary)",
-      fontFamily: "monospace", fontSize: "1.3rem", fontWeight: 800,
-      textTransform: "uppercase",
+      fontFamily: isHe ? "inherit" : "monospace",
+      fontSize: isHe ? "1.1rem" : "1.3rem",
+      fontWeight: 800,
+      textTransform: isHe ? "none" : "uppercase",
     }}>{entry.letter}</span>
   );
 
   const endIcon = phase === "player-lost" ? "💀" : "🎉";
-  const endTitle = phase === "player-lost" ? "You lost!" : "AI lost!";
+  const endTitle = phase === "player-lost"
+    ? (isHe ? "הפסדת!" : "You lost!")
+    : (isHe ? "הבינה המלאכותית הפסידה!" : "AI lost!");
 
   const recordPill = (record.wins + record.losses) > 0 && (
     <div style={{
@@ -357,9 +419,9 @@ export default function GhostGame({ title }: { title: string }) {
       borderRadius: "var(--radius-full, 999px)", padding: "0.25rem 0.75rem",
       color: "var(--text-secondary)",
     }}>
-      <span style={{ color: "#22c55e" }}>W: {record.wins}</span>
+      <span style={{ color: "#22c55e" }}>{isHe ? "נצח:" : "W:"} {record.wins}</span>
       <span>|</span>
-      <span style={{ color: "#ef4444" }}>L: {record.losses}</span>
+      <span style={{ color: "#ef4444" }}>{isHe ? "הפסד:" : "L:"} {record.losses}</span>
     </div>
   );
 
@@ -369,34 +431,57 @@ export default function GhostGame({ title }: { title: string }) {
       <h3 className={styles.gameTitle}>{title}</h3>
 
       <div className={styles.difficultySelector}>
-        <span className={styles.difficultyLabel}>Mode:</span>
+        <span className={styles.difficultyLabel}>{isHe ? "רמה:" : "Mode:"}</span>
         {(["Kids", "Adult"] as const).map(m => (
           <button
             key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
             onClick={() => { setMode(m); resetGame(); }}
-          >{m}</button>
+          >{isHe ? (m === "Kids" ? "ילדים" : "מבוגרים") : m}</button>
+        ))}
+        <span style={{ marginInlineStart: "0.5rem", opacity: 0.4 }}>|</span>
+        {(["en","he"] as const).map(l => (
+          <button
+            key={l}
+            className={`${styles.diffBtn} ${lang === l ? styles.activeDiff : ""}`}
+            onClick={() => { setLang(l); resetGame(); }}
+          >{l === "en" ? "🇺🇸 EN" : "🇮🇱 עב"}</button>
         ))}
       </div>
 
       {/* ── IDLE ── */}
       {phase === "idle" && (
-        <div style={{ textAlign: "center", padding: "2rem 0" }}>
+        <div style={{ textAlign: "center", padding: "2rem 0", direction: isHe ? "rtl" : "ltr" }}>
           <p style={{ color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: "0.75rem" }}>
-            Take turns adding one letter to a growing word.<br />
-            The first player to <strong>complete a real word</strong> loses!
+            {isHe ? (
+              <>מוסיפים אות אחת בכל תור למילה הגדלה.<br />
+              הראשון ש<strong>משלים מילה אמיתית</strong> — מפסיד!</>
+            ) : (
+              <>Take turns adding one letter to a growing word.<br />
+              The first player to <strong>complete a real word</strong> loses!</>
+            )}
           </p>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginBottom: "0.5rem" }}>
-            {mode === "Kids"
-              ? "🟢 Kids: only 4+ letter words lose. Short words (3 letters) are safe!"
-              : "🔴 Adult: even 3-letter words lose. Every letter is a trap!"}
+            {isHe ? (
+              mode === "Kids"
+                ? "🟢 ילדים: רק מילים מ-4 אותיות מפסידות. מילים קצרות (3 אותיות) בטוחות!"
+                : "🔴 מבוגרים: גם מילים של 3 אותיות מפסידות. כל אות היא מלכודת!"
+            ) : (
+              mode === "Kids"
+                ? "🟢 Kids: only 4+ letter words lose. Short words (3 letters) are safe!"
+                : "🔴 Adult: even 3-letter words lose. Every letter is a trap!"
+            )}
           </p>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", marginBottom: "1.5rem" }}>
-            You can <strong>Challenge</strong> if you think the AI has no valid word.
+            {isHe
+              ? "ניתן לאתגר אם חושבים שלבינה המלאכותית אין מילה תקנית."
+              : "You can Challenge if you think the AI has no valid word."}
           </p>
           {recordPill}
           <div style={{ marginTop: "1.25rem" }}>
-            <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
+            <button className={styles.resetBtn} onClick={startGame}>
+              {isHe ? "התחל משחק" : "Start Game"}
+            </button>
           </div>
         </div>
       )}
@@ -405,7 +490,6 @@ export default function GhostGame({ title }: { title: string }) {
       {phase === "playing" && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
 
-          {/* Record pill */}
           {recordPill}
 
           {/* Growing prefix display */}
@@ -415,9 +499,9 @@ export default function GhostGame({ title }: { title: string }) {
             textAlign: "center", width: "100%", maxWidth: 400,
           }}>
             <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
-              Current letters
+              {isHe ? "האותיות עד כה" : "Current letters"}
             </div>
-            <div style={{ display: "flex", gap: "0.35rem", justifyContent: "center", flexWrap: "wrap", minHeight: 48 }}>
+            <div style={{ display: "flex", gap: "0.35rem", justifyContent: "center", flexWrap: "wrap", minHeight: 48, direction: isHe ? "rtl" : "ltr" }}>
               {history.length === 0
                 ? <span style={{ color: "var(--text-secondary)", fontStyle: "italic" }}>—</span>
                 : history.map((e, i) => letterChip(e, i))
@@ -425,9 +509,13 @@ export default function GhostGame({ title }: { title: string }) {
             </div>
             {prefix && (
               <div style={{
-                marginTop: "0.75rem", fontFamily: "monospace",
-                fontSize: "1.6rem", fontWeight: 800, letterSpacing: "0.2em",
-                textTransform: "uppercase", color: "var(--text-primary)",
+                marginTop: "0.75rem",
+                fontFamily: isHe ? "inherit" : "monospace",
+                fontSize: "1.6rem", fontWeight: 800,
+                letterSpacing: isHe ? "0" : "0.2em",
+                textTransform: isHe ? "none" : "uppercase",
+                color: "var(--text-primary)",
+                direction: isHe ? "rtl" : "ltr",
               }}>
                 {prefix}
               </div>
@@ -437,10 +525,10 @@ export default function GhostGame({ title }: { title: string }) {
           {/* Turn status */}
           <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
             {aiThinking
-              ? "🤔 AI is thinking…"
+              ? (isHe ? "🤔 הבינה המלאכותית חושבת…" : "🤔 AI is thinking…")
               : turn === "player"
-              ? "Your turn — add a letter:"
-              : "Waiting for AI…"}
+              ? (isHe ? "התור שלך — הוסף אות:" : "Your turn — add a letter:")
+              : (isHe ? "ממתין לבינה המלאכותית…" : "Waiting for AI…")}
           </div>
 
           {/* Player input */}
@@ -449,18 +537,28 @@ export default function GhostGame({ title }: { title: string }) {
               <input
                 ref={inputRef}
                 value={inputLetter}
-                onChange={e => setInputLetter(e.target.value.replace(/[^a-zA-Z]/g, "").slice(-1))}
+                onChange={e => {
+                  if (isHe) {
+                    setInputLetter(e.target.value.replace(/[^\u05D0-\u05EA]/g, "").slice(-1));
+                  } else {
+                    setInputLetter(e.target.value.replace(/[^a-zA-Z]/g, "").slice(-1));
+                  }
+                }}
                 onKeyDown={e => e.key === "Enter" && handleAddLetter()}
                 maxLength={1}
                 placeholder="?"
+                dir={isHe ? "rtl" : "ltr"}
                 style={{
                   width: 56, height: 56, textAlign: "center",
                   background: "var(--bg-primary)",
                   border: "2px solid var(--accent-primary)",
                   borderRadius: "var(--radius-sm)",
                   color: "var(--text-primary)",
-                  fontFamily: "monospace", fontSize: "1.5rem", fontWeight: 800,
-                  textTransform: "uppercase", outline: "none", caretColor: "transparent",
+                  fontFamily: isHe ? "inherit" : "monospace",
+                  fontSize: isHe ? "1.3rem" : "1.5rem",
+                  fontWeight: 800,
+                  textTransform: isHe ? "none" : "uppercase",
+                  outline: "none", caretColor: "transparent",
                 }}
               />
               <button
@@ -470,14 +568,14 @@ export default function GhostGame({ title }: { title: string }) {
                   border: "none", borderRadius: "var(--radius-sm)",
                   padding: "0.55rem 1.1rem", cursor: "pointer", fontWeight: 600, fontSize: "0.95rem",
                 }}
-              >Add</button>
+              >{isHe ? "הוסף" : "Add"}</button>
             </div>
           )}
 
           {/* Legend */}
           <div style={{ display: "flex", gap: "1rem", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-            <span><span style={{ color: "var(--accent-secondary, #ec4899)" }}>■</span> You</span>
-            <span><span style={{ color: "var(--accent-primary)" }}>■</span> AI</span>
+            <span><span style={{ color: "var(--accent-secondary, #ec4899)" }}>■</span> {isHe ? "את/ה" : "You"}</span>
+            <span><span style={{ color: "var(--accent-primary)" }}>■</span> {isHe ? "בינה" : "AI"}</span>
           </div>
 
           {/* Challenge */}
@@ -490,7 +588,7 @@ export default function GhostGame({ title }: { title: string }) {
                 borderRadius: "var(--radius-sm)", cursor: "pointer", fontSize: "0.82rem",
               }}
             >
-              Challenge AI (can they form a word?)
+              {isHe ? "אתגר — יש לבינה מילה?" : "Challenge AI (can they form a word?)"}
             </button>
           )}
         </div>
@@ -498,7 +596,7 @@ export default function GhostGame({ title }: { title: string }) {
 
       {/* ── END STATE ── */}
       {(phase === "player-lost" || phase === "ai-lost") && (
-        <div style={{ textAlign: "center", padding: "1.5rem 0" }}>
+        <div style={{ textAlign: "center", padding: "1.5rem 0", direction: isHe ? "rtl" : "ltr" }}>
           <div style={{ fontSize: "2.5rem", marginBottom: "0.25rem" }}>{endIcon}</div>
           <div style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.5rem" }}>
             {endTitle}
@@ -508,14 +606,15 @@ export default function GhostGame({ title }: { title: string }) {
             {challengeResult ?? loseMsg}
           </div>
 
-          <div style={{ display: "flex", gap: "0.3rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem" }}>
+          <div style={{ display: "flex", gap: "0.3rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem", direction: isHe ? "rtl" : "ltr" }}>
             {history.map((e, i) => letterChip(e, i))}
           </div>
 
-          {/* Session record */}
           <div style={{ marginBottom: "1.25rem" }}>{recordPill}</div>
 
-          <button className={styles.resetBtn} onClick={startGame}>Play Again</button>
+          <button className={styles.resetBtn} onClick={startGame}>
+            {isHe ? "שחק שוב" : "Play Again"}
+          </button>
         </div>
       )}
     </div>
