@@ -350,6 +350,16 @@
     "description": "Answer math questions to fuel your rocket and blast off! Fill the tank by solving + and − problems (Kids) or all 4 operations (Adult). Launch as many rockets as you can in 60 seconds — wrong answers drain fuel in Adult mode!"
   },
   {
+    "id": "money-market",
+    "title": "Money Market",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "emoji": "💰",
+    "thumbBg": "135deg, #14532d 0%, #16a34a 50%, #ca8a04 100%",
+    "rating": 4.9,
+    "description": "Count coins and make change! Kids mode: add up pennies, nickels, dimes, and quarters shown on screen. Adult mode: count coins AND make change from $5, $10, or $20 bills. Visual SVG coins, streak bonuses, 60 seconds!"
+  },
+  {
     "id": "estimation-station",
     "title": "Estimation Station",
     "developer": "aigengamez",

@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (38 total)
+## ✅ Games Shipped (39 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -46,6 +46,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Number Rocket | number-rocket | Math questions → fuel gauge → rocket launch, 60s |
 | Shape Sorter | shape-sorter | Name shapes + area/perimeter calculations, 60s |
 | Estimation Station | estimation-station | Visual dot jar + real-world quantity estimation |
+| Money Market | money-market | Count coins + make change, SVG coin visuals |
 
 ---
 
@@ -65,7 +66,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Number Rocket** — math game, mechanic TBD
 - [x] **Shape Sorter** — math/geometry game
 - [x] **Estimation Station** — estimate quantities/measurements
-- [ ] **Money Market** — coins and change game
+- [x] **Money Market** — coins and change game
 
 ### Painting / Creative
 - [x] **Kaleidoscope Painter** — draw and it mirrors symmetrically in real time
