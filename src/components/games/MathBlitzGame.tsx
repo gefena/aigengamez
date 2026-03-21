@@ -221,7 +221,7 @@ export default function MathBlitzGame({ title }: { title: string }) {
           <button
             key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
-            onClick={() => { if (phase === "idle") setMode(m); }}
+            onClick={() => { if (phase !== "playing") setMode(m); }}
           >
             {m === "kids" ? "🧒 Kids  ＋ −" : "🧑 Adult  × ÷"}
           </button>

@@ -234,6 +234,15 @@
     "description": "Program your lawn mower using if-condition commands! Red, Blue, and Yellow tiles change your direction. Write a 4-rule program to mow all the grass within the step limit. Kids mode uses a 6×6 grid; Adult mode challenges you on an 8×8 field. Every level is uniquely generated!"
   },
   {
+    "id": "block-drop",
+    "title": "Block Drop",
+    "developer": "aigengamez",
+    "category": "Action",
+    "imageUrl": "https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Stack falling blocks and clear lines before they reach the top! Kids mode: slower speed with friendly piece shapes. Adult mode: full Tetris speed with all 7 pieces, hard drop, and level progression. How many lines can you clear?"
+  },
+  {
     "id": "ice-cream-memory",
     "title": "Ice Cream Memory",
     "developer": "aigengamez",

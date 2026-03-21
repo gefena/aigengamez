@@ -34,6 +34,7 @@ import BalanceScalesGame from "@/components/games/BalanceScalesGame";
 import FractionSlicesGame from "@/components/games/FractionSlicesGame";
 import TimesTableGame from "@/components/games/TimesTableGame";
 import IceCreamMemoryGame from "@/components/games/IceCreamMemoryGame";
+import TetrisGame from "@/components/games/TetrisGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -66,6 +67,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'fraction-slices': FractionSlicesGame,
   'times-table': TimesTableGame,
   'ice-cream-memory': IceCreamMemoryGame,
+  'block-drop': TetrisGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

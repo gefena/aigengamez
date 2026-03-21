@@ -215,7 +215,7 @@ export default function IceCreamMemoryGame({ title }: { title: string }) {
       <div className={styles.difficultySelector}>
         {(["kids", "adult"] as Mode[]).map(m => (
           <button key={m} className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
-            onClick={() => { if (phase === "idle") setMode(m); }}>
+            onClick={() => { if (phase !== "playing") setMode(m); }}>
             {m === "kids" ? `🧒 Kids (${CONFIG.kids.scoops} scoops · 30s)` : `🧑 Adult (${CONFIG.adult.scoops} scoops · 15s)`}
           </button>
         ))}
