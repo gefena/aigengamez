@@ -21,14 +21,14 @@
 }
 
 .langBtn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
+  background: rgba(212, 160, 23, 0.08);
+  color: var(--gold-primary);
 }
 
 .active {
-  background: rgba(109, 40, 217, 0.2);
-  border-color: rgba(109, 40, 217, 0.4);
-  color: var(--text-primary);
+  background: rgba(212, 160, 23, 0.14);
+  border-color: rgba(245, 197, 24, 0.35);
+  color: var(--gold-primary);
 }
 
 .flag {

@@ -1,43 +1,57 @@
 :root {
-  /* Color Palette - Premium Dark Theme */
-  --bg-primary: #050511;
-  --bg-secondary: #0f0f20;
-  --bg-tertiary: #1a1a2e;
-  
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #6e6e80;
-  
-  --accent-primary: #6d28d9; /* Deep Purple */
-  --accent-secondary: #ec4899; /* Vibrant Pink */
-  --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  
-  --border-color: rgba(255, 255, 255, 0.1);
-  --border-highlight: rgba(255, 255, 255, 0.2);
+  /* ── Backgrounds ─────────────────────────────────────────── */
+  --bg-primary: #080710;
+  --bg-secondary: #0e0c1a;
+  --bg-tertiary: #171228;
 
-  /* Glassmorphism Tokens */
-  --glass-bg: rgba(20, 20, 35, 0.6);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 20px rgba(109, 40, 217, 0.4);
+  /* ── Text ────────────────────────────────────────────────── */
+  --text-primary: #faf8f0;
+  --text-secondary: #a89e88;
+  --text-muted: #665e4e;
 
-  /* Animations & Transitions */
-  --transition-fast: 0.15s ease-out;
+  /* ── Gold Palette ────────────────────────────────────────── */
+  --gold-bright:  #fde68a;   /* champagne */
+  --gold-primary: #f5c518;   /* rich gold  */
+  --gold-warm:    #d4a017;   /* amber gold */
+  --gold-dark:    #b8860b;   /* bronze     */
+  --gold-deep:    #8b6508;   /* dark bronze */
+
+  /* Kept as aliases for code that still uses these vars */
+  --accent-primary:   var(--gold-warm);
+  --accent-secondary: var(--gold-primary);
+
+  /* ── Gradients ───────────────────────────────────────────── */
+  --accent-gradient: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-bright) 100%);
+  --gold-shimmer:    linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-primary) 30%, var(--gold-bright) 50%, var(--gold-primary) 70%, var(--gold-dark) 100%);
+
+  /* ── Glass ───────────────────────────────────────────────── */
+  --glass-bg:     rgba(14, 12, 26, 0.72);
+  --glass-border: 1px solid rgba(245, 197, 24, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* ── Borders ─────────────────────────────────────────────── */
+  --border-color:     rgba(245, 197, 24, 0.08);
+  --border-highlight: rgba(245, 197, 24, 0.25);
+
+  /* ── Shadows ─────────────────────────────────────────────── */
+  --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg:        0 16px 48px rgba(0, 0, 0, 0.7);
+  --shadow-glow:      0 0 24px rgba(212, 160, 23, 0.28);
+  --shadow-glow-strong: 0 0 48px rgba(245, 197, 24, 0.4);
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --transition-fast:   0.15s ease-out;
   --transition-normal: 0.3s ease-out;
-  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --transition-slow:   0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Radius ──────────────────────────────────────────────── */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
   --radius-full: 9999px;
-  
-  /* Sizing Constraints */
+
+  /* ── Layout ──────────────────────────────────────────────── */
   --max-width: 1200px;
 }
 
@@ -52,9 +66,9 @@ body {
 
 body {
   min-height: 100vh;
-  /* Add a subtle radial gradient background to elevate the dark mode */
-  background-image: radial-gradient(circle at top right, rgba(109, 40, 217, 0.15) 0%, transparent 40%),
-                    radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(212, 160, 23, 0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 100%, rgba(184, 134, 11, 0.08) 0%, transparent 55%);
   background-attachment: fixed;
 }
 
@@ -71,45 +85,49 @@ a {
 }
 
 a:hover {
-  color: var(--text-secondary);
+  color: var(--gold-primary);
 }
 
-/* Base Headings */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-/* Glass panel utility class */
+/* ── Utility: Glass panel ──────────────────────────────────── */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: var(--radius-md);
 }
 
-/* Gradient text utility class */
+/* ── Utility: Gold shimmer gradient text ───────────────────── */
 .gradient-text {
-  background: var(--accent-gradient);
+  background: var(--gold-shimmer);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: goldShimmer 5s linear infinite;
 }
 
-/* ── RTL overrides (Hebrew) ─────────────────────────────────── */
+@keyframes goldShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── RTL overrides (Hebrew) ────────────────────────────────── */
 [dir="rtl"] body {
   font-family: "Inter", "Arial", "Helvetica Neue", sans-serif;
 }
 
-/* Flip flex rows so natural LTR layouts mirror correctly */
 [dir="rtl"] .main-content {
   direction: rtl;
 }
 
-/* Headings with gradient-text: letter-spacing looks odd in Hebrew */
 [dir="rtl"] h1,
 [dir="rtl"] h2,
 [dir="rtl"] h3 {
