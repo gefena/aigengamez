@@ -8,7 +8,7 @@ import gamesData from "@/data/games.json";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Game } from "@/types/game";
 
-const CATEGORIES = ["All", "Action", "Puzzle", "Kids", "Strategy", "Racing", "Simulation"];
+const CATEGORIES = ["All", "Action", "Puzzle", "Kids", "Word"];
 
 const KIDS_IDS = [
   "ai-canvas", "stamp-pad", "pixel-art", "fireworks-canvas",

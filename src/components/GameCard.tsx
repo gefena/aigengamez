@@ -5,9 +5,10 @@ import type { Game } from "@/types/game";
 
 type GameCardProps = Pick<Game, 'id' | 'title' | 'developer' | 'category' | 'emoji' | 'thumbBg'> & {
   rating?: number;
+  description?: string;
 };
 
-function GameCard({ id, title, developer, category, emoji, thumbBg, rating }: GameCardProps) {
+function GameCard({ id, title, developer, category, emoji, thumbBg, rating, description }: GameCardProps) {
   return (
     <Link href={`/games/${id}`} className={styles.card}>
       <div
@@ -29,6 +30,7 @@ function GameCard({ id, title, developer, category, emoji, thumbBg, rating }: Ga
           )}
         </div>
 
+        {description && <p className={styles.description}>{description}</p>}
         <p className={styles.developer}>{developer}</p>
       </div>
     </Link>

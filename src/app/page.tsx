@@ -7,15 +7,42 @@ import gamesData from "@/data/games.json";
 import type { Game } from "@/types/game";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+const FEATURED_IDS = [
+  "queen-gauntlet",
+  "anagram-blitz",
+  "four-in-a-row",
+  "forest-maze",
+  "mandala-painter",
+  "money-market",
+  "trivia",
+  "endless-runner",
+];
+
+const MARQUEE_TEXT =
+  "Queen's Gauntlet · Anagram Blitz · Forest Escape · Toilet Piano · Kaleidoscope Painter · Marble Drop · Socks Match · Color by Numbers · Mandala Painter · Number Rocket · Shape Sorter · Estimation Station · Money Market · 4 in a Row · Ghost · Word Ladder · Math Blitz · Bubble Pop · ";
+
+const STATS = [
+  { icon: "🎮", label: "39 Games" },
+  { icon: "🆓", label: "Always Free" },
+  { icon: "📱", label: "No Download" },
+  { icon: "🌍", label: "EN + HE" },
+];
+
+const FLOATERS = ["♛", "🚀", "🌸", "🎯", "🔤", "🎨", "🧩", "⚡"];
+
 export default function Home() {
   const { t, lang } = useLanguage();
   const games = gamesData as Game[];
 
-  const localizedGames = games.map((g) => ({
+  const allLocalized = games.map((g) => ({
     ...g,
     title: t.games[g.id]?.title ?? g.title,
     description: t.games[g.id]?.description ?? g.description,
   }));
+
+  const featuredGames = FEATURED_IDS
+    .map((id) => allLocalized.find((g) => g.id === id))
+    .filter(Boolean) as typeof allLocalized;
 
   return (
     <div className={styles.container}>
@@ -36,13 +63,34 @@ export default function Home() {
               {t.home.howItWorks}
             </Link>
           </div>
+
+          {/* Stats bar */}
+          <div className={styles.statsBar}>
+            {STATS.map((s) => (
+              <div key={s.label} className={styles.statItem}>
+                <span className={styles.statIcon}>{s.icon}</span>
+                <span className={styles.statLabel}>{s.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className={styles.heroBackground}>
           <div className={styles.glowBlob1}></div>
           <div className={styles.glowBlob2}></div>
+          {FLOATERS.map((emoji, i) => (
+            <div key={i} className={styles[`floater${i + 1}` as keyof typeof styles]}>{emoji}</div>
+          ))}
         </div>
       </section>
+
+      {/* Marquee strip */}
+      <div className={styles.marqueeStrip}>
+        <div className={styles.marqueeTrack}>
+          <span>{MARQUEE_TEXT}</span>
+          <span aria-hidden="true">{MARQUEE_TEXT}</span>
+        </div>
+      </div>
 
       {/* Featured Games Section */}
       <section className={styles.featured}>
@@ -54,9 +102,15 @@ export default function Home() {
         </div>
 
         <div className={styles.grid}>
-          {localizedGames.map((game) => (
-            <GameCard key={game.id} {...game} />
+          {featuredGames.map((game) => (
+            <GameCard key={game.id} {...game} description={game.description} />
           ))}
+        </div>
+
+        <div className={styles.browseAll}>
+          <Link href="/explore" className={styles.browseAllLink}>
+            Browse all 39 games {lang === "he" ? "←" : "→"}
+          </Link>
         </div>
       </section>
 
