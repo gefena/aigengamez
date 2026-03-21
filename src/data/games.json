@@ -4,7 +4,8 @@
     "title": "Queen's Gauntlet",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1528819622765-d6bcf132f793?auto=format&fit=crop&q=80&w=800",
+    "emoji": "♛",
+    "thumbBg": "135deg, #1a1a2e 0%, #4a1d96 100%",
     "rating": 4.9,
     "description": "60 seconds. One white queen. Up to 4 enemy pieces hunting you down. Capture black pieces for points — but if they catch you, your queen teleports and you lose points. How high can you score?"
   },
@@ -13,7 +14,8 @@
     "title": "Tic-Tac-Toe NextGen",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=800",
+    "emoji": "✖️",
+    "thumbBg": "135deg, #0f172a 0%, #1e3a5f 100%",
     "rating": 4.9,
     "description": "Play against our custom-built AI. Choose between Easy, Medium, or Hard (Minimax) difficulty."
   },
@@ -22,7 +24,8 @@
     "title": "AI Magic Canvas",
     "developer": "aigengamez",
     "category": "Kids",
-    "imageUrl": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🎨",
+    "thumbBg": "135deg, #7c2d92 0%, #db2777 100%",
     "rating": 5.0,
     "description": "A magical free-form drawing canvas. Pick your colors and use the AI Symmetry brush to create beautiful generative art!"
   },
@@ -31,7 +34,8 @@
     "title": "Stamp & Sticker Pad",
     "developer": "aigengamez",
     "category": "Kids",
-    "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🖊️",
+    "thumbBg": "135deg, #0369a1 0%, #7c3aed 100%",
     "rating": 4.8,
     "description": "Tap your favourite emoji stamps onto a colourful canvas! Pick a background, choose from animals, food, space and more — then clear and start again."
   },
@@ -40,7 +44,8 @@
     "title": "Pixel Art Maker",
     "developer": "aigengamez",
     "category": "Kids",
-    "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
+    "emoji": "👾",
+    "thumbBg": "135deg, #064e3b 0%, #0369a1 100%",
     "rating": 4.9,
     "description": "Create pixel art on a 32×32 grid. Choose your colour, click to fill, and save your masterpiece as a PNG download!"
   },
@@ -49,7 +54,8 @@
     "title": "Fireworks Canvas",
     "developer": "aigengamez",
     "category": "Kids",
-    "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🎆",
+    "thumbBg": "135deg, #0f0f1a 0%, #c2410c 100%",
     "rating": 5.0,
     "description": "Click or drag anywhere on the night-sky canvas to launch spectacular fireworks explosions packed with colour and sparkle!"
   },
@@ -58,7 +64,8 @@
     "title": "Intestine Escape",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?auto=format&fit=crop&q=80&w=800",
+    "emoji": "💩",
+    "thumbBg": "135deg, #7f1d1d 0%, #9d174d 100%",
     "rating": 4.8,
     "description": "Navigate 💩 through a winding intestinal maze and reach the toilet 🚽 before it's too late. Dodge dead-ends, follow the fleshy pink corridors, and find freedom!"
   },
@@ -67,7 +74,8 @@
     "title": "Forest Escape",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🦊",
+    "thumbBg": "135deg, #14532d 0%, #166534 100%",
     "rating": 4.9,
     "description": "Guide your clever fox 🦊 through a magical forest maze to reach the campsite 🏕️! Collect mushrooms 🍄 for bonus points through three ever-larger woodland labyrinths."
   },
@@ -76,7 +84,8 @@
     "title": "Temple Dash",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🏃",
+    "thumbBg": "135deg, #78350f 0%, #b45309 100%",
     "rating": 4.9,
     "description": "Run through a neon corridor! Dodge glowing pillars, leap over low bars, and collect coins as the speed ramps up. How far can you go?"
   },
@@ -85,7 +94,8 @@
     "title": "Anagram Blitz",
     "developer": "aigengamez",
     "category": "Word",
-    "imageUrl": "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🔤",
+    "thumbBg": "135deg, #92400e 0%, #d97706 100%",
     "rating": 4.8,
     "description": "Unscramble as many words as you can in 60 seconds! Click the scrambled letter tiles in the right order. Kids and Adult modes with progressively longer words."
   },
@@ -94,7 +104,8 @@
     "title": "Word Ladder",
     "developer": "aigengamez",
     "category": "Word",
-    "imageUrl": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🔡",
+    "thumbBg": "135deg, #0e7490 0%, #0284c7 100%",
     "rating": 4.8,
     "description": "Transform the start word into the target word by changing one letter at a time — every step must be a real word. Can you find the shortest path?"
   },
@@ -103,7 +114,8 @@
     "title": "Ghost",
     "developer": "aigengamez",
     "category": "Word",
-    "imageUrl": "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80&w=800",
+    "emoji": "👻",
+    "thumbBg": "135deg, #1e293b 0%, #334155 100%",
     "rating": 4.9,
     "description": "Take turns adding letters with a strategic AI opponent. The first player to complete a real word loses! The AI uses a trie and minimax to outplay you."
   },
@@ -112,7 +124,8 @@
     "title": "Code Order",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🤖",
+    "thumbBg": "135deg, #1e3a5f 0%, #1d4ed8 100%",
     "rating": 4.9,
     "description": "Arrange command blocks in the right order to guide the robot to the star! Build programs from Forward, Turn Left and Turn Right blocks. Use Repeat blocks in Adult mode for bonus stars. 8 puzzles per mode."
   },
@@ -121,7 +134,8 @@
     "title": "Trivia Challenge",
     "developer": "aigengamez",
     "category": "Word",
-    "imageUrl": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🧠",
+    "thumbBg": "135deg, #4c1d95 0%, #7c3aed 100%",
     "rating": 4.9,
     "description": "Test your knowledge across 10 questions! Kids mode uses emoji picture clues — animals, food, science & more. Adult mode covers science, history, geography & pop culture with a 15-second timer and time-bonus scoring."
   },
@@ -130,7 +144,8 @@
     "title": "Bubble Pop",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🫧",
+    "thumbBg": "135deg, #0c4a6e 0%, #38bdf8 100%",
     "rating": 4.8,
     "description": "Pop colorful bubbles before they float away! Star bubbles give bonus points, freeze bubbles slow everything down, and bomb bubbles will punish the trigger-happy. Build combos for ×2/×3/×4 multipliers!"
   },
@@ -139,7 +154,8 @@
     "title": "Fruit Catcher",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🍎",
+    "thumbBg": "135deg, #14532d 0%, #16a34a 100%",
     "rating": 4.8,
     "description": "Catch falling fruits in your basket before they hit the ground! Dodge bombs and rotten items. Build combos for score multipliers across Kids, Medium, and Hard modes."
   },
@@ -148,7 +164,8 @@
     "title": "Memory Match",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🃏",
+    "thumbBg": "135deg, #1e40af 0%, #3b82f6 100%",
     "rating": 4.8,
     "description": "Flip cards to find matching pairs! Kids mode has three themed decks — Animals, Food, and Space — with no timer. Adult mode adds bigger grids, a 90-second countdown, and score bonuses for speedy matches."
   },
@@ -157,7 +174,8 @@
     "title": "Logic Gates",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+    "emoji": "⚡",
+    "thumbBg": "135deg, #713f12 0%, #ca8a04 100%",
     "rating": 4.9,
     "description": "Learn how computers think! Kids mode: see AND, OR, NOT and XOR gates in action — will the lamp light up? Adult mode: decode mystery gates from their truth tables. Boolean logic made fun!"
   },
@@ -166,7 +184,8 @@
     "title": "Bug Hunt",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🐛",
+    "thumbBg": "135deg, #064e3b 0%, #15803d 100%",
     "rating": 4.9,
     "description": "Spot the bug in the code before time runs out! Kids mode uses friendly pseudocode with emoji hints. Adult mode features real JavaScript bugs — off-by-one errors, wrong operators, broken async. Can you find them all?"
   },
@@ -175,7 +194,8 @@
     "title": "4 in a Row",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🔵",
+    "thumbBg": "135deg, #1e3a8a 0%, #2563eb 100%",
     "rating": 4.9,
     "description": "Classic Connect Four — drop discs and be first to line up 4 in a row! Kids mode is pass-and-play for two friends. Adult mode pits you against a sharp minimax AI that plans several moves ahead. Can you beat it?"
   },
@@ -184,7 +204,8 @@
     "title": "Skunk Duel",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1474511320723-9a56873867b5?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🦨",
+    "thumbBg": "135deg, #365314 0%, #4d7c0f 100%",
     "rating": 4.9,
     "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
   },
@@ -193,7 +214,8 @@
     "title": "Times Table Treasure",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1605870445919-838d190e8e1b?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🏴‍☠️",
+    "thumbBg": "135deg, #1c1917 0%, #92400e 100%",
     "rating": 4.9,
     "description": "A pirate hid treasure in 9 chests — only one holds the correct multiplication answer! Tap the right chest before the decoys fool you. Kids: ×2 to ×9. Adult: ×2 to ×12 with a 10-second timer per round. Build streaks for bonus loot!"
   },
@@ -202,7 +224,8 @@
     "title": "Fraction Slices",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🍕",
+    "thumbBg": "135deg, #7f1d1d 0%, #dc2626 100%",
     "rating": 4.9,
     "description": "Tap the right number of pizza slices to match the fraction shown! Kids mode: halves, thirds, and quarters. Adult mode: equivalent fractions — the pizza has more slices than the denominator, so you'll need to think deeper. 8 rounds of delicious fraction fun!"
   },
@@ -211,7 +234,8 @@
     "title": "Balance Scales",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=800",
+    "emoji": "⚖️",
+    "thumbBg": "135deg, #1e3a5f 0%, #1e40af 100%",
     "rating": 4.9,
     "description": "The scale is perfectly balanced — but what does the mystery box weigh? Kids mode: find the unknown weight using subtraction. Adult mode: multiple identical boxes, solve for the unknown like a real algebra problem! 8 rounds of visual equation solving."
   },
@@ -220,7 +244,8 @@
     "title": "Math Blitz",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    "emoji": "➕",
+    "thumbBg": "135deg, #4c1d95 0%, #a855f7 100%",
     "rating": 4.9,
     "description": "Equations rain down from the sky! Tap the TRUE ones before they hit the ground — miss one and lose a life. Kids mode: addition & subtraction. Adult mode: all 4 operations with rising speed. Build combos for ×2, ×3, and ×4 multipliers!"
   },
@@ -229,7 +254,8 @@
     "title": "Lawn Mower Coder",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🌿",
+    "thumbBg": "135deg, #14532d 0%, #4d7c0f 100%",
     "rating": 4.9,
     "description": "Program your lawn mower using if-condition commands! Red, Blue, and Yellow tiles change your direction. Write a 4-rule program to mow all the grass within the step limit. Kids mode uses a 6×6 grid; Adult mode challenges you on an 8×8 field. Every level is uniquely generated!"
   },
@@ -238,7 +264,8 @@
     "title": "Block Drop",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🧱",
+    "thumbBg": "135deg, #0f172a 0%, #312e81 100%",
     "rating": 4.9,
     "description": "Stack falling blocks and clear lines before they reach the top! Kids mode: slower speed with friendly piece shapes. Adult mode: full Tetris speed with all 7 pieces, hard drop, and level progression. How many lines can you clear?"
   },
@@ -247,7 +274,8 @@
     "title": "Ice Cream Memory",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🍦",
+    "thumbBg": "135deg, #9d174d 0%, #f472b6 100%",
     "rating": 4.9,
     "description": "Study the ice cream cone for a few seconds, then rebuild it from memory! Match the flavor order exactly. Kids mode: 3 scoops, 30 seconds. Adult mode: 5 scoops, just 15 seconds. How good is your memory?"
   },
@@ -256,7 +284,8 @@
     "title": "Alien Invasion!",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800",
+    "emoji": "👾",
+    "thumbBg": "135deg, #1e1b4b 0%, #4f46e5 100%",
     "rating": 4.9,
     "description": "Aliens are popping up from crater holes — whack them before they escape! Build combos, catch bonus UFOs, and survive 60 seconds of escalating alien chaos. Kids, Medium, and Hard modes."
   },
@@ -265,7 +294,8 @@
     "title": "Color by Numbers",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🎨",
+    "thumbBg": "135deg, #701a75 0%, #db2777 100%",
     "rating": 4.9,
     "description": "Tap numbered regions to fill them with the matching color and reveal a hidden picture! Easy pictures: House and Flower. Hard pictures: Owl and Fish with 14 regions and tricky overlapping details. Satisfying to complete — tap Reveal to preview!"
   },
@@ -274,7 +304,8 @@
     "title": "Socks Match",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🧦",
+    "thumbBg": "135deg, #7c2d12 0%, #ea580c 100%",
     "rating": 4.9,
     "description": "Match the loose socks before the laundry pile takes over! Click two matching socks to pair them. Kids mode: 6 brightly colored pairs. Adult mode: 8 pairs with stripes, dots, and diagonal patterns — some look nearly identical. Beat the 90-second clock!"
   },
@@ -283,7 +314,8 @@
     "title": "Marble Drop",
     "developer": "aigengamez",
     "category": "Puzzle",
-    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🔮",
+    "thumbBg": "135deg, #0c4a6e 0%, #0891b2 100%",
     "rating": 4.9,
     "description": "Drop colored marbles into columns and match 3 or more of the same color to clear them! Chain clears for big points. Kids mode: 3 colors, easy stacking. Adult mode: 5 colors, faster chains. How long can you keep the columns from overflowing?"
   },
@@ -292,7 +324,8 @@
     "title": "Kaleidoscope Painter",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800",
+    "emoji": "✨",
+    "thumbBg": "135deg, #4c1d95 0%, #7c3aed 50%, #db2777 100%",
     "rating": 4.9,
     "description": "Draw and watch your art bloom into a living kaleidoscope! Every stroke mirrors symmetrically in real time. Kids mode: 4-fold symmetry with vibrant colors. Adult mode: choose 4, 6, 8, or 12-fold symmetry, a custom color picker, and a glow blend mode for psychedelic patterns. Save your creation as a PNG!"
   },
@@ -301,7 +334,8 @@
     "title": "Toilet Piano",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🚽",
+    "thumbBg": "135deg, #164e63 0%, #0e7490 100%",
     "rating": 4.9,
     "description": "Play music on a keyboard made entirely of toilets! Each key is a 🚽 that flushes with a real piano note blended with a subtle fart sound. Kids mode: 8 white keys (C4–C5). Adult mode: 15 keys spanning two full octaves. Tap or use your keyboard!"
   },
@@ -310,7 +344,8 @@
     "title": "Mandala Painter",
     "developer": "aigengamez",
     "category": "Action",
-    "imageUrl": "https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&fit=crop&q=80&w=800",
+    "emoji": "🌸",
+    "thumbBg": "135deg, #831843 0%, #be185d 50%, #d97706 100%",
     "rating": 4.9,
     "description": "Create stunning mandalas with radial symmetry! Draw freely or stamp shapes — dots, rings, diamonds, and petals — that mirror across 8, 12, or 16 segments automatically. Concentric guide rings help you build balanced designs. Save your mandala as a PNG!"
   }

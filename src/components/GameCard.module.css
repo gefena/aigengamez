@@ -20,33 +20,33 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--bg-tertiary);
   overflow: hidden;
-}
-
-.image {
-  object-fit: cover;
-  transition: transform var(--transition-slow);
-}
-
-.card:hover .image {
-  transform: scale(1.05);
-}
-
-.placeholderImage {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 217, 0.2));
 }
 
-.placeholderText {
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  opacity: 0.5;
+/* subtle radial highlight in center */
+.imageContainer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,0.14) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.thumbEmoji {
+  font-size: 3.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.45));
+  transition: transform 0.3s ease;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover .thumbEmoji {
+  transform: scale(1.18) translateY(-3px);
 }
 
 .categoryBadge {

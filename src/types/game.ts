@@ -3,7 +3,8 @@ export interface Game {
   title: string;
   developer: string;
   category: string;
-  imageUrl: string;
+  emoji: string;
+  thumbBg: string;
   rating: number;
   description: string;
 }
