@@ -18,8 +18,8 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Forest Escape | forest-maze | Nature maze |
 | Temple Dash | endless-runner | Endless runner |
 | Anagram Blitz | anagram-blitz | 🇺🇸/🇮🇱 Hebrew mode |
-| Word Ladder | word-ladder | |
-| Ghost | ghost | Trie + minimax |
+| Word Ladder | word-ladder | 🇺🇸/🇮🇱 Hebrew mode |
+| Ghost | ghost | Trie + minimax · 🇺🇸/🇮🇱 Hebrew mode |
 | Code Order | code-order | Block coding |
 | Trivia Challenge | trivia | 🇺🇸/🇮🇱 Hebrew mode |
 | Bubble Pop | bubble-pop | |
@@ -62,8 +62,8 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 - [x] Hebrew Anagram Blitz — 🇮🇱/🇺🇸 toggle, Hebrew word lists kids + adult
 - [x] Hebrew Trivia — 20 kids + 20 adult Hebrew questions, RTL support
-- [ ] **Hebrew Word Ladder** — needs Hebrew word pairs with single-letter-change connections. Source a word list first.
-- [ ] **Hebrew Ghost** — needs a full Hebrew word trie. Complex, defer until dictionary is sourced.
+- [x] Hebrew Word Ladder — verified puzzle chains, HE_VALID_3 vocabulary set
+- [x] Hebrew Ghost — HE_GHOST_WORDS trie, minimax AI works on Hebrew
 
 ---
 
