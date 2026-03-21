@@ -263,12 +263,13 @@ export default function TetrisGame({ title }: { title: string }) {
   const sc = Math.max(12, Math.floor(cellPx * 0.62)); // sidebar cell px
 
   const btnSt: React.CSSProperties = {
-    padding: "0.45rem 1rem", fontSize: "0.85rem",
+    padding: "0.5rem", fontSize: "1.15rem",
     background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.15)",
+    border: "1px solid rgba(255,255,255,0.18)",
     borderRadius: 8, color: "var(--text-primary)",
     cursor: "pointer", userSelect: "none",
     WebkitUserSelect: "none", touchAction: "manipulation",
+    flex: 1, textAlign: "center" as const,
   };
 
   return (
@@ -343,8 +344,9 @@ export default function TetrisGame({ title }: { title: string }) {
               }))}
             </div>
 
-            {/* Sidebar */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 72 }}>
+            {/* Sidebar: stats + touch controls */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 80 }}>
+              {/* Next piece */}
               <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "0.5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "0.6rem", color: "var(--text-muted)", marginBottom: 4, letterSpacing: "0.06em" }}>NEXT</div>
                 <div style={{ display: "grid", gridTemplateColumns: `repeat(${NEXT_SIZE}, ${sc}px)`, gap: 1, margin: "0 auto", width: "fit-content" }}>
@@ -358,26 +360,32 @@ export default function TetrisGame({ title }: { title: string }) {
                   )))}
                 </div>
               </div>
-              <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "0.5rem 0.6rem", fontSize: "0.68rem" }}>
+
+              {/* Stats */}
+              <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "0.4rem 0.6rem", fontSize: "0.68rem" }}>
                 <div style={{ color: "var(--text-muted)", letterSpacing: "0.06em" }}>SCORE</div>
-                <div style={{ fontWeight: 800, fontSize: "0.92rem", marginBottom: 8 }}>{score.toLocaleString()}</div>
+                <div style={{ fontWeight: 800, fontSize: "0.88rem", marginBottom: 6 }}>{score.toLocaleString()}</div>
                 <div style={{ color: "var(--text-muted)", letterSpacing: "0.06em" }}>LINES</div>
-                <div style={{ fontWeight: 700, marginBottom: 8 }}>{lines}</div>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>{lines}</div>
                 <div style={{ color: "var(--text-muted)", letterSpacing: "0.06em" }}>LEVEL</div>
                 <div style={{ fontWeight: 700 }}>{level}</div>
               </div>
-            </div>
-          </div>
 
-          {/* Touch controls */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginTop: 10 }}>
-            <button onPointerDown={rotate} style={btnSt}>↺ Rotate</button>
-            <div style={{ display: "flex", gap: 6 }}>
-              <button onPointerDown={() => moveH(-1)} style={btnSt}>◀</button>
-              <button onPointerDown={softDrop} style={btnSt}>▼</button>
-              <button onPointerDown={() => moveH(1)} style={btnSt}>▶</button>
+              {/* Touch D-pad — always visible, fills remaining sidebar space */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
+                <div style={{ display: "flex" }}>
+                  <button onPointerDown={rotate} style={btnSt}>↺</button>
+                </div>
+                <div style={{ display: "flex", gap: 4 }}>
+                  <button onPointerDown={() => moveH(-1)} style={btnSt}>◀</button>
+                  <button onPointerDown={softDrop} style={btnSt}>▼</button>
+                  <button onPointerDown={() => moveH(1)} style={btnSt}>▶</button>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <button onPointerDown={hardDrop} style={{ ...btnSt, background: "rgba(139,92,246,0.3)", border: "1px solid rgba(139,92,246,0.5)" }}>⬇</button>
+                </div>
+              </div>
             </div>
-            <button onPointerDown={hardDrop} style={{ ...btnSt, background: "rgba(139,92,246,0.25)", border: "1px solid rgba(139,92,246,0.4)" }}>⬇ Drop</button>
           </div>
         </>
       )}
