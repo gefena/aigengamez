@@ -4,47 +4,82 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## 🌍 Language / i18n
+## ✅ Games Shipped (29 total)
 
-- [ ] **Hebrew Word Ladder** — needs Hebrew word pairs with Levenshtein-1 connections. Source a dictionary first.
-- [ ] **Hebrew Ghost** — needs a Hebrew trie. Complex, defer until dictionary is sourced.
-- [ ] **Hebrew Anagram Blitz** ✅ done (2026-03-21) — 🇮🇱/🇺🇸 toggle, Hebrew word lists kids + adult
-- [ ] **Hebrew Trivia** ✅ done (2026-03-21) — 20 kids + 20 adult Hebrew questions
+| Game | ID | Notes |
+|------|----|-------|
+| Queen's Gauntlet | queen-gauntlet | |
+| Tic-Tac-Toe NextGen | tic-tac-toe | Minimax AI |
+| AI Magic Canvas | ai-canvas | |
+| Stamp & Sticker Pad | stamp-pad | |
+| Pixel Art Maker | pixel-art | |
+| Fireworks Canvas | fireworks-canvas | |
+| Intestine Escape | maze-game | Prim's maze |
+| Forest Escape | forest-maze | Nature maze |
+| Temple Dash | endless-runner | Endless runner |
+| Anagram Blitz | anagram-blitz | 🇺🇸/🇮🇱 Hebrew mode |
+| Word Ladder | word-ladder | |
+| Ghost | ghost | Trie + minimax |
+| Code Order | code-order | Block coding |
+| Trivia Challenge | trivia | 🇺🇸/🇮🇱 Hebrew mode |
+| Bubble Pop | bubble-pop | |
+| Fruit Catcher | fruit-catcher | |
+| Memory Match | memory-match | |
+| Logic Gates | logic-gates | |
+| Bug Hunt | bug-hunt | |
+| 4 in a Row | four-in-a-row | Minimax AI |
+| Skunk Duel | fart-duel | Fart Tank idea → became this |
+| Times Table Treasure | times-table | |
+| Fraction Slices | fraction-slices | |
+| Balance Scales | balance-scales | |
+| Math Blitz | math-blitz | |
+| Lawn Mower Coder | lawn-mower | |
+| Block Drop | block-drop | Tetris-style |
+| Ice Cream Memory | ice-cream-memory | |
+| Alien Invasion! | whack-a-mole | |
 
 ---
 
-## 🎮 New Games
+## 🎮 New Games To Build
 
-- [ ] **Tetris / Block Drop** ✅ done (2026-03-21) — falling blocks, 7 tetrominoes, kids/adult speed, ghost piece, hard drop
-- [ ] **Ice Cream Memory** ✅ done (2026-03-21) — memorize scoop order, rebuild from palette, 5 rounds
-- [ ] **Fart Tank** — animal fires farts instead of bullets. Plan mechanic before building.
-- [ ] **Marble / Color Match falling game** — Tetris-like but with colored marbles or match-3 columns. Plan before building.
+### Action / Fun
+- [ ] **Marble Drop / Color Match** — falling colored marbles, match-3 or stack-to-clear mechanic. Plan before building.
 
-### Math games (one by one)
-- [ ] Number Rocket
-- [ ] Shape Sorter
-- [ ] Estimation Station
-- [ ] Money Market
+### Math (kids + adult)
+- [ ] **Number Rocket** — math game, mechanic TBD
+- [ ] **Shape Sorter** — math/geometry game
+- [ ] **Estimation Station** — estimate quantities/measurements
+- [ ] **Money Market** — coins and change game
 
 ### Painting / Creative
-- [ ] Brainstorm more painting games (AI Canvas, Stamp Pad, Pixel Art already exist)
-- [ ] Ideas: kaleidoscope painter, mandala drawer, color-by-numbers
+- [ ] **Kaleidoscope Painter** — draw and it mirrors symmetrically in real time
+- [ ] **Mandala Drawer** — radial symmetry drawing tool
+- [ ] **Color by Numbers** — tap numbered regions to fill with color
+
+---
+
+## 🌍 Language / i18n
+
+- [x] Hebrew Anagram Blitz — 🇮🇱/🇺🇸 toggle, Hebrew word lists kids + adult
+- [x] Hebrew Trivia — 20 kids + 20 adult Hebrew questions, RTL support
+- [ ] **Hebrew Word Ladder** — needs Hebrew word pairs with single-letter-change connections. Source a word list first.
+- [ ] **Hebrew Ghost** — needs a full Hebrew word trie. Complex, defer until dictionary is sourced.
 
 ---
 
 ## 🐛 Bugs & UX
 
-- [ ] **Tablet/iPad layout audit** — games look small on 768–1024px. Need to audit `.gameContainer` sizing and update CLAUDE.md rules.
-- [x] Mode-switch locked after game over — fixed 2026-03-21 (5 games)
-- [x] MathBlitz invisible on mobile — fixed 2026-03-21 (play area needs explicit height)
-- [x] Word Ladder broken image — fixed 2026-03-21
-- [x] IceCreamMemoryGame TypeScript error on Vercel build — fixed 2026-03-21
+- [ ] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
+- [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
+- [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
+- [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21
+- [x] Word Ladder broken Unsplash image — fixed 2026-03-21
 
 ---
 
-## 💡 Future Ideas
+## 💡 Future / Long-term Ideas
 
-- [ ] Leaderboard / high score persistence (localStorage or backend)
-- [ ] Sound effects toggle (mute button)
+- [ ] Leaderboard / high scores (localStorage first, backend later)
+- [ ] Sound effects toggle / mute button site-wide
 - [ ] More languages beyond EN/HE
-- [ ] Hebrew word games: source a Hebrew dictionary/word list first
+- [ ] More Hebrew word game content once a Hebrew dictionary is sourced
