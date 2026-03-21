@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (39 total)
+## ✅ Games Shipped (40 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -47,6 +47,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Shape Sorter | shape-sorter | Name shapes + area/perimeter calculations, 60s |
 | Estimation Station | estimation-station | Visual dot jar + real-world quantity estimation |
 | Money Market | money-market | Count coins + make change, SVG coin visuals |
+| Gear Train Puzzle | gear-train | SVG animated gears, direction + RPM questions |
 
 ---
 
@@ -57,7 +58,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Toilet Piano** — piano keyboard where each key is a toilet/bathroom; plays real piano note + subtle fart sound blend. Tap keys to make music.
 
 ### Engineering / STEM
-- [ ] **Research & brainstorm engineering games** — ideas to explore: bridge builder, circuit builder, gear/pulley puzzles, simple machines, rocket launch trajectory, architecture/load bearing. Pick 1–2 to build after brainstorm.
+- [x] **Gear Train Puzzle** — SVG animated interlocking gears; kids: direction-only, adult: direction + RPM ratio.
+- [ ] **More engineering games** — ideas: bridge builder (truss stress), rocket trajectory (angle + thrust), pulley systems.
+- [ ] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
 
 ### Kids / Casual
 - [x] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
@@ -83,6 +86,11 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] Hebrew Ghost — HE_GHOST_WORDS trie, minimax AI works on Hebrew
 
 ---
+
+## 🌿 Lawn Mower Coder
+
+- [ ] **Wall collision rule** — no rule block for what happens when the mower hits a wall. Audit and add a "hit wall → stop / turn" instruction block if missing.
+- [ ] **Visual polish** — make the game more visually appealing: better mower sprite, grass texture, color palette upgrade.
 
 ## 🐛 Bugs & UX
 
@@ -120,7 +128,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 💡 Future / Long-term Ideas
 
-- [ ] **Play counter per game** — track how many times each game has been played to identify popular ones. Start with localStorage, move to backend later.
+- [x] **Play counter per game** — localStorage `play_<id>` key, incremented on each game page visit; shown as "🎮 N" on Explore cards.
 - [ ] Leaderboard / high scores (localStorage first, backend later)
 - [ ] Sound effects toggle / mute button site-wide
 - [ ] More languages beyond EN/HE

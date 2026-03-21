@@ -380,6 +380,16 @@
     "description": "Name shapes and count their sides — or tackle area and perimeter! Kids mode: identify circles, triangles, pentagons, and more. Adult mode: calculate areas of rectangles, squares, and triangles plus geometry knowledge questions. Streak bonuses for 3 and 6 in a row!"
   },
   {
+    "id": "gear-train",
+    "title": "Gear Train Puzzle",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "emoji": "⚙️",
+    "thumbBg": "135deg, #1c1c2e 0%, #374151 60%, #7c3aed 100%",
+    "rating": 4.8,
+    "description": "Watch interlocking gears spin and determine which way the output gear turns — and how fast! Kids mode: direction only (clockwise or counter-clockwise). Adult mode: figure out the output RPM from gear tooth ratios. Streak bonuses for 3 and 5 in a row!"
+  },
+  {
     "id": "mandala-painter",
     "title": "Mandala Painter",
     "developer": "aigengamez",
