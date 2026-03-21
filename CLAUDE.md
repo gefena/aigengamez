@@ -131,9 +131,31 @@ export default function MyGame({ title }: { title: string }) {
 ## Adding a New Game
 
 1. Create `src/components/games/MyGame.tsx`
-2. Add entry to `src/data/games.json`
+2. Add entry to `src/data/games.json` — **must include a `tags` array** (see tag vocabulary below)
 3. Import and register in `src/app/games/[id]/page.tsx` → `GAME_COMPONENTS`
 4. Run `npm run build` locally before committing to catch ESLint/TypeScript errors
+
+### Game Tags — Required for Every New Game
+
+Every entry in `games.json` must have `"tags": [...]` using this vocabulary:
+
+| Tag | Use for |
+|-----|---------|
+| `Math` | arithmetic, geometry, estimation, money, fractions |
+| `Word` | anagrams, word ladders, spelling, vocabulary |
+| `Art` | drawing, painting, coloring, creative tools |
+| `Logic` | puzzles, strategy, deduction, chess, sliding blocks |
+| `Coding` | block coding, programming concepts |
+| `Action` | reflex, timing, arcade mechanics |
+| `Memory` | match-2, recall, pattern memory |
+| `STEM` | gears, circuits, physics, engineering |
+| `Maze` | maze navigation |
+| `Music` | rhythm, instruments, audio |
+| `Hebrew` | Hebrew-language content |
+
+A game may have multiple tags (e.g. `["Word", "Hebrew"]`).
+
+The `Explore` page tag filter and the **Surprise Me** kids pool are both driven by these tags — if a game is missing tags it won't appear in tag-filtered results. Kids Surprise Me includes any game with at least one of: Math, Art, Action, Memory, Maze, Music, Word.
 
 ## Passing the Vercel Build
 

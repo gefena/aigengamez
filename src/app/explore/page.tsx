@@ -9,21 +9,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { getAllPlayCounts } from "@/lib/playCounts";
 import type { Game } from "@/types/game";
 
-const CATEGORIES = ["All", "Action", "Puzzle", "Kids", "Word"];
+const TAGS = ["All", "Math", "Word", "Art", "Logic", "Coding", "Action", "Memory", "STEM", "Maze", "Music", "Hebrew"];
 
-const KIDS_IDS = [
-  "ai-canvas", "stamp-pad", "pixel-art", "fireworks-canvas",
-  "maze-game", "forest-maze", "memory-match", "fruit-catcher",
-  "bubble-pop", "anagram-blitz", "trivia", "code-order",
-  "whack-a-mole", "four-in-a-row", "lawn-mower", "fart-duel",
-];
-const ALL_IDS = gamesData.map((g) => g.id);
+// Kids pool: all games that don't require adult reasoning (exclude pure STEM/Coding for kids Surprise Me)
+const KIDS_TAGS = ["Math", "Art", "Action", "Memory", "Maze", "Music", "Word"];
+const ALL_IDS = (gamesData as import("@/types/game").Game[]).map((g) => g.id);
+const KIDS_IDS = (gamesData as import("@/types/game").Game[])
+  .filter((g) => g.tags?.some((tag) => KIDS_TAGS.includes(tag)))
+  .map((g) => g.id);
 
 export default function ExplorePage() {
   const router = useRouter();
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeTag, setActiveTag] = useState("All");
   const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -46,8 +45,8 @@ export default function ExplorePage() {
     const matchesSearch =
       game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       game.developer.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === "All" || game.category === activeCategory;
-    return matchesSearch && matchesCategory;
+    const matchesTag = activeTag === "All" || game.tags?.includes(activeTag);
+    return matchesSearch && matchesTag;
   });
 
   return (
@@ -86,16 +85,16 @@ export default function ExplorePage() {
         </div>
       </section>
 
-      {/* Category Filter */}
+      {/* Tag Filter */}
       <section className={styles.filters}>
         <div className={styles.categoryList}>
-          {CATEGORIES.map((category) => (
+          {TAGS.map((tag) => (
             <button
-              key={category}
-              className={`${styles.categoryFilter} ${activeCategory === category ? styles.activeFilter : ""}`}
-              onClick={() => setActiveCategory(category)}
+              key={tag}
+              className={`${styles.categoryFilter} ${activeTag === tag ? styles.activeFilter : ""}`}
+              onClick={() => setActiveTag(tag)}
             >
-              {category}
+              {tag}
             </button>
           ))}
         </div>
@@ -116,7 +115,7 @@ export default function ExplorePage() {
             <p>{t.explore.noGamesHint}</p>
             <button
               className={styles.resetBtn}
-              onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
+              onClick={() => { setSearchQuery(""); setActiveTag("All"); }}
             >
               {t.explore.resetFilters}
             </button>

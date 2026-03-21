@@ -91,7 +91,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 🌿 Lawn Mower Coder
 
 - [x] **Wall collision rule** — added "🧱 Hit Wall" condition block; mower applies wall rule then retries movement.
-- [ ] **Visual polish** — make the game more visually appealing: better mower sprite, grass texture, color palette upgrade.
+- [x] **Visual polish** — wooden board frame, lawn-stripe mowed cells, green mower sprite with spinning blade, grass-sway animation.
 
 ## 🐛 Bugs & UX
 
@@ -121,7 +121,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 🎨 Design & Visual Polish
 
-- [ ] **Improve game tags/categories** — current tags (Puzzle, Action) are too broad. Add richer tags per game (e.g. "Word", "Math", "Art", "Multiplayer", "Hebrew", "Coding") and make Explore page filterable by them.
+- [x] **Improve game tags/categories** — richer tags per game (Math, Word, Art, Logic, Coding, Action, Memory, STEM, Maze, Music, Hebrew); Explore page now has tag chip filter; Surprise Me kids pool derived dynamically from tags.
 - [ ] **Replace generic Unsplash photos** — most game cards use stock photos unrelated to gameplay. Replace with on-brand custom thumbnails or generated art that reflects each game's actual visuals.
 - [ ] **Site visual identity overhaul** — the site looks like a generic Next.js template. Ideas to make it feel unique: custom color palette, hand-drawn / pixel-art logo, animated homepage hero, card hover effects, a mascot character, and a coherent "arcade" or "retro-future" theme throughout.
 
