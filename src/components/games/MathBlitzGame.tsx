@@ -239,7 +239,7 @@ export default function MathBlitzGame({ title }: { title: string }) {
       )}
 
       {/* Play area */}
-      <div style={{ flex: 1, minHeight: 0, position: "relative", overflow: "hidden", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ flex: 1, minHeight: "220px", height: "min(52vh, 380px)", position: "relative", overflow: "hidden", borderRadius: 12, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
 
         {/* Idle */}
         {phase === "idle" && (

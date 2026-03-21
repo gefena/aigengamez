@@ -28,6 +28,25 @@ const ADULT_WORDS = [
   "whisper","fortune","climate","courage","journey","kitchen",
 ];
 
+const HE_KIDS_WORDS = [
+  // 3-letter
+  "ילד","כלב","ירח","פרח","ספר","בית","ענב","דבש","שלג","גשם",
+  "רגל","אור","שיר","חלב","כוס","ראש","דגל","עיר",
+  // 4-letter
+  "חתול","ילדה","כיסא","תפוח","ארנב","מורה","אריה","רכבת",
+  "מטוס","תפוז","מלון","שוטר","רופא","כובע","גלידה","ספינה",
+];
+
+const HE_ADULT_WORDS = [
+  // 4-letter
+  "מחשב","ארנב","אריה","שוטר","רופא","כובע","מלון","תפוז",
+  // 5-letter
+  "ספינה","ציפור","תלמיד","מסיבה","שולחן","טלפון","ישראל",
+  "אבטיח","גלידה","ספריה","מנהיג","ממשלה","ראשון",
+  // 6-letter
+  "מכונית","דולפין","שוקולד",
+];
+
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -67,6 +86,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  const [lang, setLang] = useState<"en" | "he">("en");
   const [mode, setMode] = useState<"Kids" | "Adult">("Kids");
   const [phase, setPhase] = useState<Phase>("idle");
   const [pool, setPool] = useState<string[]>([]);
@@ -78,7 +98,9 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
   const [timeLeft, setTimeLeft] = useState(60);
   const [feedback, setFeedback] = useState<Feedback>(null);
 
-  const wordBank = mode === "Kids" ? KIDS_WORDS : ADULT_WORDS;
+  const wordBank = lang === "he"
+    ? (mode === "Kids" ? HE_KIDS_WORDS : HE_ADULT_WORDS)
+    : (mode === "Kids" ? KIDS_WORDS : ADULT_WORDS);
   const pointsPerWord = mode === "Kids" ? 10 : 15;
 
   const loadWord = useCallback((words: string[], idx: number) => {
@@ -167,9 +189,9 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
     width: tilePx, height: tilePx,
     border: "2px solid var(--border-highlight)",
     borderRadius: "var(--radius-sm)",
-    fontSize: Math.round(tilePx * 0.38), fontWeight: 700, cursor: "pointer",
-    transition: "all 0.15s", textTransform: "uppercase",
-    fontFamily: "monospace",
+    fontSize: Math.round(tilePx * (lang === "he" ? 0.44 : 0.38)), fontWeight: 700, cursor: "pointer",
+    transition: "all 0.15s",
+    ...(lang === "en" ? { textTransform: "uppercase" as const, fontFamily: "monospace" } : {}),
   };
 
   const availableTile = (picked: boolean): React.CSSProperties => ({
@@ -188,9 +210,10 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
   };
 
   const feedbackMsg = () => {
-    if (feedback === "correct") return `✓ ${currentWord.toUpperCase()}! +${pointsPerWord}`;
-    if (feedback === "wrong")   return "✗ Not quite — try again!";
-    if (feedback === "skipped") return `→ ${currentWord.toUpperCase()} (skipped)`;
+    const w = lang === "he" ? currentWord : currentWord.toUpperCase();
+    if (feedback === "correct") return `✓ ${w}! +${pointsPerWord}`;
+    if (feedback === "wrong")   return lang === "he" ? "✗ לא נכון — נסה שוב!" : "✗ Not quite — try again!";
+    if (feedback === "skipped") return `→ ${w} (${lang === "he" ? "דילגת" : "skipped"})`;
     return null;
   };
 
@@ -207,13 +230,20 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
       <h3 className={styles.gameTitle}>{title}</h3>
 
       <div className={styles.difficultySelector}>
-        <span className={styles.difficultyLabel}>Mode:</span>
+        {(["en", "he"] as const).map(l => (
+          <button key={l}
+            className={`${styles.diffBtn} ${lang === l ? styles.activeDiff : ""}`}
+            onClick={() => { setLang(l); resetGame(); }}>
+            {l === "en" ? "🇺🇸 English" : "🇮🇱 עברית"}
+          </button>
+        ))}
+        <span style={{ margin: "0 0.25rem", color: "var(--text-muted)" }}>|</span>
         {(["Kids", "Adult"] as const).map(m => (
-          <button
-            key={m}
+          <button key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
-            onClick={() => { setMode(m); resetGame(); }}
-          >{m}</button>
+            onClick={() => { setMode(m); resetGame(); }}>
+            {m}
+          </button>
         ))}
       </div>
 
@@ -221,13 +251,16 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
       {phase === "idle" && (
         <div style={{ textAlign: "center", padding: "2rem 0" }}>
           <p style={{ color: "var(--text-secondary)", marginBottom: "0.75rem", lineHeight: 1.7 }}>
-            Unscramble as many words as you can in <strong>60 seconds</strong>!<br />
-            Click the scrambled letters in the correct order.
+            {lang === "he"
+              ? <>סדר כמה שיותר מילים ב-<strong>60 שניות</strong>!<br />לחץ על האותיות המעורבבות בסדר הנכון.</>
+              : <>Unscramble as many words as you can in <strong>60 seconds</strong>!<br />Click the scrambled letters in the correct order.</>}
           </p>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginBottom: "1.5rem" }}>
-            Mode: <strong>{mode}</strong> &mdash; {mode === "Kids" ? "3–4 letter words" : "5–7 letter words"}
+            {lang === "he"
+              ? `מצב: ${mode === "Kids" ? "ילדים" : "מבוגרים"} — ${mode === "Kids" ? "מילים בנות 3–4 אותיות" : "מילים בנות 4–6 אותיות"}`
+              : `Mode: ${mode} — ${mode === "Kids" ? "3–4 letter words" : "5–7 letter words"}`}
           </p>
-          <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
+          <button className={styles.resetBtn} onClick={startGame}>{lang === "he" ? "התחל משחק" : "Start Game"}</button>
         </div>
       )}
 
@@ -263,7 +296,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
             transition: "background 0.25s",
           }}>
             <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textAlign: "center", marginBottom: "0.6rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Scrambled — tap to pick
+              {lang === "he" ? "אותיות מעורבבות — לחץ לבחור" : "Scrambled — tap to pick"}
             </div>
             <div style={{ display: "flex", gap: "0.45rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.1rem" }}>
               {tiles.map((letter, i) => (
@@ -274,7 +307,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
             </div>
 
             <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textAlign: "center", marginBottom: "0.6rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Your answer — tap to remove
+              {lang === "he" ? "התשובה שלך — לחץ להסיר" : "Your answer — tap to remove"}
             </div>
             <div style={{ display: "flex", gap: "0.45rem", justifyContent: "center", flexWrap: "wrap", minHeight: 50 }}>
               {selected.map((tileIdx, pos) => (
@@ -301,7 +334,7 @@ export default function AnagramBlitzGame({ title }: { title: string }) {
               }}
               onClick={handleSkip}
             >
-              Skip (reveals word)
+              {lang === "he" ? "דלג (מגלה מילה)" : "Skip (reveals word)"}
             </button>
           )}
         </div>

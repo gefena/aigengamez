@@ -94,7 +94,7 @@
     "title": "Word Ladder",
     "developer": "aigengamez",
     "category": "Word",
-    "imageUrl": "https://images.unsplash.com/photo-1550399105-c4db5952694a?auto=format&fit=crop&q=80&w=800",
+    "imageUrl": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=800",
     "rating": 4.8,
     "description": "Transform the start word into the target word by changing one letter at a time — every step must be a real word. Can you find the shortest path?"
   },

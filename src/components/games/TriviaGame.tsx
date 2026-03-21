@@ -131,6 +131,52 @@ const ADULT_QUESTIONS: Question[] = [
   { id: 142, mode: "adult", category: "Arts",         question: "What term describes a film made without spoken dialogue?",                options: ["B-movie","Silent film","Noir","Docudrama"],               correct: 1 },
 ];
 
+const HE_KIDS_QUESTIONS: Question[] = [
+  { id: 201, mode: "kids", category: "בעלי חיים", emoji: "🐱", question: "כמה רגליים יש לחתול?",                      options: ["2","4","6","8"],                                          correct: 1 },
+  { id: 202, mode: "kids", category: "בעלי חיים", emoji: "🐘", question: "מי הכי גדול מביניהם?",                      options: ["אריה","פיל","סוס","קוף"],                                 correct: 1 },
+  { id: 203, mode: "kids", category: "בעלי חיים", emoji: "🐮", question: "מה נותנת לנו הפרה?",                        options: ["ביצים","חלב","דבש","צמר"],                                correct: 1 },
+  { id: 204, mode: "kids", category: "בעלי חיים", emoji: "🐟", question: "איפה גרים דגים?",                           options: ["ביבשה","בשמיים","במים","בעצים"],                          correct: 2 },
+  { id: 205, mode: "kids", category: "בעלי חיים", emoji: "🐝", question: "מה מייצרות הדבורים?",                       options: ["חלב","דבש","גבינה","שמן"],                                correct: 1 },
+  { id: 206, mode: "kids", category: "בעלי חיים", emoji: "🦋", question: "מה היה הפרפר לפני שנהיה פרפר?",            options: ["דבורה","תולעת","זחל","יתוש"],                             correct: 2 },
+  { id: 207, mode: "kids", category: "בעלי חיים", emoji: "🐙", question: "כמה זרועות יש לתמנון?",                    options: ["4","6","8","10"],                                          correct: 2 },
+  { id: 208, mode: "kids", category: "טבע",       emoji: "🌈", question: "כמה צבעים יש בקשת בענן?",                  options: ["5","6","7","8"],                                          correct: 2 },
+  { id: 209, mode: "kids", category: "טבע",       emoji: "☀️", question: "מה גדול יותר — שמש או ירח?",              options: ["ירח","שמש","שווים","כוכב"],                               correct: 1 },
+  { id: 210, mode: "kids", category: "אוכל",      emoji: "🍌", question: "איזה פרי הוא צהוב וארוך?",                 options: ["תפוח","בננה","תות","ענב"],                                correct: 1 },
+  { id: 211, mode: "kids", category: "אוכל",      emoji: "🥕", question: "מה הצבע של גזר?",                          options: ["אדום","כתום","צהוב","ירוק"],                              correct: 1 },
+  { id: 212, mode: "kids", category: "אוכל",      emoji: "🍦", question: "ממה עושים גלידה?",                         options: ["מיץ","חלב","מים","שמן"],                                  correct: 1 },
+  { id: 213, mode: "kids", category: "מספרים",    emoji: "📅", question: "כמה ימים יש בשבוע?",                       options: ["5","6","7","8"],                                          correct: 2 },
+  { id: 214, mode: "kids", category: "מספרים",    emoji: "🔺", question: "כמה צלעות יש למשולש?",                     options: ["2","3","4","5"],                                          correct: 1 },
+  { id: 215, mode: "kids", category: "מספרים",    emoji: "🕔", question: "השעה ארבע. אחרי שעתיים — מה השעה?",        options: ["חמש","שש","שבע","שמונה"],                                 correct: 1 },
+  { id: 216, mode: "kids", category: "ישראל",     emoji: "🇮🇱", question: "מהי בירת ישראל?",                         options: ["תל אביב","ירושלים","חיפה","אילת"],                        correct: 1 },
+  { id: 217, mode: "kids", category: "ישראל",     emoji: "🕯️", question: "כמה נרות יש בחנוכייה (עם השמש)?",        options: ["7","8","9","10"],                                          correct: 2 },
+  { id: 218, mode: "kids", category: "עולם",      emoji: "🗼", question: "מאיזה עיר מגדל אייפל?",                   options: ["לונדון","רומא","פריז","ברלין"],                            correct: 2 },
+  { id: 219, mode: "kids", category: "גוף",       emoji: "❤️", question: "איפה נמצא הלב?",                          options: ["בבטן","בחזה","בראש","ביד"],                               correct: 1 },
+  { id: 220, mode: "kids", category: "גוף",       emoji: "👀", question: "בעזרת מה אנחנו רואים?",                   options: ["אוזניים","אף","עיניים","ידיים"],                          correct: 2 },
+];
+
+const HE_ADULT_QUESTIONS: Question[] = [
+  { id: 301, mode: "adult", category: "מדע",        question: "מה הסמל הכימי של זהב?",                                   options: ["Go","Gd","Au","Ag"],                                       correct: 2 },
+  { id: 302, mode: "adult", category: "מדע",        question: "כמה עצמות יש בגוף האדם הבוגר?",                          options: ["186","206","226","246"],                                   correct: 1 },
+  { id: 303, mode: "adult", category: "מדע",        question: "מהו כוכב הלכת הגדול ביותר במערכת השמש?",                 options: ["שבתאי","צדק","מאדים","אורנוס"],                           correct: 1 },
+  { id: 304, mode: "adult", category: "מדע",        question: "מה הגז שצמחים סופגים בפוטוסינתזה?",                      options: ["חמצן","חנקן","פחמן דו-חמצני","מימן"],                    correct: 2 },
+  { id: 305, mode: "adult", category: "מדע",        question: "מהי מהירות האור בקירוב (ק\"מ לשנייה)?",                  options: ["200,000","300,000","400,000","150,000"],                   correct: 1 },
+  { id: 306, mode: "adult", category: "מדע",        question: "מהי החומר הקשה ביותר בטבע?",                             options: ["טיטניום","קוורץ","יהלום","קורונדום"],                     correct: 2 },
+  { id: 307, mode: "adult", category: "היסטוריה",   question: "באיזה שנה הוקמה מדינת ישראל?",                           options: ["1946","1947","1948","1949"],                               correct: 2 },
+  { id: 308, mode: "adult", category: "היסטוריה",   question: "מי היה ראש הממשלה הראשון של ישראל?",                     options: ["מנחם בגין","משה שרת","דוד בן-גוריון","לוי אשכול"],      correct: 2 },
+  { id: 309, mode: "adult", category: "היסטוריה",   question: "באיזה שנה הסתיימה מלחמת העולם השנייה?",                  options: ["1943","1944","1945","1946"],                               correct: 2 },
+  { id: 310, mode: "adult", category: "היסטוריה",   question: "הרנסנס החל באיזה מדינה?",                                options: ["צרפת","יוון","איטליה","ספרד"],                            correct: 2 },
+  { id: 311, mode: "adult", category: "גיאוגרפיה",  question: "מהי בירת אוסטרליה?",                                     options: ["סידני","מלבורן","בריסבן","קנברה"],                        correct: 3 },
+  { id: 312, mode: "adult", category: "גיאוגרפיה",  question: "מהו הנהר הארוך ביותר באפריקה?",                          options: ["קונגו","ניז'ר","זמבזי","נילוס"],                          correct: 3 },
+  { id: 313, mode: "adult", category: "גיאוגרפיה",  question: "איזו מדינה היא הקטנה בעולם?",                            options: ["מונקו","ליכטנשטיין","סן מרינו","הוותיקן"],              correct: 3 },
+  { id: 314, mode: "adult", category: "גיאוגרפיה",  question: "מהו הים שממזרח לישראל?",                                 options: ["הים התיכון","ים סוף","ים המלח","הכינרת"],                correct: 2 },
+  { id: 315, mode: "adult", category: "תרבות",      question: "מי צייר את 'מונה ליזה'?",                                options: ["מיכלאנג'לו","רפאל","לאונרדו דה וינצ'י","בוטיצ'לי"],   correct: 2 },
+  { id: 316, mode: "adult", category: "תרבות",      question: "מי כתב את סדרת 'הארי פוטר'?",                            options: ["סוזן קולינס","פיליפ פולמן","ג'יי קיי רולינג","רואלד דאל"], correct: 2 },
+  { id: 317, mode: "adult", category: "תרבות",      question: "באיזה שנה יצא האייפון הראשון?",                          options: ["2005","2006","2007","2008"],                               correct: 2 },
+  { id: 318, mode: "adult", category: "מתמטיקה",   question: "מהו ערך פאי לשתי ספרות עשרוניות?",                       options: ["3.12","3.14","3.16","3.18"],                               correct: 1 },
+  { id: 319, mode: "adult", category: "שפה",        question: "כמה אותיות יש באלפבית העברי?",                           options: ["20","22","24","26"],                                       correct: 1 },
+  { id: 320, mode: "adult", category: "שפה",        question: "מהו פלינדרום?",                                          options: ["מילה שנקראת אותו דבר קדימה ואחורה","מילה נרדפת","קיצור","ניב"], correct: 0 },
+];
+
 const QUESTIONS_PER_GAME = 10;
 const TIMER_SECONDS = 15;
 
@@ -146,6 +192,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 // ── Component ──────────────────────────────────────────────────────────────────
 export default function TriviaGame({ title }: { title: string }) {
+  const [lang, setLang]                 = useState<"en" | "he">("en");
   const [phase, setPhase]               = useState<Phase>("idle");
   const [mode, setMode]                 = useState<Mode>("kids");
   const [questions, setQuestions]       = useState<Question[]>([]);
@@ -162,11 +209,13 @@ export default function TriviaGame({ title }: { title: string }) {
   const advanceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const deadlineRef      = useRef<number>(0);
   const modeRef          = useRef<Mode>("kids");
+  const langRef          = useRef<"en" | "he">("en");
   const scoreRef         = useRef(0);
   const streakRef        = useRef(0);
   const correctRef       = useRef(0);
 
   useEffect(() => { modeRef.current = mode; }, [mode]);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   // ── Timer ─────────────────────────────────────────────────────────────────
   const stopTimer = useCallback(() => {
@@ -245,7 +294,9 @@ export default function TriviaGame({ title }: { title: string }) {
   const startGame = useCallback(() => {
     stopTimer();
     if (advanceTimeoutRef.current) clearTimeout(advanceTimeoutRef.current);
-    const pool = modeRef.current === "kids" ? KIDS_QUESTIONS : ADULT_QUESTIONS;
+    const pool = modeRef.current === "kids"
+      ? (langRef.current === "he" ? HE_KIDS_QUESTIONS : KIDS_QUESTIONS)
+      : (langRef.current === "he" ? HE_ADULT_QUESTIONS : ADULT_QUESTIONS);
     const picked = shuffleArray(pool).slice(0, QUESTIONS_PER_GAME);
     scoreRef.current  = 0;
     streakRef.current = 0;
@@ -319,15 +370,20 @@ export default function TriviaGame({ title }: { title: string }) {
       <style>{KEYFRAMES}</style>
       <h3 className={styles.gameTitle}>{title}</h3>
 
-      {/* Mode selector */}
+      {/* Lang + Mode selector */}
       <div className={styles.difficultySelector}>
-        <span className={styles.difficultyLabel}>Mode:</span>
+        {(["en", "he"] as const).map(l => (
+          <button key={l}
+            className={`${styles.diffBtn} ${lang === l ? styles.activeDiff : ""}`}
+            onClick={() => { setLang(l); resetGame(); }}>
+            {l === "en" ? "🇺🇸 EN" : "🇮🇱 עב"}
+          </button>
+        ))}
+        <span style={{ margin: "0 0.25rem", color: "var(--text-muted)" }}>|</span>
         {(["kids", "adult"] as Mode[]).map(m => (
-          <button
-            key={m}
+          <button key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
-            onClick={() => { setMode(m); resetGame(); }}
-          >
+            onClick={() => { setMode(m); resetGame(); }}>
             {m === "kids" ? "Kids 🖼️" : "Adult 🧠"}
           </button>
         ))}
@@ -448,7 +504,7 @@ export default function TriviaGame({ title }: { title: string }) {
                 {currentQ.category}
               </div>
             )}
-            <p style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.5, margin: 0 }}>
+            <p style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.5, margin: 0, direction: lang === "he" ? "rtl" : "ltr", textAlign: lang === "he" ? "right" : "left" }}>
               {currentQ.question}
             </p>
           </div>
@@ -458,10 +514,10 @@ export default function TriviaGame({ title }: { title: string }) {
             {currentQ.options.map((opt, idx) => (
               <button
                 key={idx}
-                style={getButtonStyle(idx)}
+                style={{ ...getButtonStyle(idx), direction: lang === "he" ? "rtl" : "ltr", textAlign: lang === "he" ? "right" : "left" }}
                 onClick={() => !answered && handleAnswer(idx, timeLeft)}
               >
-                <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-secondary)", marginRight: "0.35rem" }}>
+                <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-secondary)", marginRight: lang === "he" ? 0 : "0.35rem", marginLeft: lang === "he" ? "0.35rem" : 0 }}>
                   {["A","B","C","D"][idx]}
                 </span>
                 {opt}
