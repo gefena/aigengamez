@@ -189,6 +189,15 @@
     "description": "Two skunks enter, one stinks out! Fire 💨 stink clouds at the enemy skunk before they get you. Arrow keys to move, Space to fire. Kids mode has a slow CPU; Adult mode has a sharp-aimed opponent. 3 lives each — first to 0 loses!"
   },
   {
+    "id": "math-blitz",
+    "title": "Math Blitz",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Equations rain down from the sky! Tap the TRUE ones before they hit the ground — miss one and lose a life. Kids mode: addition & subtraction. Adult mode: all 4 operations with rising speed. Build combos for ×2, ×3, and ×4 multipliers!"
+  },
+  {
     "id": "lawn-mower",
     "title": "Lawn Mower Coder",
     "developer": "aigengamez",

@@ -29,6 +29,7 @@ import MemoryMatchGame from "@/components/games/MemoryMatchGame";
 import FartDuelGame from "@/components/games/FartDuelGame";
 import FourInARowGame from "@/components/games/FourInARowGame";
 import LawnMowerGame from "@/components/games/LawnMowerGame";
+import MathBlitzGame from "@/components/games/MathBlitzGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -56,6 +57,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'fart-duel': FartDuelGame,
   'four-in-a-row': FourInARowGame,
   'lawn-mower': LawnMowerGame,
+  'math-blitz': MathBlitzGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
