@@ -83,8 +83,8 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 📊 Analytics & SEO
 
-- [ ] **Vercel Analytics** — install `@vercel/analytics` package, add `<Analytics />` to layout.tsx to track page views and game engagement
-- [ ] **SEO audit** — check meta tags, Open Graph, site title/description for Google discoverability; verify site appears in Google Search
+- [x] **Vercel Analytics** — installed, `<Analytics />` added to layout.tsx
+- [x] **SEO** — Open Graph tags, keywords, robots.txt, sitemap.xml (29 game URLs) added
 
 ---
 
