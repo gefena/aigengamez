@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (35 total)
+## ✅ Games Shipped (36 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -43,6 +43,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Socks Match | socks-match | CSS-patterned sock pairs, 90s adult timer |
 | Color by Numbers | color-by-numbers | SVG tap-to-fill, 4 pictures (House/Flower/Owl/Fish) |
 | Mandala Painter | mandala-painter | Radial stamp + draw, 8/12/16 segments, guide rings |
+| Number Rocket | number-rocket | Math questions → fuel gauge → rocket launch, 60s |
 
 ---
 
@@ -59,7 +60,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
 
 ### Math (kids + adult)
-- [ ] **Number Rocket** — math game, mechanic TBD
+- [x] **Number Rocket** — math game, mechanic TBD
 - [ ] **Shape Sorter** — math/geometry game
 - [ ] **Estimation Station** — estimate quantities/measurements
 - [ ] **Money Market** — coins and change game
@@ -84,6 +85,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 - [x] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
 - [x] **Pixel Art Maker broken on mobile/tablet** — fixed: responsive cellPx from containerRef, pointer events on container for touch drag painting.
+- [ ] **Socks Match patterns** — add visible CSS patterns (stripes, dots, diagonals, argyle) to sock cards so pairs are harder to distinguish visually.
 - [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
 - [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
 - [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21
