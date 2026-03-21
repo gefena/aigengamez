@@ -171,6 +171,15 @@
     "description": "Spot the bug in the code before time runs out! Kids mode uses friendly pseudocode with emoji hints. Adult mode features real JavaScript bugs — off-by-one errors, wrong operators, broken async. Can you find them all?"
   },
   {
+    "id": "four-in-a-row",
+    "title": "4 in a Row",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Classic Connect Four — drop discs and be first to line up 4 in a row! Kids mode is pass-and-play for two friends. Adult mode pits you against a sharp minimax AI that plans several moves ahead. Can you beat it?"
+  },
+  {
     "id": "fart-duel",
     "title": "Skunk Duel",
     "developer": "aigengamez",
