@@ -8,7 +8,7 @@ const COLS = 7;
 type Cell  = 0 | 1 | 2;
 type Board = Cell[][];
 type Phase = "idle" | "playing" | "over";
-type Mode  = "kids" | "adult";
+type Mode  = "kids" | "easy" | "hard";
 
 const KEYFRAMES = `
 @keyframes winPulse {
@@ -141,9 +141,28 @@ function getBestMove(board: Board): number {
   return bestCol;
 }
 
+function getEasyMove(board: Board): number {
+  // Still take the win
+  for (const c of COL_ORDER) { const n = dropDisc(board, c, 2); if (n && checkWin(n, 2)) return c; }
+  // Still block an immediate loss
+  for (const c of COL_ORDER) { const n = dropDisc(board, c, 1); if (n && checkWin(n, 1)) return c; }
+  const validCols = COL_ORDER.filter(c => getDropRow(board, c) !== -1);
+  // 45% of the time just pick a random column
+  if (Math.random() < 0.45) return validCols[Math.floor(Math.random() * validCols.length)];
+  // Otherwise use shallow depth-2 minimax
+  let bestScore = -Infinity, bestCol = validCols[0] ?? 3;
+  for (const c of validCols) {
+    const next = dropDisc(board, c, 2);
+    if (!next) continue;
+    const s = minimax(next, 2, -Infinity, Infinity, false);
+    if (s > bestScore) { bestScore = s; bestCol = c; }
+  }
+  return bestCol;
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function FourInARowGame({ title }: { title: string }) {
-  const [mode,           setMode]           = useState<Mode>("adult");
+  const [mode,           setMode]           = useState<Mode>("easy");
   const [phase,          setPhase]          = useState<Phase>("idle");
   const [board,          setBoard]          = useState<Board>(createBoard);
   const [turn,           setTurn]           = useState<1 | 2>(1);
@@ -184,24 +203,24 @@ export default function FourInARowGame({ title }: { title: string }) {
 
   const handleColClick = useCallback((col: number) => {
     if (phase !== "playing" || aiThinkRef.current) return;
-    if (mode === "adult" && turn !== 1) return;
-    const player: 1 | 2 = mode === "adult" ? 1 : turn;
+    if (mode !== "kids" && turn !== 1) return;
+    const player: 1 | 2 = mode !== "kids" ? 1 : turn;
     const row = getDropRow(boardRef.current, col);
     if (row === -1) return;
     const newBoard = dropDisc(boardRef.current, col, player as Cell);
     if (!newBoard) return;
     const over = applyDrop(newBoard, player, row, col);
-    if (!over) setTurn(mode === "adult" ? 2 : (turn === 1 ? 2 : 1));
+    if (!over) setTurn(mode !== "kids" ? 2 : (turn === 1 ? 2 : 1));
   }, [phase, mode, turn, applyDrop]);
 
   // AI turn
   useEffect(() => {
-    if (phase !== "playing" || mode !== "adult" || turn !== 2) return;
+    if (phase !== "playing" || mode === "kids" || turn !== 2) return;
     if (aiThinkRef.current) return;
     aiThinkRef.current = true;
     setAiThinking(true);
     const t = setTimeout(() => {
-      const col      = getBestMove(boardRef.current);
+      const col      = mode === "easy" ? getEasyMove(boardRef.current) : getBestMove(boardRef.current);
       const row      = getDropRow(boardRef.current, col);
       const newBoard = dropDisc(boardRef.current, col, 2 as Cell);
       if (newBoard && row !== -1) {
@@ -247,8 +266,8 @@ export default function FourInARowGame({ title }: { title: string }) {
     return "";
   };
 
-  const p1Label = mode === "adult" ? "You"    : "Red 🔴";
-  const p2Label = mode === "adult" ? "CPU 🤖" : "Yellow 🟡";
+  const p1Label = mode !== "kids" ? "You"    : "Red 🔴";
+  const p2Label = mode !== "kids" ? "CPU 🤖" : "Yellow 🟡";
   const p1Color = "#fca5a5";
   const p2Color = "#fde68a";
 
@@ -256,10 +275,10 @@ export default function FourInARowGame({ title }: { title: string }) {
     phase === "idle" ? "" :
     phase === "over" ?
       winner === "draw" ? "It's a Draw! 🤝" :
-      winner === 1      ? (mode === "adult" ? "You Win! 🎉" : "Red Wins! 🔴") :
-                          (mode === "adult" ? "CPU Wins! 🤖" : "Yellow Wins! 🟡") :
+      winner === 1      ? (mode !== "kids" ? "You Win! 🎉" : "Red Wins! 🔴") :
+                          (mode !== "kids" ? "CPU Wins! 🤖" : "Yellow Wins! 🟡") :
     aiThinking  ? "CPU is thinking… 🤔" :
-    mode === "adult" ? "Your turn!" :
+    mode !== "kids" ? "Your turn!" :
     turn === 1       ? "Red's turn 🔴" : "Yellow's turn 🟡";
 
   const statusColor =
@@ -268,7 +287,7 @@ export default function FourInARowGame({ title }: { title: string }) {
     phase === "over"                    ? "rgba(255,255,255,0.55)" :
     aiThinking                          ? p2Color : p1Color;
 
-  const canInteract = phase === "playing" && !aiThinking && (mode !== "adult" || turn === 1);
+  const canInteract = phase === "playing" && !aiThinking && (mode === "kids" || turn === 1);
 
   return (
     <div className={styles.gameInner}>
@@ -278,11 +297,13 @@ export default function FourInARowGame({ title }: { title: string }) {
       {/* Mode selector */}
       <div className={styles.difficultySelector}>
         <span className={styles.difficultyLabel}>Mode:</span>
-        {(["kids", "adult"] as Mode[]).map(m => (
+        {(["kids", "easy", "hard"] as Mode[]).map(m => (
           <button key={m}
             className={`${styles.diffBtn} ${mode === m ? styles.activeDiff : ""}`}
             onClick={() => { setMode(m); resetGame(); }}
-          >{m === "kids" ? "👥 2-Player" : "🤖 vs AI"}</button>
+          >
+            {m === "kids" ? "👥 2-Player" : m === "easy" ? "🐣 Easy AI" : "🤖 Hard AI"}
+          </button>
         ))}
       </div>
 
@@ -296,7 +317,9 @@ export default function FourInARowGame({ title }: { title: string }) {
           <p style={{ color: "var(--text-secondary)", fontSize: "0.83rem", marginBottom: "1.5rem" }}>
             {mode === "kids"
               ? "Pass-and-play — Red 🔴 vs Yellow 🟡"
-              : "You are Red 🔴 — beat the minimax AI!"}
+              : mode === "easy"
+              ? "You are Red 🔴 — the CPU makes mistakes. Can you win?"
+              : "You are Red 🔴 — beat the full minimax AI. Good luck!"}
           </p>
           <button className={styles.resetBtn} onClick={startGame}>Start Game</button>
         </div>
