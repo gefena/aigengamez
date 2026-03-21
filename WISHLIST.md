@@ -63,6 +63,13 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [ ] **More engineering games** — ideas: bridge builder (truss stress), rocket trajectory (angle + thrust), pulley systems.
 - [x] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
 
+### Biology / Immunology
+- [ ] **Immune Defense** — players direct white blood cells (neutrophils, T-cells, B-cells) to fight waves of bacteria and viruses; kids: destroy invaders; adult: also manage antibody production and cytokine signals.
+- [ ] **Cell Cycle Puzzle** — sequence the phases of mitosis (G1, S, G2, M) and drag organelles into place; kids: simple matching; adult: DNA replication + checkpoints.
+- [ ] **Virus Builder** — construct a virus by selecting capsid, spike proteins, and genome; then launch it and see if it can infect a cell — teaches lock-and-key receptor binding.
+- [ ] **Blood Type Match** — transfusion puzzle: match donor blood types to compatible recipients under time pressure; teaches ABO + Rh system.
+- [ ] **Intestine Explorer** (extend existing maze) — biology-themed maze explaining digestive organs as the player navigates through them, with fact pop-ups.
+
 ### Kids / Casual
 - [x] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.
 
