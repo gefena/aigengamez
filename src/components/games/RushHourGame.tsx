@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import styles from "@/app/page.module.css";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -10,8 +10,8 @@ interface Vehicle {
   id: string;
   dir: Dir;
   size: Size;
-  row: number; // top-left row
-  col: number; // top-left col
+  row: number;
+  col: number;
 }
 
 type Board = Vehicle[];
@@ -51,23 +51,19 @@ function allMoves(board: Board): Board[] {
   for (const v of board) {
     const others = occupancyGrid(board, v.id);
     if (v.dir === "h") {
-      // slide left
       for (let delta = -1; v.col + delta >= 0; delta--) {
         if (others[v.row][v.col + delta]) break;
         result.push(board.map(x => x.id === v.id ? { ...v, col: v.col + delta } : x));
       }
-      // slide right
       for (let delta = 1; v.col + v.size - 1 + delta < 6; delta++) {
         if (others[v.row][v.col + v.size - 1 + delta]) break;
         result.push(board.map(x => x.id === v.id ? { ...v, col: v.col + delta } : x));
       }
     } else {
-      // slide up
       for (let delta = -1; v.row + delta >= 0; delta--) {
         if (others[v.row + delta][v.col]) break;
         result.push(board.map(x => x.id === v.id ? { ...v, row: v.row + delta } : x));
       }
-      // slide down
       for (let delta = 1; v.row + v.size - 1 + delta < 6; delta++) {
         if (others[v.row + v.size - 1 + delta][v.col]) break;
         result.push(board.map(x => x.id === v.id ? { ...v, row: v.row + delta } : x));
@@ -78,13 +74,12 @@ function allMoves(board: Board): Board[] {
 }
 
 function bfsSolve(board: Board): number {
-  // Returns minimum moves to solve, or -1 if unsolvable
   const visited = new Set<string>();
   const queue: [Board, number][] = [[board, 0]];
   visited.add(stateKey(board));
   while (queue.length > 0) {
     const [cur, depth] = queue.shift()!;
-    if (depth > 25) continue; // skip deep states
+    if (depth > 25) continue;
     for (const next of allMoves(cur)) {
       if (isSolved(next)) return depth + 1;
       const key = stateKey(next);
@@ -97,10 +92,7 @@ function bfsSolve(board: Board): number {
   return -1;
 }
 
-// ── Hand-coded Puzzles ───────────────────────────────────────────────────────
-// R = red car (horizontal, size 2, row 2)
-// Difficulty: easy = ~5 moves, medium = ~10 moves, hard = ~15+ moves
-
+// ── Puzzles ───────────────────────────────────────────────────────────────────
 const PUZZLES: { label: string; board: Board }[] = [
   {
     label: "Beginner",
@@ -229,9 +221,9 @@ const PUZZLES: { label: string; board: Board }[] = [
   },
 ];
 
-// ── Colors ───────────────────────────────────────────────────────────────────
+// ── Colors ────────────────────────────────────────────────────────────────────
 const VEHICLE_COLORS: Record<string, string> = {
-  R: "#ef4444", // red car — always this
+  R: "#ef4444",
   A: "#3b82f6",
   B: "#f59e0b",
   C: "#10b981",
@@ -245,28 +237,64 @@ const VEHICLE_COLORS: Record<string, string> = {
   K: "#e879f9",
 };
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function canSlide(board: Board, vid: string, delta: number): boolean {
+  const v = board.find(x => x.id === vid);
+  if (!v) return false;
+  const others = occupancyGrid(board, vid);
+  if (v.dir === "h") {
+    if (delta < 0) {
+      for (let d = -1; d >= delta; d--) {
+        if (v.col + d < 0 || others[v.row][v.col + d]) return false;
+      }
+    } else {
+      for (let d = 1; d <= delta; d++) {
+        if (v.col + v.size - 1 + d >= 6 || others[v.row][v.col + v.size - 1 + d]) return false;
+      }
+    }
+  } else {
+    if (delta < 0) {
+      for (let d = -1; d >= delta; d--) {
+        if (v.row + d < 0 || others[v.row + d][v.col]) return false;
+      }
+    } else {
+      for (let d = 1; d <= delta; d++) {
+        if (v.row + v.size - 1 + d >= 6 || others[v.row + v.size - 1 + d][v.col]) return false;
+      }
+    }
+  }
+  return true;
+}
+
+function slideVehicle(board: Board, vid: string, delta: number): Board {
+  return board.map(v => {
+    if (v.id !== vid) return v;
+    return v.dir === "h" ? { ...v, col: v.col + delta } : { ...v, row: v.row + delta };
+  });
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function RushHourGame({ title }: { title: string }) {
   const [puzzleIdx, setPuzzleIdx] = useState(0);
-  const [board, setBoard] = useState<Board>(() =>
-    PUZZLES[0].board.map(v => ({ ...v }))
-  );
+  const [board, setBoard] = useState<Board>(() => PUZZLES[0].board.map(v => ({ ...v })));
   const [selected, setSelected] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const [moves, setMoves] = useState(0);
   const [minMoves, setMinMoves] = useState<number>(-1);
-  const [cellPx, setCellPx] = useState(72);
+  const [cellPx, setCellPx] = useState(60);
 
-  // Compute min moves for current puzzle
+  // Touch state for swipe detection per vehicle
+  const touchStart = useRef<{ x: number; y: number; vid: string } | null>(null);
+
   useEffect(() => {
     const m = bfsSolve(PUZZLES[puzzleIdx].board);
     setMinMoves(m);
   }, [puzzleIdx]);
 
-  // Responsive cell size
   useEffect(() => {
     const update = () => {
-      const w = Math.min(window.innerWidth - 32, 480);
+      // Use full available width on mobile, cap at 400px
+      const w = Math.min(window.innerWidth - 24, 400);
       setCellPx(Math.floor(w / 6));
     };
     update();
@@ -291,7 +319,6 @@ export default function RushHourGame({ title }: { title: string }) {
     setPhase("playing");
   }, [puzzleIdx]);
 
-  // Check win after board update
   useEffect(() => {
     if (phase === "playing" && isSolved(board)) {
       setPhase("solved");
@@ -299,119 +326,177 @@ export default function RushHourGame({ title }: { title: string }) {
     }
   }, [board, phase]);
 
-  // Valid slide positions for selected vehicle
-  function getValidPositions(vid: string): number[] {
-    const v = board.find(x => x.id === vid);
-    if (!v) return [];
-    const others = occupancyGrid(board, vid);
-    const positions: number[] = [];
-    if (v.dir === "h") {
-      // left
-      for (let c = v.col - 1; c >= 0; c--) {
-        if (others[v.row][c]) break;
-        positions.push(c);
-      }
-      // right
-      for (let c = v.col + 1; c + v.size - 1 < 6; c++) {
-        if (others[v.row][c + v.size - 1]) break;
-        positions.push(c);
-      }
-    } else {
-      // up
-      for (let r = v.row - 1; r >= 0; r--) {
-        if (others[r][v.col]) break;
-        positions.push(r);
-      }
-      // down
-      for (let r = v.row + 1; r + v.size - 1 < 6; r++) {
-        if (others[r + v.size - 1][v.col]) break;
-        positions.push(r);
-      }
-    }
-    return positions;
+  // Slide by delta steps (±1 or ±max)
+  const slide = useCallback((vid: string, delta: number) => {
+    if (phase !== "playing") return;
+    if (!canSlide(board, vid, delta)) return;
+    setBoard(prev => slideVehicle(prev, vid, delta));
+    setMoves(m => m + 1);
+  }, [board, phase]);
+
+  // Direction pad: slide one step
+  const slideOne = useCallback((dir: "left" | "right" | "up" | "down") => {
+    if (!selected) return;
+    const delta = (dir === "left" || dir === "up") ? -1 : 1;
+    slide(selected, delta);
+  }, [selected, slide]);
+
+  // Touch handlers — attached to vehicle divs
+  function onVehicleTouchStart(e: React.TouchEvent, vid: string) {
+    e.stopPropagation();
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY, vid };
   }
 
+  function onVehicleTouchEnd(e: React.TouchEvent, vid: string) {
+    e.stopPropagation();
+    e.preventDefault();
+    const ts = touchStart.current;
+    touchStart.current = null;
+    if (!ts || ts.vid !== vid) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - ts.x;
+    const dy = t.clientY - ts.y;
+    const threshold = 20;
+
+    if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
+      // Tap — select / deselect
+      if (selected === vid) setSelected(null);
+      else setSelected(vid);
+      return;
+    }
+
+    // Swipe — find vehicle and move it
+    const v = board.find(x => x.id === vid);
+    if (!v || phase !== "playing") return;
+
+    if (v.dir === "h" && Math.abs(dx) > Math.abs(dy)) {
+      const delta = dx > 0 ? 1 : -1;
+      slide(vid, delta);
+      setSelected(vid);
+    } else if (v.dir === "v" && Math.abs(dy) > Math.abs(dx)) {
+      const delta = dy > 0 ? 1 : -1;
+      slide(vid, delta);
+      setSelected(vid);
+    }
+    // Swipe in wrong axis — just select
+    else {
+      setSelected(vid);
+    }
+  }
+
+  // Click on empty cell to move selected vehicle there (desktop UX)
   function handleCellClick(row: number, col: number) {
     if (phase !== "playing") return;
 
-    // Clicked on a vehicle?
     const clicked = board.find(v =>
       cellsOccupied(v).some(([r, c]) => r === row && c === col)
     );
 
     if (selected) {
-      const selVehicle = board.find(v => v.id === selected)!;
-      const validPositions = getValidPositions(selected);
+      const sv = board.find(v => v.id === selected)!;
+      const others = occupancyGrid(board, selected);
+      let canMove = false;
+      let delta = 0;
 
-      // Clicked on a valid target position?
-      const targetPos = selVehicle.dir === "h" ? col : row;
-      // Normalize: we need to find if this cell is within a valid col/row range
-      const isValid = validPositions.includes(targetPos);
+      if (sv.dir === "h" && row === sv.row) {
+        delta = col - sv.col; // positive = right; might need to check full slide
+        // Check if any cells between current and target are blocked
+        if (delta !== 0) {
+          let ok = true;
+          if (delta < 0) {
+            for (let d = -1; d >= delta; d--) {
+              if (sv.col + d < 0 || others[sv.row][sv.col + d]) { ok = false; break; }
+            }
+          } else {
+            for (let d = 1; d <= delta; d++) {
+              if (sv.col + sv.size - 1 + d >= 6 || others[sv.row][sv.col + sv.size - 1 + d]) { ok = false; break; }
+            }
+            // Adjust: user clicked inside the vehicle range, treat as no-op
+            if (col >= sv.col && col < sv.col + sv.size) { ok = false; delta = 0; }
+          }
+          canMove = ok;
+        }
+      } else if (sv.dir === "v" && col === sv.col) {
+        delta = row - sv.row;
+        if (delta !== 0) {
+          let ok = true;
+          if (delta < 0) {
+            for (let d = -1; d >= delta; d--) {
+              if (sv.row + d < 0 || others[sv.row + d][sv.col]) { ok = false; break; }
+            }
+          } else {
+            for (let d = 1; d <= delta; d++) {
+              if (sv.row + sv.size - 1 + d >= 6 || others[sv.row + sv.size - 1 + d][sv.col]) { ok = false; break; }
+            }
+            if (row >= sv.row && row < sv.row + sv.size) { ok = false; delta = 0; }
+          }
+          canMove = ok;
+        }
+      }
 
-      if (isValid) {
-        // Move the vehicle so its leading edge is at targetPos or trailing?
-        // We snap to the clicked col/row
-        const newBoard = board.map(v => {
-          if (v.id !== selected) return v;
-          return v.dir === "h" ? { ...v, col: targetPos } : { ...v, row: targetPos };
-        });
-        setBoard(newBoard);
+      if (canMove && delta !== 0) {
+        setBoard(prev => slideVehicle(prev, selected, delta));
         setMoves(m => m + 1);
         setSelected(null);
         return;
       }
 
-      // Clicked on same vehicle → deselect
-      if (clicked?.id === selected) {
-        setSelected(null);
-        return;
-      }
+      if (clicked?.id === selected) { setSelected(null); return; }
     }
 
-    if (clicked) {
-      setSelected(clicked.id);
-    } else {
-      setSelected(null);
-    }
+    if (clicked) setSelected(clicked.id);
+    else setSelected(null);
   }
 
-  // Compute valid target cells for highlight
+  // Precompute valid cells for highlight
   const validCells = new Set<string>();
   if (selected && phase === "playing") {
     const v = board.find(x => x.id === selected)!;
-    for (const pos of getValidPositions(selected)) {
-      for (let i = 0; i < v.size; i++) {
-        if (v.dir === "h") validCells.add(`${v.row},${pos + i}`);
-        else validCells.add(`${pos + i},${v.col}`);
+    const others = occupancyGrid(board, selected);
+    if (v.dir === "h") {
+      for (let c = v.col - 1; c >= 0; c--) {
+        if (others[v.row][c]) break;
+        for (let i = 0; i < v.size; i++) validCells.add(`${v.row},${c + i}`);
+      }
+      for (let c = v.col + 1; c + v.size - 1 < 6; c++) {
+        if (others[v.row][c + v.size - 1]) break;
+        for (let i = 0; i < v.size; i++) validCells.add(`${v.row},${c + i}`);
+      }
+    } else {
+      for (let r = v.row - 1; r >= 0; r--) {
+        if (others[r][v.col]) break;
+        for (let i = 0; i < v.size; i++) validCells.add(`${r + i},${v.col}`);
+      }
+      for (let r = v.row + 1; r + v.size - 1 < 6; r++) {
+        if (others[r + v.size - 1][v.col]) break;
+        for (let i = 0; i < v.size; i++) validCells.add(`${r + i},${v.col}`);
       }
     }
   }
 
   const gap = Math.max(2, Math.round(cellPx * 0.04));
+  const selVehicle = selected ? board.find(v => v.id === selected) : null;
 
   return (
-    <div className={styles.gameInner} style={{ userSelect: "none" }}>
+    <div className={styles.gameInner} style={{ userSelect: "none", touchAction: "pan-y" }}>
       <h2 className={styles.gameTitle}>{title}</h2>
 
       {phase === "idle" && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "8px 0" }}>
-          <p style={{ color: "#94a3b8", fontSize: 15, textAlign: "center", maxWidth: 380 }}>
-            Slide the cars to let the <span style={{ color: "#ef4444", fontWeight: 700 }}>red car</span> escape through the right exit!
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "6px 0" }}>
+          <p style={{ color: "#94a3b8", fontSize: 14, textAlign: "center", maxWidth: 360, lineHeight: 1.5, margin: 0 }}>
+            Slide the cars to let the <span style={{ color: "#ef4444", fontWeight: 700 }}>red car 🚗</span> escape through the right exit.
+            <br /><span style={{ fontSize: 12 }}>Swipe vehicles or tap to select, then use arrows.</span>
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, width: "100%", maxWidth: 380 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8, width: "100%", maxWidth: 360 }}>
             {PUZZLES.map((p, i) => (
               <button
                 key={i}
                 onClick={() => startPuzzle(i)}
                 style={{
-                  padding: "10px 12px",
-                  borderRadius: 10,
-                  border: "1px solid #334155",
-                  background: "#1e293b",
-                  color: "#e2e8f0",
-                  fontSize: 14,
-                  cursor: "pointer",
-                  textAlign: "left",
+                  padding: "10px 12px", borderRadius: 10,
+                  border: "1px solid #334155", background: "#1e293b",
+                  color: "#e2e8f0", fontSize: 14, cursor: "pointer", textAlign: "left",
                 }}
               >
                 <div style={{ fontWeight: 700 }}>Puzzle {i + 1}</div>
@@ -425,29 +510,28 @@ export default function RushHourGame({ title }: { title: string }) {
       {(phase === "playing" || phase === "solved") && (
         <>
           {/* Info bar */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, maxWidth: boardPx, width: "100%" }}>
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            marginBottom: 8, maxWidth: boardPx + 24, width: "100%",
+          }}>
             <div style={{ color: "#94a3b8", fontSize: 13 }}>
               Puzzle {puzzleIdx + 1} · {PUZZLES[puzzleIdx].label}
-              {minMoves > 0 && <span style={{ color: "#64748b" }}> · min {minMoves}</span>}
+              {minMoves > 0 && <span style={{ color: "#64748b" }}> · best {minMoves}</span>}
             </div>
             <div style={{ color: "#e2e8f0", fontSize: 14, fontWeight: 600 }}>
-              Moves: {moves}
+              {moves} move{moves !== 1 ? "s" : ""}
             </div>
           </div>
 
-          {/* Board */}
-          <div style={{ position: "relative", width: boardPx, height: boardPx, flexShrink: 0 }}>
-            {/* Grid background */}
+          {/* Board + exit wrapper */}
+          <div style={{ position: "relative", width: boardPx + 24, maxWidth: "100%", flexShrink: 0 }}>
+            {/* Board */}
             <div
               style={{
-                position: "absolute", inset: 0,
-                display: "grid",
-                gridTemplateColumns: `repeat(6, ${cellPx}px)`,
-                gridTemplateRows: `repeat(6, ${cellPx}px)`,
-                background: "#1e293b",
-                border: "3px solid #334155",
-                borderRadius: 8,
-                overflow: "hidden",
+                position: "relative", width: boardPx, height: boardPx,
+                background: "#1e293b", border: "3px solid #334155",
+                borderRadius: 8, overflow: "hidden",
+                touchAction: "none",
               }}
               onClick={e => {
                 const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -456,6 +540,7 @@ export default function RushHourGame({ title }: { title: string }) {
                 if (col >= 0 && col < 6 && row >= 0 && row < 6) handleCellClick(row, col);
               }}
             >
+              {/* Grid cells */}
               {Array.from({ length: 36 }, (_, i) => {
                 const r = Math.floor(i / 6);
                 const c = i % 6;
@@ -465,137 +550,176 @@ export default function RushHourGame({ title }: { title: string }) {
                   <div
                     key={i}
                     style={{
-                      background: isValid ? "rgba(99,102,241,0.18)" : isExit ? "rgba(239,68,68,0.12)" : "transparent",
+                      position: "absolute",
+                      left: c * cellPx, top: r * cellPx,
+                      width: cellPx, height: cellPx,
+                      background: isValid
+                        ? "rgba(99,102,241,0.22)"
+                        : isExit ? "rgba(239,68,68,0.10)" : "transparent",
                       border: "1px solid #0f172a",
                       boxSizing: "border-box",
+                      pointerEvents: "none",
                     }}
                   />
                 );
               })}
+
+              {/* Vehicles */}
+              {board.map(v => {
+                const isRed = v.id === "R";
+                const isSel = v.id === selected;
+                const color = VEHICLE_COLORS[v.id] ?? "#6b7280";
+                const vw = v.dir === "h" ? v.size * cellPx - gap * 2 : cellPx - gap * 2;
+                const vh = v.dir === "v" ? v.size * cellPx - gap * 2 : cellPx - gap * 2;
+                return (
+                  <div
+                    key={v.id}
+                    onTouchStart={e => onVehicleTouchStart(e, v.id)}
+                    onTouchEnd={e => onVehicleTouchEnd(e, v.id)}
+                    onClick={e => {
+                      e.stopPropagation();
+                      if (phase !== "playing") return;
+                      if (selected === v.id) setSelected(null);
+                      else setSelected(v.id);
+                    }}
+                    style={{
+                      position: "absolute",
+                      left: v.col * cellPx + gap,
+                      top: v.row * cellPx + gap,
+                      width: vw, height: vh,
+                      background: color,
+                      borderRadius: 6,
+                      cursor: "pointer",
+                      border: isSel ? "3px solid #fff" : isRed ? "2px solid #fca5a5" : "2px solid rgba(255,255,255,0.25)",
+                      boxSizing: "border-box",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: isRed ? Math.round(cellPx * 0.38) : 11,
+                      color: "#fff", fontWeight: 700,
+                      transition: "left 0.1s ease, top 0.1s ease",
+                      boxShadow: isSel
+                        ? `0 0 0 2px ${color}, 0 4px 14px rgba(0,0,0,0.5)`
+                        : "0 2px 8px rgba(0,0,0,0.35)",
+                      zIndex: isSel ? 10 : 1,
+                      touchAction: "none",
+                    }}
+                  >
+                    {isRed ? "🚗" : ""}
+                  </div>
+                );
+              })}
+
+              {/* Solved overlay */}
+              {phase === "solved" && (
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "rgba(0,0,0,0.72)", borderRadius: 6,
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center", gap: 10, zIndex: 20,
+                }}>
+                  <div style={{ fontSize: 44 }}>🎉</div>
+                  <div style={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>Escaped!</div>
+                  <div style={{ color: "#94a3b8", fontSize: 13 }}>
+                    {moves} move{moves !== 1 ? "s" : ""}
+                    {minMoves > 0 && moves === minMoves ? " · Perfect! 🌟" : minMoves > 0 ? ` · best: ${minMoves}` : ""}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Exit arrow */}
+            {/* Exit indicator */}
             <div style={{
               position: "absolute",
-              right: -22,
-              top: cellPx * 2,
-              height: cellPx,
-              display: "flex",
-              alignItems: "center",
-              color: "#ef4444",
-              fontSize: 18,
-              fontWeight: 900,
-              pointerEvents: "none",
+              right: 0, top: cellPx * 2,
+              width: 24, height: cellPx,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#ef4444", fontSize: 16, fontWeight: 900, pointerEvents: "none",
             }}>▶</div>
+          </div>
 
-            {/* Vehicles */}
-            {board.map(v => {
-              const isRed = v.id === "R";
-              const isSel = v.id === selected;
-              const color = VEHICLE_COLORS[v.id] ?? "#6b7280";
-              const vw = v.dir === "h" ? v.size * cellPx - gap * 2 : cellPx - gap * 2;
-              const vh = v.dir === "v" ? v.size * cellPx - gap * 2 : cellPx - gap * 2;
-              return (
-                <div
-                  key={v.id}
-                  onClick={e => {
-                    e.stopPropagation();
-                    if (phase !== "playing") return;
-                    if (selected === v.id) setSelected(null);
-                    else setSelected(v.id);
-                  }}
-                  style={{
-                    position: "absolute",
-                    left: v.col * cellPx + gap,
-                    top: v.row * cellPx + gap,
-                    width: vw,
-                    height: vh,
-                    background: color,
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    border: isSel ? "3px solid #fff" : isRed ? "2px solid #fca5a5" : "2px solid rgba(255,255,255,0.2)",
-                    boxSizing: "border-box",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: isRed ? 20 : 12,
-                    color: "#fff",
-                    fontWeight: 700,
-                    transition: "left 0.12s ease, top 0.12s ease, border 0.1s",
-                    boxShadow: isSel ? `0 0 0 2px ${color}, 0 4px 12px rgba(0,0,0,0.4)` : "0 2px 8px rgba(0,0,0,0.3)",
-                    zIndex: isSel ? 10 : 1,
-                  }}
-                >
-                  {isRed ? "🚗" : ""}
+          {/* Direction pad — visible when a vehicle is selected */}
+          <div style={{
+            marginTop: 12,
+            minHeight: 64,
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+          }}>
+            {selVehicle && phase === "playing" ? (
+              <>
+                <div style={{ color: "#64748b", fontSize: 12, marginBottom: 2 }}>
+                  Move {selVehicle.id === "R" ? "🚗 red car" : `car ${selVehicle.id}`}
+                  {selVehicle.dir === "h" ? " ← →" : " ↑ ↓"}
                 </div>
-              );
-            })}
-
-            {/* Solved overlay */}
-            {phase === "solved" && (
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "rgba(0,0,0,0.7)",
-                borderRadius: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                zIndex: 20,
-              }}>
-                <div style={{ fontSize: 48 }}>🎉</div>
-                <div style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>Escaped!</div>
-                <div style={{ color: "#94a3b8", fontSize: 14 }}>
-                  {moves} move{moves !== 1 ? "s" : ""}
-                  {minMoves > 0 && moves === minMoves ? " · Perfect! 🌟" : minMoves > 0 ? ` · Best: ${minMoves}` : ""}
+                <div style={{ display: "flex", gap: 10 }}>
+                  {selVehicle.dir === "h" ? (
+                    <>
+                      <DirButton label="◀" disabled={!canSlide(board, selVehicle.id, -1)} onPress={() => slideOne("left")} />
+                      <DirButton label="▶" disabled={!canSlide(board, selVehicle.id, 1)} onPress={() => slideOne("right")} />
+                    </>
+                  ) : (
+                    <>
+                      <DirButton label="▲" disabled={!canSlide(board, selVehicle.id, -1)} onPress={() => slideOne("up")} />
+                      <DirButton label="▼" disabled={!canSlide(board, selVehicle.id, 1)} onPress={() => slideOne("down")} />
+                    </>
+                  )}
+                  <button
+                    onClick={() => setSelected(null)}
+                    style={{
+                      width: 50, height: 50, borderRadius: 10,
+                      border: "1px solid #334155", background: "#1e293b",
+                      color: "#64748b", fontSize: 18, cursor: "pointer",
+                    }}
+                  >✕</button>
                 </div>
+              </>
+            ) : phase === "playing" ? (
+              <div style={{ color: "#475569", fontSize: 13 }}>
+                Tap or swipe a car to move it
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Controls */}
-          <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-            <button
-              onClick={resetPuzzle}
-              className={styles.resetBtn}
-            >
-              ↺ Reset
-            </button>
-            {phase === "solved" ? (
+          <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
+            <button onClick={resetPuzzle} className={styles.resetBtn}>↺ Reset</button>
+            {phase === "solved" && (
               <button
                 onClick={() => startPuzzle((puzzleIdx + 1) % PUZZLES.length)}
                 style={{
-                  padding: "8px 20px",
-                  borderRadius: 8,
-                  border: "none",
-                  background: "#3b82f6",
-                  color: "#fff",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontSize: 14,
+                  padding: "8px 18px", borderRadius: 8, border: "none",
+                  background: "#3b82f6", color: "#fff", fontWeight: 700,
+                  cursor: "pointer", fontSize: 14,
                 }}
-              >
-                Next Puzzle →
-              </button>
-            ) : null}
+              >Next →</button>
+            )}
             <button
               onClick={() => { setPhase("idle"); setSelected(null); }}
               style={{
-                padding: "8px 14px",
-                borderRadius: 8,
-                border: "1px solid #334155",
-                background: "transparent",
-                color: "#94a3b8",
-                cursor: "pointer",
-                fontSize: 14,
+                padding: "8px 14px", borderRadius: 8, border: "1px solid #334155",
+                background: "transparent", color: "#94a3b8", cursor: "pointer", fontSize: 14,
               }}
-            >
-              All Puzzles
-            </button>
+            >All Puzzles</button>
           </div>
         </>
       )}
     </div>
+  );
+}
+
+// ── Direction button ──────────────────────────────────────────────────────────
+function DirButton({ label, disabled, onPress }: { label: string; disabled: boolean; onPress: () => void }) {
+  return (
+    <button
+      onClick={onPress}
+      disabled={disabled}
+      style={{
+        width: 56, height: 56, borderRadius: 12,
+        border: disabled ? "1px solid #1e293b" : "2px solid #3b82f6",
+        background: disabled ? "#0f172a" : "linear-gradient(135deg,#1e40af,#2563eb)",
+        color: disabled ? "#334155" : "#fff",
+        fontSize: 22, cursor: disabled ? "not-allowed" : "pointer",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: disabled ? "none" : "0 2px 8px rgba(59,130,246,0.4)",
+        transition: "all 0.1s",
+      }}
+    >{label}</button>
   );
 }

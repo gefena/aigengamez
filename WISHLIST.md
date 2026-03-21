@@ -109,7 +109,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 📊 Analytics & SEO
 
 - [x] **Vercel Analytics** — installed, `<Analytics />` added to layout.tsx
-- [x] **SEO** — Open Graph tags, keywords, robots.txt, sitemap.xml (29 game URLs) added
+- [x] **SEO** — Open Graph tags, keywords, robots.txt, sitemap.xml (41 game URLs) added
 
 ---
 
