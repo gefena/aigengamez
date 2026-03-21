@@ -46,6 +46,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [ ] **Marble Drop / Color Match** — falling colored marbles, match-3 or stack-to-clear mechanic. Plan before building.
 - [ ] **Toilet Piano** — piano keyboard where each key is a toilet/bathroom; plays real piano note + subtle fart sound blend. Tap keys to make music.
 
+### Engineering / STEM
+- [ ] **Research & brainstorm engineering games** — ideas to explore: bridge builder, circuit builder, gear/pulley puzzles, simple machines, rocket launch trajectory, architecture/load bearing. Pick 1–2 to build after brainstorm.
+
 ### Math (kids + adult)
 - [ ] **Number Rocket** — math game, mechanic TBD
 - [ ] **Shape Sorter** — math/geometry game
