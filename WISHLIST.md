@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (37 total)
+## ✅ Games Shipped (38 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -45,6 +45,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Mandala Painter | mandala-painter | Radial stamp + draw, 8/12/16 segments, guide rings |
 | Number Rocket | number-rocket | Math questions → fuel gauge → rocket launch, 60s |
 | Shape Sorter | shape-sorter | Name shapes + area/perimeter calculations, 60s |
+| Estimation Station | estimation-station | Visual dot jar + real-world quantity estimation |
 
 ---
 
@@ -63,7 +64,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ### Math (kids + adult)
 - [x] **Number Rocket** — math game, mechanic TBD
 - [x] **Shape Sorter** — math/geometry game
-- [ ] **Estimation Station** — estimate quantities/measurements
+- [x] **Estimation Station** — estimate quantities/measurements
 - [ ] **Money Market** — coins and change game
 
 ### Painting / Creative
@@ -118,6 +119,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 💡 Future / Long-term Ideas
 
+- [ ] **Play counter per game** — track how many times each game has been played to identify popular ones. Start with localStorage, move to backend later.
 - [ ] Leaderboard / high scores (localStorage first, backend later)
 - [ ] Sound effects toggle / mute button site-wide
 - [ ] More languages beyond EN/HE

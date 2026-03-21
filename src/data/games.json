@@ -350,6 +350,16 @@
     "description": "Answer math questions to fuel your rocket and blast off! Fill the tank by solving + and − problems (Kids) or all 4 operations (Adult). Launch as many rockets as you can in 60 seconds — wrong answers drain fuel in Adult mode!"
   },
   {
+    "id": "estimation-station",
+    "title": "Estimation Station",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "emoji": "🎯",
+    "thumbBg": "135deg, #134e4a 0%, #0d9488 50%, #7c3aed 100%",
+    "rating": 4.9,
+    "description": "Look at the jar and estimate how many dots! Kids mode: 5–25 dots with nearby choices. Adult mode: up to 80 dots plus real-world estimation questions — heartbeats per minute, bones in the body, miles to the Moon, and more. Streak bonuses for 3 and 5 in a row!"
+  },
+  {
     "id": "shape-sorter",
     "title": "Shape Sorter",
     "developer": "aigengamez",

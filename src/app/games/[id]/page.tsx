@@ -43,6 +43,7 @@ import ColorByNumbers from "@/components/games/ColorByNumbers";
 import MandalaPainter from "@/components/games/MandalaPainter";
 import NumberRocketGame from "@/components/games/NumberRocketGame";
 import ShapeSorterGame from "@/components/games/ShapeSorterGame";
+import EstimationStationGame from "@/components/games/EstimationStationGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -84,6 +85,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'mandala-painter': MandalaPainter,
   'number-rocket': NumberRocketGame,
   'shape-sorter': ShapeSorterGame,
+  'estimation-station': EstimationStationGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
