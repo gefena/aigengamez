@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styles from "@/app/games/[id]/page.module.css";
 
 export const GRID = 32;
@@ -15,15 +15,64 @@ export default function PixelArtGame({ title }: { title: string }) {
   const [pixels, setPixels] = useState<string[]>(() => Array(GRID * GRID).fill('#ffffff'));
   const [activeColor, setActiveColor] = useState<string>('#000000');
   const [isEraser, setIsEraser] = useState<boolean>(false);
-  const isPainting = useRef<boolean>(false);
+  const [cellPx, setCellPx] = useState(12);
 
-  const paint = (idx: number) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const isPainting = useRef(false);
+  const activeColorRef = useRef(activeColor);
+  const isEraserRef = useRef(isEraser);
+
+  useEffect(() => { activeColorRef.current = activeColor; }, [activeColor]);
+  useEffect(() => { isEraserRef.current = isEraser; }, [isEraser]);
+
+  // Responsive cell size: fit grid into available width and 45% viewport height
+  useEffect(() => {
+    const measure = () => {
+      if (!containerRef.current) return;
+      const w = containerRef.current.offsetWidth - 8;
+      const maxByW = Math.floor(w / GRID);
+      const maxByH = Math.floor((window.innerHeight * 0.45) / GRID);
+      setCellPx(Math.max(4, Math.min(maxByW, maxByH, 20)));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  const paintCell = useCallback((idx: number) => {
     setPixels(prev => {
       const next = [...prev];
-      next[idx] = isEraser ? '#ffffff' : activeColor;
+      next[idx] = isEraserRef.current ? '#ffffff' : activeColorRef.current;
       return next;
     });
-  };
+  }, []);
+
+  const getCellIndex = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const grid = gridRef.current;
+    if (!grid) return -1;
+    const rect = grid.getBoundingClientRect();
+    const col = Math.floor((e.clientX - rect.left) / cellPx);
+    const row = Math.floor((e.clientY - rect.top) / cellPx);
+    if (col < 0 || col >= GRID || row < 0 || row >= GRID) return -1;
+    return row * GRID + col;
+  }, [cellPx]);
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    isPainting.current = true;
+    (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+    const idx = getCellIndex(e);
+    if (idx >= 0) paintCell(idx);
+  }, [getCellIndex, paintCell]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isPainting.current) return;
+    const idx = getCellIndex(e);
+    if (idx >= 0) paintCell(idx);
+  }, [getCellIndex, paintCell]);
+
+  const onPointerUp = useCallback(() => { isPainting.current = false; }, []);
 
   const downloadImage = () => {
     const canvas = document.createElement('canvas');
@@ -40,10 +89,10 @@ export default function PixelArtGame({ title }: { title: string }) {
     link.click();
   };
 
-  const cellSize = `${100 / GRID}%`;
+  const gridSize = cellPx * GRID;
 
   return (
-    <div className={styles.gameInner} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', gap: '0.75rem', boxSizing: 'border-box' }}>
+    <div ref={containerRef} className={styles.gameInner} style={{ padding: '0.75rem', display: 'flex', flexDirection: 'column', width: '100%', gap: '0.5rem', boxSizing: 'border-box' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
         <h3 className={styles.gameTitle} style={{ margin: 0 }}>{title}</h3>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -57,32 +106,46 @@ export default function PixelArtGame({ title }: { title: string }) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', background: 'var(--bg-secondary)', padding: '0.6rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', background: 'var(--bg-secondary)', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', alignItems: 'center' }}>
         {PIXEL_PALETTE.map(c => (
           <button key={c} onClick={() => { setActiveColor(c); setIsEraser(false); }}
-            style={{ width: 26, height: 26, borderRadius: '50%', background: c, border: (!isEraser && activeColor === c) ? '3px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: (!isEraser && activeColor === c) ? '0 0 8px rgba(255,255,255,0.6)' : 'none', flexShrink: 0 }}
+            style={{ width: 24, height: 24, borderRadius: '50%', background: c, border: (!isEraser && activeColor === c) ? '3px solid white' : '2px solid transparent', cursor: 'pointer', boxShadow: (!isEraser && activeColor === c) ? '0 0 8px rgba(255,255,255,0.6)' : 'none', flexShrink: 0 }}
           />
         ))}
-        <label title="Custom" style={{ width: 26, height: 26, borderRadius: '50%', background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)', border: '2px solid transparent', cursor: 'pointer', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <label title="Custom" style={{ width: 24, height: 24, borderRadius: '50%', background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)', border: '2px solid transparent', cursor: 'pointer', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <input type="color" value={activeColor} onChange={e => { setActiveColor(e.target.value); setIsEraser(false); }} style={{ opacity: 0, position: 'absolute', width: 0, height: 0 }} />
         </label>
       </div>
 
-      <div
-        style={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${GRID}, ${cellSize})`, border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden', userSelect: 'none', touchAction: 'none' }}
-        onMouseLeave={() => { isPainting.current = false; }}
-      >
-        {pixels.map((c, i) => (
-          <div
-            key={i}
-            style={{ backgroundColor: c, aspectRatio: '1', borderRight: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)', cursor: 'crosshair' }}
-            onMouseDown={() => { isPainting.current = true; paint(i); }}
-            onMouseUp={() => { isPainting.current = false; }}
-            onMouseEnter={() => { if (isPainting.current) paint(i); }}
-            onTouchStart={(e) => { e.preventDefault(); isPainting.current = true; paint(i); }}
-            onTouchEnd={() => { isPainting.current = false; }}
-          />
-        ))}
+      {/* Grid — pointer events on container so drag-painting works on touch */}
+      <div style={{ flex: 1, minHeight: 0, overflow: 'auto', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+        <div
+          ref={gridRef}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${GRID}, ${cellPx}px)`,
+            width: gridSize,
+            height: gridSize,
+            border: '1px solid var(--border-color)',
+            borderRadius: 4,
+            overflow: 'hidden',
+            userSelect: 'none',
+            touchAction: 'none',
+            cursor: 'crosshair',
+            flexShrink: 0,
+          }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
+        >
+          {pixels.map((c, i) => (
+            <div
+              key={i}
+              style={{ width: cellPx, height: cellPx, backgroundColor: c, borderRight: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
