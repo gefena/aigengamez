@@ -89,7 +89,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 🌿 Lawn Mower Coder
 
-- [ ] **Wall collision rule** — no rule block for what happens when the mower hits a wall. Audit and add a "hit wall → stop / turn" instruction block if missing.
+- [x] **Wall collision rule** — added "🧱 Hit Wall" condition block; mower applies wall rule then retries movement.
 - [ ] **Visual polish** — make the game more visually appealing: better mower sprite, grass texture, color palette upgrade.
 
 ## 🐛 Bugs & UX

@@ -5,7 +5,7 @@ import styles from "@/app/games/[id]/page.module.css";
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Dir    = 0 | 1 | 2 | 3;          // right=0, down=1, left=2, up=3
 type TileC  = "red" | "blue" | "yellow";
-type Color  = TileC | "empty";
+type Color  = TileC | "empty" | "wall";
 type Act    = "fwd" | "left" | "right" | "back";
 type Phase  = "idle" | "running" | "won" | "over";
 type Mode   = "kids" | "adult";
@@ -42,9 +42,14 @@ function applyAct(dir: Dir, act: Act): Dir {
 
 function doStep(m: Mower, prog: Prog, grid: Cell[][], dim: number): Mower {
   const col: Color = grid[m.y][m.x].tile ?? "empty";
-  const d  = applyAct(m.dir, prog[col]);
-  const nx = m.x + DX[d], ny = m.y + DY[d];
-  if (nx < 0 || nx >= dim || ny < 0 || ny >= dim) return { ...m, dir: d };
+  let d  = applyAct(m.dir, prog[col]);
+  let nx = m.x + DX[d], ny = m.y + DY[d];
+  if (nx < 0 || nx >= dim || ny < 0 || ny >= dim) {
+    // Apply wall rule then try again
+    d  = applyAct(d, prog["wall"]);
+    nx = m.x + DX[d]; ny = m.y + DY[d];
+    if (nx < 0 || nx >= dim || ny < 0 || ny >= dim) return { ...m, dir: d };
+  }
   return { x: nx, y: ny, dir: d };
 }
 
@@ -85,6 +90,7 @@ function genLevel(mode: Mode): { grid: Cell[][], start: Mower, maxSteps: number 
     blue:   acts[Math.floor(Math.random() * 4)],
     yellow: acts[Math.floor(Math.random() * 4)],
     empty:  acts[Math.floor(Math.random() * 4)],
+    wall:   acts[Math.floor(Math.random() * 4)],
   };
 
   // Simulate to find visited cells
@@ -110,7 +116,7 @@ const EMPTY_GRID: Cell[][] = Array.from({ length: KDIM }, () =>
   Array.from({ length: KDIM }, () => ({ tile: null as TileC | null, grass: false }))
 );
 const INIT_MOWER: Mower = { x: 2, y: 3, dir: 0 };
-const INIT_PROG:  Prog  = { red:"fwd", blue:"left", yellow:"right", empty:"fwd" };
+const INIT_PROG:  Prog  = { red:"fwd", blue:"left", yellow:"right", empty:"fwd", wall:"right" };
 
 export default function LawnMowerGame({ title }: { title: string }) {
   const [mode,           setMode]           = useState<Mode>("kids");
@@ -249,12 +255,14 @@ export default function LawnMowerGame({ title }: { title: string }) {
         { key: "red",   label: "🔴 On Red",   accent: "#ef4444" },
         { key: "blue",  label: "🔵 On Blue",  accent: "#3b82f6" },
         { key: "empty", label: "⬜ Empty",     accent: "#94a3b8" },
+        { key: "wall",  label: "🧱 Hit Wall", accent: "#a16207" },
       ]
     : [
         { key: "red",    label: "🔴 On Red",    accent: "#ef4444" },
         { key: "blue",   label: "🔵 On Blue",   accent: "#3b82f6" },
         { key: "yellow", label: "🟡 On Yellow", accent: "#f59e0b" },
         { key: "empty",  label: "⬜ Empty",      accent: "#94a3b8" },
+        { key: "wall",   label: "🧱 Hit Wall",  accent: "#a16207" },
       ];
 
   return (
