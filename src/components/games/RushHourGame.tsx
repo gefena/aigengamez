@@ -673,23 +673,26 @@ export default function RushHourGame({ title }: { title: string }) {
           </div>
 
           {/* Controls */}
-          <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
+          <div style={{
+            display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap", justifyContent: "center",
+            borderTop: "1px solid #1e293b", paddingTop: 14, width: "100%", maxWidth: boardPx + 24,
+          }}>
             <button onClick={resetPuzzle} className={styles.resetBtn}>↺ Reset</button>
             {phase === "solved" && (
               <button
                 onClick={() => startPuzzle((puzzleIdx + 1) % PUZZLES.length)}
                 style={{
-                  padding: "8px 18px", borderRadius: 8, border: "none",
+                  padding: "10px 22px", borderRadius: 8, border: "none",
                   background: "#3b82f6", color: "#fff", fontWeight: 700,
-                  cursor: "pointer", fontSize: 14,
+                  cursor: "pointer", fontSize: 15,
                 }}
               >Next →</button>
             )}
             <button
               onClick={() => { setPhase("idle"); setSelected(null); }}
               style={{
-                padding: "8px 14px", borderRadius: 8, border: "1px solid #334155",
-                background: "transparent", color: "#94a3b8", cursor: "pointer", fontSize: 14,
+                padding: "10px 18px", borderRadius: 8, border: "1px solid #334155",
+                background: "transparent", color: "#94a3b8", cursor: "pointer", fontSize: 15,
               }}
             >All Puzzles</button>
           </div>
