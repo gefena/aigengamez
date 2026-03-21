@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (33 total)
+## ✅ Games Shipped (34 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -41,6 +41,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Kaleidoscope Painter | kaleidoscope-painter | Real-time mirror symmetry, glow mode |
 | Marble Drop | marble-drop | Column-drop color match, chain clears |
 | Socks Match | socks-match | CSS-patterned sock pairs, 90s adult timer |
+| Color by Numbers | color-by-numbers | SVG tap-to-fill, 4 pictures (House/Flower/Owl/Fish) |
 
 ---
 
@@ -65,7 +66,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ### Painting / Creative
 - [x] **Kaleidoscope Painter** — draw and it mirrors symmetrically in real time
 - [ ] **Mandala Drawer** — radial symmetry drawing tool
-- [ ] **Color by Numbers** — tap numbered regions to fill with color
+- [x] **Color by Numbers** — tap numbered regions to fill with color
 
 ---
 

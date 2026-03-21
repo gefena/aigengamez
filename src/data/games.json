@@ -261,6 +261,15 @@
     "description": "Aliens are popping up from crater holes — whack them before they escape! Build combos, catch bonus UFOs, and survive 60 seconds of escalating alien chaos. Kids, Medium, and Hard modes."
   },
   {
+    "id": "color-by-numbers",
+    "title": "Color by Numbers",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "imageUrl": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800",
+    "rating": 4.9,
+    "description": "Tap numbered regions to fill them with the matching color and reveal a hidden picture! Easy pictures: House and Flower. Hard pictures: Owl and Fish with 14 regions and tricky overlapping details. Satisfying to complete — tap Reveal to preview!"
+  },
+  {
     "id": "socks-match",
     "title": "Socks Match",
     "developer": "aigengamez",
