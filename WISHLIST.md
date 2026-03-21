@@ -100,7 +100,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 🎯 Content Improvements
 
-- [ ] **Trivia — more questions** — research and add more EN + HE questions for kids and adult pools (currently 20 each). Aim for 50+ per pool for better variety.
+- [x] **Trivia — more questions** — EN Kids: 55, EN Adult: 65, HE Kids: 55, HE Adult: 55. All pools at 50+.
 
 ---
 
