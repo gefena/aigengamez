@@ -398,5 +398,15 @@
     "thumbBg": "135deg, #831843 0%, #be185d 50%, #d97706 100%",
     "rating": 4.9,
     "description": "Create stunning mandalas with radial symmetry! Draw freely or stamp shapes — dots, rings, diamonds, and petals — that mirror across 8, 12, or 16 segments automatically. Concentric guide rings help you build balanced designs. Save your mandala as a PNG!"
+  },
+  {
+    "id": "rush-hour",
+    "title": "Rush Hour",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "emoji": "🚗",
+    "thumbBg": "135deg, #1a1a2e 0%, #7f1d1d 60%, #ef4444 100%",
+    "rating": 4.9,
+    "description": "Slide the cars and trucks out of each other's way to let the red car escape! 10 hand-crafted puzzles from Beginner to Expert. Find the minimum-move solution for a perfect score. Pure logic — no timer pressure."
   }
 ]

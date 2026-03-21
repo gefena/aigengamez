@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (40 total)
+## ✅ Games Shipped (41 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -48,6 +48,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Estimation Station | estimation-station | Visual dot jar + real-world quantity estimation |
 | Money Market | money-market | Count coins + make change, SVG coin visuals |
 | Gear Train Puzzle | gear-train | SVG animated gears, direction + RPM questions |
+| Rush Hour | rush-hour | Sliding block puzzle, BFS solver, 10 puzzles |
 
 ---
 
@@ -60,7 +61,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ### Engineering / STEM
 - [x] **Gear Train Puzzle** — SVG animated interlocking gears; kids: direction-only, adult: direction + RPM ratio.
 - [ ] **More engineering games** — ideas: bridge builder (truss stress), rocket trajectory (angle + thrust), pulley systems.
-- [ ] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
+- [x] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
 
 ### Kids / Casual
 - [x] **Socks Match** — pair up loose socks by color and pattern before the laundry pile grows too big. Match-2 mechanic with increasingly tricky patterns. Kids mode: simple colors; Adult mode: stripes, dots, and argyle patterns that look nearly identical.

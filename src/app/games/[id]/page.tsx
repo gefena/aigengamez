@@ -47,6 +47,7 @@ import ShapeSorterGame from "@/components/games/ShapeSorterGame";
 import EstimationStationGame from "@/components/games/EstimationStationGame";
 import MoneyMarketGame from "@/components/games/MoneyMarketGame";
 import GearTrainGame from "@/components/games/GearTrainGame";
+import RushHourGame from "@/components/games/RushHourGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -91,6 +92,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'estimation-station': EstimationStationGame,
   'money-market': MoneyMarketGame,
   'gear-train': GearTrainGame,
+  'rush-hour': RushHourGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {
