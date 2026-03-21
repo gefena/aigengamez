@@ -178,7 +178,7 @@ export default function MemoryMatchGame({ title }: { title: string }) {
   const PAD = 12;
   const maxCellByWidth = Math.floor((containerWidth - GAP * (COLS - 1) - PAD * 2) / COLS);
   const maxCellByHeight = typeof window !== "undefined"
-    ? Math.floor((window.innerHeight * 0.44) / ROWS)
+    ? Math.floor((window.innerHeight * 0.52) / ROWS)
     : 90;
   const cellPx = Math.min(88, maxCellByWidth, maxCellByHeight);
   const fontSize = cellPx * 0.45;

@@ -189,7 +189,7 @@ export default function MandalaPainter({ title }: { title: string }) {
     const measure = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.offsetWidth - 8;
-      const h = window.innerHeight * 0.46;
+      const h = window.innerHeight * 0.56;
       setCanvasSize(Math.floor(Math.min(w, h, 500)));
     };
     measure();

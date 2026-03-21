@@ -113,7 +113,7 @@ export default function MarbleDropGame({ title }: { title: string }) {
       if (!containerRef.current) return;
       const availW = containerRef.current.offsetWidth - 8;
       const cellW = Math.floor(Math.min(availW, 420) / COLS);
-      const cellH = Math.min(cellW, Math.floor((window.innerHeight * 0.44) / ROWS));
+      const cellH = Math.min(cellW, Math.floor((window.innerHeight * 0.52) / ROWS));
       setCanvasW(cellW * COLS);
       setCanvasH(cellH * ROWS);
     };

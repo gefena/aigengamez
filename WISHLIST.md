@@ -82,8 +82,8 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ## 🐛 Bugs & UX
 
-- [ ] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
-- [ ] **Pixel Art Maker broken on mobile/tablet** — grid too small, touch painting doesn't work well. Needs responsive cell sizing + touch event handling.
+- [x] **Tablet/iPad layout audit** — games look small on 768–1024px. Audit `.gameContainer` sizing, update CLAUDE.md.
+- [x] **Pixel Art Maker broken on mobile/tablet** — fixed: responsive cellPx from containerRef, pointer events on container for touch drag painting.
 - [x] Mode-switch locked after game over — fixed (5 games, 2026-03-21)
 - [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
 - [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21

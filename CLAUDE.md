@@ -9,14 +9,28 @@ These rules must be followed when building any new game component to prevent con
 | Tier | Width | `.gameContainer` height | `.gameInner` |
 |------|-------|------------------------|--------------|
 | Desktop | >1024px | `aspect-ratio: 4/3` — gives an **explicit** computed height | `height: 100%` fills it; `overflow: hidden`; `justify-content: center` |
-| Tablet | 641–1024px | `min(75vh, 720px)` — **explicit** viewport-relative height | `overflow: visible`; `justify-content: flex-start` |
+| Tablet | 641–1024px | `min(80vh, 780px)` — **explicit** viewport-relative height | `overflow: visible`; `justify-content: flex-start` |
 | Mobile | ≤640px | `height: auto` — shrinks to content | `overflow: visible`; `justify-content: flex-start` |
 
-**The key rule:** `height: 100%` on `.gameInner` only works when the parent has an **explicit** height (not `height: auto`). Desktop uses `aspect-ratio`; tablet uses `min(75vh, 720px)`; mobile abandons the percentage chain entirely and lets content flow naturally.
+**The key rule:** `height: 100%` on `.gameInner` only works when the parent has an **explicit** height (not `height: auto`). Desktop uses `aspect-ratio`; tablet uses `min(80vh, 780px)`; mobile abandons the percentage chain entirely and lets content flow naturally.
 
 ### Root Cause
 
 `.gameContainer` has a fixed height on desktop and tablet but switches to `height: auto` on mobile. `.gameInner` is `overflow: visible; justify-content: flex-start` on tablet and mobile. This means the **game component itself** must manage its own layout — it cannot rely on the outer container to bound its height.
+
+### Canvas sizing with `window.innerHeight`
+
+When capping canvas height against viewport height use a multiplier of **0.54–0.60**. Lower multipliers (0.44–0.48) were too conservative and made canvases small on tablets (768px tall iPad landscape → only 337–370px canvas inside a 624px container).
+
+```ts
+// Good — leaves room for title + controls while filling tablet space
+const h = window.innerHeight * 0.56;
+
+// Bad — canvas shrinks to ~337px on a 600px-tall laptop
+const h = window.innerHeight * 0.46;
+```
+
+For column-height games (Tetris, Marble Drop) use **0.52–0.60 / ROWS**. For square canvases (Mandala, Kaleidoscope) use **0.56**.
 
 ### Rules
 

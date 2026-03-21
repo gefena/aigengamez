@@ -258,11 +258,11 @@
   }
 
   /* Explicit height so gameInner's height:100% resolves correctly on tablets.
-     height:auto breaks the percentage chain — min(75vh, 720px) fixes it. */
+     height:auto breaks the percentage chain — min(80vh, 780px) fixes it. */
   .gameContainer {
     aspect-ratio: auto;
-    height: min(75vh, 720px);
-    min-height: 500px;
+    height: min(80vh, 780px);
+    min-height: 560px;
   }
 
   /* Mirror mobile pattern: let content-heavy games flow without clipping */

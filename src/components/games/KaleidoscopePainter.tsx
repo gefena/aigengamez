@@ -49,7 +49,7 @@ export default function KaleidoscopePainter({ title }: { title: string }) {
     const measure = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.offsetWidth;
-      const h = window.innerHeight * 0.48;
+      const h = window.innerHeight * 0.56;
       setCanvasSize(Math.floor(Math.min(w - 8, h, 520)));
     };
     measure();

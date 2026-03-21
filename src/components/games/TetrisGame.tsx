@@ -106,7 +106,7 @@ export default function TetrisGame({ title }: { title: string }) {
       if (!containerRef.current) return;
       const w = containerRef.current.offsetWidth;
       const maxByW = Math.floor((w - 92) / COLS); // 92 = sidebar + gap
-      const maxByH = Math.floor((window.innerHeight * 0.52) / ROWS);
+      const maxByH = Math.floor((window.innerHeight * 0.60) / ROWS);
       setCellPx(Math.max(14, Math.min(26, maxByW, maxByH)));
     };
     measure();
