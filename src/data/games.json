@@ -460,5 +460,16 @@
     "thumbBg": "135deg, #7f1d1d 0%, #dc2626 50%, #1e1b4b 100%",
     "rating": 4.9,
     "description": "A patient needs a transfusion NOW — tap the right donor blood type before time runs out! Kids: match A, B, AB, O types. Adult: all 8 types with Rh factor, select every compatible donor and press Transfuse. Real immunology, real stakes — learn why O− is the universal donor!"
+  },
+  {
+    "id": "immune-defense",
+    "title": "Immune Defense",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "tags": ["STEM", "Logic"],
+    "emoji": "🛡️",
+    "thumbBg": "135deg, #0a2a0a 0%, #14532d 50%, #1e3a5f 100%",
+    "rating": 4.9,
+    "description": "Invaders are attacking! Deploy the right immune cells — Neutrophils fight bacteria, T-Cells destroy viruses, NK-Cells hunt parasites. Survive all waves and learn real immunology as you play!"
   }
 ]
