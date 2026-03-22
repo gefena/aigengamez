@@ -4,7 +4,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ---
 
-## ✅ Games Shipped (41 total)
+## ✅ Games Shipped (43 total)
 
 | Game | ID | Notes |
 |------|----|-------|
@@ -49,6 +49,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Money Market | money-market | Count coins + make change, SVG coin visuals |
 | Gear Train Puzzle | gear-train | SVG animated gears, direction + RPM questions |
 | Rush Hour | rush-hour | Sliding block puzzle, BFS solver · Regular (10) + Extra (55 BFS-verified) |
+| Blood Type Match | blood-type-match | ABO+Rh transfusion puzzle, kids/adult modes |
+| Immune Defense | immune-defense | Card-dispatch wave survival, 5 cell types vs 3 invader types |
+| Judo Drills Trivia | judo-trivia | 25 beginner + 30 advanced judo questions, streak multipliers |
 
 ---
 
@@ -64,7 +67,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
 
 ### Biology / Immunology
-- [ ] **Immune Defense** — players direct white blood cells (neutrophils, T-cells, B-cells) to fight waves of bacteria and viruses; kids: destroy invaders; adult: also manage antibody production and cytokine signals.
+- [x] **Immune Defense** — card-dispatch wave survival: deploy Neutrophil/Macrophage/B-Cell/T-Cell/NK-Cell against Bacteria/Virus/Parasite. Kids 8 waves / Adult 10 waves.
 - [ ] **Cell Cycle Puzzle** — sequence the phases of mitosis (G1, S, G2, M) and drag organelles into place; kids: simple matching; adult: DNA replication + checkpoints.
 - [ ] **Virus Builder** — construct a virus by selecting capsid, spike proteins, and genome; then launch it and see if it can infect a cell — teaches lock-and-key receptor binding.
 - [x] **Blood Type Match** — transfusion puzzle: match donor blood types to compatible recipients under time pressure; teaches ABO + Rh system.
@@ -85,6 +88,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Color by Numbers** — tap numbered regions to fill with color
 
 ---
+
+### Sports / Fitness
+- [x] **Judo Drills Trivia** — 25 beginner + 30 advanced judo questions. Terms, throws, competition rules, history. Streak multipliers.
 
 ## 🌍 Language / i18n
 
