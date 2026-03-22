@@ -18,16 +18,19 @@ export default function Navbar() {
           <span className="gradient-text">aigen</span>gamez
         </Link>
 
+        {/* Desktop nav links */}
         <div className={styles.navLinks}>
           <Link href="/explore" className={styles.navLink}>{t.nav.explore}</Link>
           <Link href="/about" className={styles.navLink}>{t.nav.about}</Link>
-          <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
 
+        {/* Right cluster: always visible */}
         <div className={styles.navRight}>
-          <ThemeSwitcher />
-          <LanguageSwitcher />
+          {/* Language switcher shown only on mobile (desktop has it in navLinks) */}
+          <div className={styles.mobileLang}>
+            <LanguageSwitcher />
+          </div>
           <button
             className={styles.hamburger}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -43,6 +46,12 @@ export default function Navbar() {
 
       {menuOpen && (
         <div className={styles.mobileMenu}>
+          {/* Theme toggle — first row */}
+          <div className={styles.menuThemeRow}>
+            <span className={styles.menuLabel}>Theme</span>
+            <ThemeSwitcher />
+          </div>
+          {/* Nav links — visible in dropdown on mobile */}
           <Link href="/explore" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{t.nav.explore}</Link>
           <Link href="/about" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{t.nav.about}</Link>
         </div>

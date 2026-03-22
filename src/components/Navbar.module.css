@@ -20,9 +20,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
-/* Gold shimmer logo */
+/* Shimmer logo */
 .logo {
   font-size: 1.45rem;
   font-weight: 800;
@@ -46,10 +47,16 @@
   gap: 2rem;
 }
 
+/* Right cluster: always visible */
 .navRight {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+/* LanguageSwitcher inside navRight — only on mobile (desktop has it in navLinks) */
+.mobileLang {
+  display: none;
 }
 
 .navLink {
@@ -80,9 +87,9 @@
   transform: scaleX(1);
 }
 
-/* Hamburger */
+/* Hamburger — always visible */
 .hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
@@ -105,13 +112,38 @@
 .barOpen2 { opacity: 0; }
 .barOpen3 { transform: translateY(-7px) rotate(-45deg); }
 
-/* Mobile dropdown */
+/* Dropdown menu — desktop: floating panel anchored to navContainer */
 .mobileMenu {
-  display: none;
+  display: flex;
   flex-direction: column;
-  padding: 1rem 2rem;
-  border-top: 1px solid var(--border-subtle);
+  position: absolute;
+  right: 2rem;
+  top: 68px;
+  min-width: 200px;
   background: rgba(8, 7, 16, 0.97);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-md);
+  z-index: 200;
+}
+
+/* Theme row inside dropdown */
+.menuThemeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.menuLabel {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
 }
 
 .mobileLink {
@@ -127,9 +159,20 @@
 
 .mobileLink:hover { color: var(--gold-primary); }
 
+/* Mobile overrides */
 @media (max-width: 640px) {
-  .navLinks  { display: none; }
-  .navRight  { display: flex; }
-  .hamburger { display: flex; }
-  .mobileMenu { display: flex; }
+  .navLinks    { display: none; }
+  .mobileLang  { display: flex; }
+
+  .mobileMenu {
+    position: static;
+    right: unset;
+    top: unset;
+    min-width: unset;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    padding: 1rem 2rem;
+    box-shadow: none;
+  }
 }
