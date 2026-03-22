@@ -50,6 +50,7 @@ import GearTrainGame from "@/components/games/GearTrainGame";
 import RushHourGame from "@/components/games/RushHourGame";
 import BloodTypeMatchGame from "@/components/games/BloodTypeMatchGame";
 import ImmuneDefenseGame from "@/components/games/ImmuneDefenseGame";
+import JudoTriviaGame from "@/components/games/JudoTriviaGame";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -97,6 +98,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType<{ title: string }>> = 
   'rush-hour': RushHourGame,
   'blood-type-match': BloodTypeMatchGame,
   'immune-defense': ImmuneDefenseGame,
+  'judo-trivia': JudoTriviaGame,
 };
 
 export default function GamePage({ params }: { params: { id: string } }) {

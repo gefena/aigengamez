@@ -471,5 +471,16 @@
     "thumbBg": "135deg, #0a2a0a 0%, #14532d 50%, #1e3a5f 100%",
     "rating": 4.9,
     "description": "Invaders are attacking! Deploy the right immune cells — Neutrophils fight bacteria, T-Cells destroy viruses, NK-Cells hunt parasites. Survive all waves and learn real immunology as you play!"
+  },
+  {
+    "id": "judo-trivia",
+    "title": "Judo Drills Trivia",
+    "developer": "aigengamez",
+    "category": "Puzzle",
+    "tags": ["Logic", "Action"],
+    "emoji": "🥋",
+    "thumbBg": "135deg, #1a1a0a 0%, #3d2b00 50%, #78350f 100%",
+    "rating": 4.9,
+    "description": "How well do you know the dojo? Test your judo — commands, throws, competition rules, and history. Beginner: core terms and fundamental techniques. Advanced: technique names, kata, scoring rules, and legendary judoka. Streaks multiply your points!"
   }
 ]
