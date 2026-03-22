@@ -137,11 +137,16 @@ function getInvaderCount(wave: number, diff: Difficulty): number {
   return Math.min(3 + Math.floor((wave - 1) / 2), 7);
 }
 
+// Kids cells: Neutrophil (Bacteria), B-Cell (Bacteria+Virus), T-Cell (Virus)
+// → only Bacteria + Virus invaders so every invader is beatable
+const KIDS_INVADER_TYPES: InvaderType[] = ["Bacterium", "Virus"];
+
 function makeInvaders(wave: number, diff: Difficulty, idRef: { v: number }): Invader[] {
   const count = getInvaderCount(wave, diff);
+  const pool = diff === "Kids" ? KIDS_INVADER_TYPES : INVADER_TYPES;
   return Array.from({ length: count }, () => ({
     id: idRef.v++,
-    type: INVADER_TYPES[Math.floor(Math.random() * 3)],
+    type: pool[Math.floor(Math.random() * pool.length)],
     status: "alive" as const,
   }));
 }
@@ -493,7 +498,7 @@ export default function ImmuneDefenseGame({ title }: { title: string }) {
           <div style={{ fontSize: "3rem", marginBottom: "0.5rem" }}>🛡️</div>
           <p style={{ color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: "1.25rem", maxWidth: 360, margin: "0 auto 1.25rem" }}>
             {diff === "Kids"
-              ? `Invaders attack in waves! Tap a cell card, then tap an invader to deploy it. Survive ${MAX_WAVES.Kids} waves to win!`
+              ? `Bacteria 🦠 and Viruses 😈 are attacking! Tap a cell card, then tap an invader to deploy it. Survive ${MAX_WAVES.Kids} waves to win!`
               : `Deploy the right immune cells against each invader. Wrong cells cost −5 pts. Survive all ${MAX_WAVES.Adult} waves!`}
           </p>
 
