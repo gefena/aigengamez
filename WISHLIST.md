@@ -48,7 +48,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Estimation Station | estimation-station | Visual dot jar + real-world quantity estimation |
 | Money Market | money-market | Count coins + make change, SVG coin visuals |
 | Gear Train Puzzle | gear-train | SVG animated gears, direction + RPM questions |
-| Rush Hour | rush-hour | Sliding block puzzle, BFS solver, 10 puzzles |
+| Rush Hour | rush-hour | Sliding block puzzle, BFS solver · Regular (10) + Extra (55 BFS-verified) |
 
 ---
 
@@ -67,7 +67,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [ ] **Immune Defense** — players direct white blood cells (neutrophils, T-cells, B-cells) to fight waves of bacteria and viruses; kids: destroy invaders; adult: also manage antibody production and cytokine signals.
 - [ ] **Cell Cycle Puzzle** — sequence the phases of mitosis (G1, S, G2, M) and drag organelles into place; kids: simple matching; adult: DNA replication + checkpoints.
 - [ ] **Virus Builder** — construct a virus by selecting capsid, spike proteins, and genome; then launch it and see if it can infect a cell — teaches lock-and-key receptor binding.
-- [ ] **Blood Type Match** — transfusion puzzle: match donor blood types to compatible recipients under time pressure; teaches ABO + Rh system.
+- [x] **Blood Type Match** — transfusion puzzle: match donor blood types to compatible recipients under time pressure; teaches ABO + Rh system.
 - [ ] **Intestine Explorer** (extend existing maze) — biology-themed maze explaining digestive organs as the player navigates through them, with fact pop-ups.
 
 ### Kids / Casual
@@ -129,8 +129,9 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 ## 🎨 Design & Visual Polish
 
 - [x] **Improve game tags/categories** — richer tags per game (Math, Word, Art, Logic, Coding, Action, Memory, STEM, Maze, Music, Hebrew); Explore page now has tag chip filter; Surprise Me kids pool derived dynamically from tags.
-- [ ] **Replace generic Unsplash photos** — most game cards use stock photos unrelated to gameplay. Replace with on-brand custom thumbnails or generated art that reflects each game's actual visuals.
-- [ ] **Site visual identity overhaul** — the site looks like a generic Next.js template. Ideas to make it feel unique: custom color palette, hand-drawn / pixel-art logo, animated homepage hero, card hover effects, a mascot character, and a coherent "arcade" or "retro-future" theme throughout.
+- [x] **Replace generic Unsplash photos** — replaced with on-brand custom thumbnails reflecting each game's actual visuals.
+- [x] **Site visual identity overhaul** — gold/black premium arcade theme: shimmer logo, gold glow cards, glassmorphism navbar, gold accent lines throughout.
+- [ ] **American flag color theme** — red/white/blue palette variant as an alternative to gold; could be a selectable theme toggle (🇺🇸 mode).
 
 ---
 
