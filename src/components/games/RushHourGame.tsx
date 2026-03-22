@@ -16,6 +16,13 @@ interface Vehicle {
 
 type Board = Vehicle[];
 type Phase = "idle" | "playing" | "solved";
+type PuzzleSet = "regular" | "extra";
+
+interface PuzzleData {
+  label: string;
+  board: Board;
+  minMoves?: number;
+}
 
 // ── BFS Solver ───────────────────────────────────────────────────────────────
 function stateKey(board: Board): string {
@@ -91,8 +98,8 @@ function bfsSolve(board: Board): number {
   return -1;
 }
 
-// ── Puzzles ───────────────────────────────────────────────────────────────────
-const PUZZLES: { label: string; board: Board }[] = [
+// ── Regular Puzzles (10) ─────────────────────────────────────────────────────
+const PUZZLES_REGULAR: PuzzleData[] = [
   {
     label: "Beginner",
     board: [
@@ -214,210 +221,68 @@ const PUZZLES: { label: string; board: Board }[] = [
       { id: "I", dir: "v", size: 2, row: 1, col: 5 },
     ],
   },
-  // ── Additional Easy puzzles ──────────────────────────────────────────────
-  {
-    label: "Easy",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "v", size: 3, row: 1, col: 5 },
-      { id: "B", dir: "v", size: 2, row: 0, col: 0 },
-      { id: "C", dir: "h", size: 2, row: 0, col: 4 },
-      { id: "D", dir: "v", size: 3, row: 2, col: 2 },
-    ],
-  },
-  {
-    label: "Easy",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
-      { id: "A", dir: "h", size: 2, row: 1, col: 2 },
-      { id: "B", dir: "v", size: 2, row: 2, col: 4 },
-      { id: "C", dir: "h", size: 3, row: 5, col: 0 },
-      { id: "D", dir: "v", size: 2, row: 2, col: 1 },
-      { id: "E", dir: "v", size: 3, row: 2, col: 5 },
-      { id: "F", dir: "h", size: 3, row: 4, col: 0 },
-      { id: "G", dir: "h", size: 2, row: 0, col: 4 },
-    ],
-  },
-  {
-    label: "Easy",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "h", size: 2, row: 5, col: 0 },
-      { id: "B", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "C", dir: "v", size: 2, row: 2, col: 5 },
-      { id: "D", dir: "v", size: 2, row: 1, col: 2 },
-      { id: "E", dir: "h", size: 3, row: 1, col: 3 },
-      { id: "F", dir: "h", size: 3, row: 5, col: 2 },
-      { id: "G", dir: "h", size: 2, row: 4, col: 3 },
-      { id: "H", dir: "h", size: 2, row: 3, col: 2 },
-    ],
-  },
-  {
-    label: "Easy",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 4, col: 1 },
-      { id: "C", dir: "h", size: 2, row: 5, col: 3 },
-      { id: "D", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "E", dir: "v", size: 2, row: 1, col: 0 },
-    ],
-  },
-  {
-    label: "Easy",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "v", size: 2, row: 1, col: 2 },
-      { id: "B", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "C", dir: "h", size: 2, row: 0, col: 2 },
-    ],
-  },
-  // ── Additional Medium puzzles ────────────────────────────────────────────
-  {
-    label: "Medium",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "h", size: 2, row: 1, col: 1 },
-      { id: "B", dir: "h", size: 3, row: 4, col: 0 },
-      { id: "C", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "D", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "E", dir: "v", size: 2, row: 0, col: 4 },
-      { id: "F", dir: "v", size: 2, row: 0, col: 0 },
-    ],
-  },
-  {
-    label: "Medium",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
-      { id: "A", dir: "h", size: 2, row: 4, col: 0 },
-      { id: "B", dir: "h", size: 2, row: 1, col: 3 },
-      { id: "C", dir: "v", size: 2, row: 3, col: 3 },
-      { id: "D", dir: "v", size: 3, row: 3, col: 2 },
-      { id: "E", dir: "h", size: 2, row: 0, col: 2 },
-      { id: "F", dir: "v", size: 2, row: 4, col: 4 },
-      { id: "G", dir: "v", size: 3, row: 0, col: 5 },
-      { id: "H", dir: "v", size: 2, row: 2, col: 1 },
-    ],
-  },
-  {
-    label: "Medium",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 3, row: 1, col: 5 },
-      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
-      { id: "C", dir: "h", size: 2, row: 1, col: 1 },
-      { id: "D", dir: "v", size: 2, row: 3, col: 0 },
-    ],
-  },
-  {
-    label: "Medium",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 2, row: 2, col: 3 },
-      { id: "B", dir: "h", size: 2, row: 0, col: 1 },
-      { id: "C", dir: "h", size: 2, row: 3, col: 0 },
-      { id: "D", dir: "v", size: 2, row: 0, col: 3 },
-      { id: "E", dir: "v", size: 2, row: 4, col: 0 },
-      { id: "F", dir: "h", size: 2, row: 3, col: 4 },
-      { id: "G", dir: "v", size: 3, row: 2, col: 2 },
-      { id: "H", dir: "h", size: 2, row: 4, col: 4 },
-    ],
-  },
-  {
-    label: "Medium",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
-      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
-    ],
-  },
-  // ── Additional Hard puzzles ──────────────────────────────────────────────
-  {
-    label: "Hard",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 0 },
-      { id: "A", dir: "v", size: 2, row: 1, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 0, col: 4 },
-      { id: "C", dir: "v", size: 2, row: 2, col: 3 },
-      { id: "D", dir: "h", size: 3, row: 4, col: 3 },
-      { id: "E", dir: "v", size: 2, row: 0, col: 3 },
-      { id: "F", dir: "h", size: 2, row: 0, col: 1 },
-    ],
-  },
-  {
-    label: "Hard",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
-      { id: "A", dir: "h", size: 3, row: 1, col: 0 },
-      { id: "B", dir: "h", size: 3, row: 1, col: 3 },
-      { id: "C", dir: "v", size: 2, row: 3, col: 0 },
-      { id: "D", dir: "v", size: 2, row: 3, col: 3 },
-      { id: "E", dir: "h", size: 2, row: 0, col: 0 },
-      { id: "F", dir: "v", size: 2, row: 4, col: 1 },
-      { id: "G", dir: "v", size: 2, row: 4, col: 4 },
-      { id: "H", dir: "v", size: 2, row: 2, col: 5 },
-    ],
-  },
-  {
-    label: "Hard",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "B", dir: "h", size: 3, row: 0, col: 3 },
-      { id: "C", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "D", dir: "h", size: 2, row: 3, col: 0 },
-      { id: "E", dir: "v", size: 2, row: 0, col: 2 },
-    ],
-  },
-  {
-    label: "Hard",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 2 },
-      { id: "A", dir: "h", size: 3, row: 4, col: 1 },
-      { id: "B", dir: "v", size: 2, row: 2, col: 1 },
-      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
-    ],
-  },
-  // ── Additional Expert puzzles ────────────────────────────────────────────
-  {
-    label: "Expert",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 2, row: 4, col: 0 },
-      { id: "B", dir: "v", size: 2, row: 1, col: 0 },
-      { id: "C", dir: "h", size: 2, row: 1, col: 4 },
-      { id: "D", dir: "v", size: 3, row: 0, col: 3 },
-      { id: "E", dir: "h", size: 2, row: 3, col: 4 },
-    ],
-  },
-  {
-    label: "Expert",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "B", dir: "h", size: 2, row: 3, col: 3 },
-      { id: "C", dir: "v", size: 2, row: 0, col: 1 },
-    ],
-  },
-  {
-    label: "Expert",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 3 },
-      { id: "A", dir: "v", size: 3, row: 3, col: 3 },
-      { id: "B", dir: "v", size: 2, row: 1, col: 5 },
-      { id: "C", dir: "h", size: 2, row: 5, col: 4 },
-    ],
-  },
-  {
-    label: "Expert",
-    board: [
-      { id: "R", dir: "h", size: 2, row: 2, col: 1 },
-      { id: "A", dir: "v", size: 2, row: 0, col: 2 },
-      { id: "B", dir: "h", size: 2, row: 3, col: 2 },
-      { id: "C", dir: "v", size: 2, row: 1, col: 4 },
-    ],
-  },
+];
+
+// ── Extra Puzzles (55) — BFS-verified ────────────────────────────────────────
+const PUZZLES_EXTRA: PuzzleData[] = [
+  // ── Easy (15) ──
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":3,"row":5,"col":2},{"id":"D","dir":"v","size":2,"row":3,"col":2},{"id":"E","dir":"v","size":2,"row":4,"col":1},{"id":"F","dir":"h","size":3,"row":0,"col":0},{"id":"G","dir":"v","size":2,"row":3,"col":3}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":0},{"id":"D","dir":"h","size":3,"row":5,"col":1},{"id":"E","dir":"h","size":2,"row":4,"col":2},{"id":"F","dir":"v","size":2,"row":1,"col":5},{"id":"G","dir":"v","size":2,"row":4,"col":4},{"id":"H","dir":"h","size":2,"row":0,"col":3}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":2},{"id":"D","dir":"v","size":2,"row":1,"col":5},{"id":"E","dir":"h","size":2,"row":5,"col":0}] },
+  { label: "Easy", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":3,"row":0,"col":1},{"id":"D","dir":"h","size":2,"row":5,"col":2}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":3,"col":1},{"id":"D","dir":"h","size":2,"row":4,"col":3},{"id":"E","dir":"h","size":3,"row":5,"col":3},{"id":"F","dir":"h","size":2,"row":0,"col":4}] },
+  { label: "Easy", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":0,"col":3},{"id":"D","dir":"v","size":2,"row":2,"col":5},{"id":"E","dir":"h","size":2,"row":3,"col":0},{"id":"F","dir":"v","size":2,"row":3,"col":2},{"id":"G","dir":"h","size":2,"row":5,"col":1}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":2},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":1,"col":0},{"id":"D","dir":"h","size":3,"row":4,"col":3},{"id":"E","dir":"h","size":3,"row":5,"col":2}] },
+  { label: "Easy", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":3,"col":0},{"id":"D","dir":"h","size":2,"row":3,"col":2},{"id":"E","dir":"v","size":3,"row":0,"col":0},{"id":"F","dir":"v","size":2,"row":4,"col":0}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":2},{"id":"C","dir":"h","size":2,"row":4,"col":3},{"id":"D","dir":"v","size":2,"row":0,"col":5},{"id":"E","dir":"v","size":3,"row":0,"col":4},{"id":"F","dir":"h","size":2,"row":3,"col":0},{"id":"G","dir":"v","size":3,"row":3,"col":5}] },
+  { label: "Easy", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":3},{"id":"D","dir":"h","size":2,"row":5,"col":4},{"id":"E","dir":"h","size":3,"row":0,"col":3}] },
+  { label: "Easy", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":1,"col":2},{"id":"D","dir":"h","size":3,"row":4,"col":1}] },
+  { label: "Easy", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":3,"row":2,"col":5},{"id":"D","dir":"h","size":3,"row":0,"col":1},{"id":"E","dir":"h","size":2,"row":1,"col":1},{"id":"F","dir":"v","size":2,"row":3,"col":2}] },
+  { label: "Easy", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":5,"col":4},{"id":"D","dir":"h","size":2,"row":0,"col":4},{"id":"E","dir":"v","size":2,"row":3,"col":5},{"id":"F","dir":"h","size":2,"row":0,"col":0}] },
+  { label: "Easy", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"v","size":3,"row":0,"col":0},{"id":"D","dir":"h","size":3,"row":0,"col":1},{"id":"E","dir":"h","size":2,"row":5,"col":3}] },
+  { label: "Easy", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":0,"col":4},{"id":"D","dir":"v","size":3,"row":3,"col":0},{"id":"E","dir":"h","size":2,"row":5,"col":3}] },
+  // ── Medium (15) ──
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":4,"col":1},{"id":"D","dir":"v","size":2,"row":3,"col":4},{"id":"E","dir":"h","size":2,"row":0,"col":2},{"id":"F","dir":"v","size":2,"row":0,"col":5},{"id":"G","dir":"h","size":2,"row":1,"col":1},{"id":"H","dir":"v","size":2,"row":0,"col":0}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":3,"row":4,"col":2},{"id":"D","dir":"h","size":2,"row":1,"col":1},{"id":"E","dir":"h","size":2,"row":5,"col":1}] },
+  { label: "Medium", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":2},{"id":"D","dir":"h","size":2,"row":4,"col":4}] },
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":0,"col":3},{"id":"D","dir":"v","size":2,"row":3,"col":0}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":4,"col":4},{"id":"D","dir":"v","size":2,"row":3,"col":1},{"id":"E","dir":"h","size":2,"row":5,"col":1},{"id":"F","dir":"h","size":2,"row":0,"col":4}] },
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":5,"col":1},{"id":"D","dir":"h","size":2,"row":1,"col":1}] },
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":3,"col":0},{"id":"D","dir":"h","size":3,"row":5,"col":3},{"id":"E","dir":"h","size":2,"row":3,"col":1}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":0,"col":5},{"id":"D","dir":"v","size":2,"row":3,"col":5},{"id":"E","dir":"h","size":3,"row":4,"col":2},{"id":"F","dir":"h","size":2,"row":0,"col":1},{"id":"G","dir":"h","size":2,"row":1,"col":1},{"id":"H","dir":"v","size":2,"row":0,"col":0}] },
+  { label: "Medium", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":4,"col":1},{"id":"D","dir":"h","size":2,"row":0,"col":2},{"id":"E","dir":"v","size":2,"row":2,"col":5},{"id":"F","dir":"v","size":2,"row":4,"col":0},{"id":"G","dir":"v","size":3,"row":1,"col":2}] },
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":0,"col":2},{"id":"D","dir":"v","size":3,"row":3,"col":4},{"id":"E","dir":"v","size":2,"row":4,"col":5},{"id":"F","dir":"h","size":2,"row":5,"col":0},{"id":"G","dir":"v","size":2,"row":1,"col":0},{"id":"H","dir":"h","size":2,"row":4,"col":0}] },
+  { label: "Medium", minMoves: 3, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":4,"col":2},{"id":"D","dir":"h","size":2,"row":1,"col":0}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":3,"col":5},{"id":"D","dir":"h","size":3,"row":4,"col":0},{"id":"E","dir":"v","size":2,"row":4,"col":3},{"id":"F","dir":"h","size":2,"row":3,"col":1},{"id":"G","dir":"v","size":3,"row":1,"col":0},{"id":"H","dir":"h","size":3,"row":0,"col":3}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":0,"col":2},{"id":"D","dir":"v","size":2,"row":0,"col":1},{"id":"E","dir":"h","size":2,"row":4,"col":3},{"id":"F","dir":"v","size":2,"row":4,"col":1}] },
+  { label: "Medium", minMoves: 4, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":2},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":4,"col":2},{"id":"D","dir":"v","size":3,"row":0,"col":5}] },
+  { label: "Medium", minMoves: 5, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":2,"col":5},{"id":"D","dir":"v","size":2,"row":0,"col":0},{"id":"E","dir":"h","size":2,"row":4,"col":4}] },
+  // ── Hard (25) ──
+  { label: "Hard", minMoves: 20, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":2},{"id":"C","dir":"v","size":2,"row":3,"col":3},{"id":"D","dir":"h","size":2,"row":4,"col":4},{"id":"E","dir":"v","size":2,"row":4,"col":0},{"id":"F","dir":"v","size":2,"row":1,"col":3},{"id":"G","dir":"h","size":3,"row":0,"col":3},{"id":"H","dir":"h","size":3,"row":5,"col":2}] },
+  { label: "Hard", minMoves: 12, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":3,"row":3,"col":0},{"id":"D","dir":"v","size":2,"row":4,"col":2},{"id":"E","dir":"h","size":2,"row":0,"col":4},{"id":"F","dir":"h","size":3,"row":5,"col":3},{"id":"G","dir":"h","size":2,"row":1,"col":1}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":3,"row":0,"col":5},{"id":"D","dir":"h","size":3,"row":5,"col":0},{"id":"E","dir":"v","size":2,"row":3,"col":4}] },
+  { label: "Hard", minMoves: 11, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"h","size":3,"row":4,"col":3},{"id":"D","dir":"h","size":2,"row":0,"col":1},{"id":"E","dir":"v","size":2,"row":3,"col":2},{"id":"F","dir":"h","size":2,"row":1,"col":1},{"id":"G","dir":"h","size":2,"row":0,"col":3},{"id":"H","dir":"v","size":2,"row":4,"col":1}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":3},{"id":"D","dir":"h","size":3,"row":5,"col":1},{"id":"E","dir":"h","size":2,"row":0,"col":2},{"id":"F","dir":"v","size":2,"row":3,"col":2},{"id":"G","dir":"v","size":2,"row":1,"col":0},{"id":"H","dir":"h","size":2,"row":1,"col":1}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":0,"col":2},{"id":"D","dir":"v","size":3,"row":2,"col":5},{"id":"E","dir":"h","size":2,"row":4,"col":2},{"id":"F","dir":"h","size":3,"row":5,"col":2}] },
+  { label: "Hard", minMoves: 14, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":2},{"id":"C","dir":"h","size":2,"row":0,"col":0},{"id":"D","dir":"v","size":2,"row":4,"col":4},{"id":"E","dir":"v","size":2,"row":3,"col":1},{"id":"F","dir":"h","size":2,"row":5,"col":1},{"id":"G","dir":"h","size":2,"row":4,"col":2}] },
+  { label: "Hard", minMoves: 17, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":5,"col":4},{"id":"D","dir":"h","size":2,"row":4,"col":3},{"id":"E","dir":"v","size":2,"row":4,"col":1},{"id":"F","dir":"v","size":3,"row":0,"col":2},{"id":"G","dir":"v","size":2,"row":3,"col":5},{"id":"H","dir":"v","size":2,"row":1,"col":5}] },
+  { label: "Hard", minMoves: 10, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":2},{"id":"D","dir":"v","size":2,"row":3,"col":1},{"id":"E","dir":"h","size":2,"row":0,"col":2}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":3,"col":2},{"id":"D","dir":"v","size":2,"row":4,"col":0},{"id":"E","dir":"v","size":3,"row":1,"col":5},{"id":"F","dir":"h","size":2,"row":1,"col":0},{"id":"G","dir":"h","size":2,"row":0,"col":1},{"id":"H","dir":"h","size":2,"row":4,"col":4}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":2},{"id":"C","dir":"h","size":2,"row":0,"col":1},{"id":"D","dir":"h","size":3,"row":5,"col":3},{"id":"E","dir":"h","size":3,"row":0,"col":3},{"id":"F","dir":"v","size":2,"row":4,"col":0},{"id":"G","dir":"h","size":2,"row":4,"col":4}] },
+  { label: "Hard", minMoves: 13, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":2,"row":5,"col":3},{"id":"D","dir":"v","size":2,"row":4,"col":1},{"id":"E","dir":"v","size":2,"row":0,"col":2},{"id":"F","dir":"v","size":2,"row":1,"col":5},{"id":"G","dir":"h","size":2,"row":4,"col":3}] },
+  { label: "Hard", minMoves: 10, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":3,"row":1,"col":5},{"id":"D","dir":"v","size":3,"row":3,"col":0},{"id":"E","dir":"h","size":3,"row":4,"col":2},{"id":"F","dir":"h","size":2,"row":5,"col":2},{"id":"G","dir":"v","size":2,"row":2,"col":4},{"id":"H","dir":"v","size":3,"row":3,"col":1}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":4,"col":2},{"id":"D","dir":"h","size":2,"row":5,"col":3},{"id":"E","dir":"h","size":3,"row":4,"col":3},{"id":"F","dir":"v","size":2,"row":3,"col":1},{"id":"G","dir":"v","size":2,"row":0,"col":0}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":0,"col":4},{"id":"D","dir":"v","size":3,"row":0,"col":5},{"id":"E","dir":"v","size":2,"row":3,"col":0},{"id":"F","dir":"h","size":3,"row":4,"col":3},{"id":"G","dir":"h","size":2,"row":0,"col":2}] },
+  { label: "Hard", minMoves: 11, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":3},{"id":"D","dir":"v","size":3,"row":0,"col":4},{"id":"E","dir":"h","size":2,"row":3,"col":3},{"id":"F","dir":"v","size":2,"row":4,"col":0}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":2,"row":1,"col":3},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"h","size":3,"row":0,"col":2},{"id":"D","dir":"h","size":2,"row":4,"col":4},{"id":"E","dir":"h","size":2,"row":3,"col":0},{"id":"F","dir":"v","size":2,"row":4,"col":2},{"id":"G","dir":"v","size":2,"row":1,"col":5}] },
+  { label: "Hard", minMoves: 10, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":3,"row":1,"col":4},{"id":"C","dir":"v","size":2,"row":0,"col":5},{"id":"D","dir":"v","size":2,"row":3,"col":0},{"id":"E","dir":"v","size":2,"row":3,"col":5},{"id":"F","dir":"h","size":2,"row":4,"col":2}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":4,"col":0},{"id":"D","dir":"h","size":3,"row":5,"col":3},{"id":"E","dir":"v","size":2,"row":1,"col":2},{"id":"F","dir":"h","size":3,"row":4,"col":2},{"id":"G","dir":"h","size":2,"row":3,"col":4}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":2,"col":5},{"id":"D","dir":"v","size":3,"row":3,"col":2},{"id":"E","dir":"h","size":2,"row":1,"col":1},{"id":"F","dir":"h","size":2,"row":4,"col":3},{"id":"G","dir":"v","size":2,"row":0,"col":5}] },
+  { label: "Hard", minMoves: 8, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":3},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"h","size":3,"row":5,"col":1},{"id":"D","dir":"h","size":2,"row":4,"col":3},{"id":"E","dir":"h","size":2,"row":3,"col":0},{"id":"F","dir":"v","size":2,"row":1,"col":5},{"id":"G","dir":"h","size":2,"row":5,"col":4},{"id":"H","dir":"v","size":2,"row":4,"col":0}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":1},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":2,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":0,"col":1},{"id":"D","dir":"h","size":2,"row":4,"col":4},{"id":"E","dir":"v","size":2,"row":4,"col":2},{"id":"F","dir":"h","size":2,"row":5,"col":4},{"id":"G","dir":"v","size":3,"row":2,"col":0},{"id":"H","dir":"v","size":2,"row":0,"col":0}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":2},{"id":"B","dir":"v","size":2,"row":1,"col":4},{"id":"C","dir":"h","size":3,"row":4,"col":1},{"id":"D","dir":"v","size":2,"row":0,"col":5},{"id":"E","dir":"v","size":2,"row":4,"col":5},{"id":"F","dir":"v","size":3,"row":3,"col":0}] },
+  { label: "Hard", minMoves: 9, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":2,"row":1,"col":2},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"h","size":2,"row":4,"col":4},{"id":"D","dir":"v","size":2,"row":0,"col":4},{"id":"E","dir":"v","size":3,"row":1,"col":5},{"id":"F","dir":"h","size":2,"row":0,"col":1},{"id":"G","dir":"v","size":3,"row":3,"col":0},{"id":"H","dir":"h","size":3,"row":5,"col":2}] },
+  { label: "Hard", minMoves: 15, board: [{"id":"R","dir":"h","size":2,"row":2,"col":0},{"id":"A","dir":"v","size":3,"row":1,"col":4},{"id":"B","dir":"v","size":3,"row":1,"col":3},{"id":"C","dir":"v","size":2,"row":4,"col":1},{"id":"D","dir":"v","size":2,"row":2,"col":5},{"id":"E","dir":"h","size":3,"row":5,"col":3},{"id":"F","dir":"h","size":2,"row":3,"col":1}] },
 ];
 
 // ── Colors ────────────────────────────────────────────────────────────────────
@@ -472,27 +337,51 @@ function slideVehicle(board: Board, vid: string, delta: number): Board {
   });
 }
 
+// Group puzzles by label for display
+function groupByLabel(puzzles: PuzzleData[]): { label: string; indices: number[] }[] {
+  const map = new Map<string, number[]>();
+  puzzles.forEach((p, i) => {
+    const arr = map.get(p.label) ?? [];
+    arr.push(i);
+    map.set(p.label, arr);
+  });
+  return Array.from(map.entries()).map(([label, indices]) => ({ label, indices }));
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function RushHourGame({ title }: { title: string }) {
+  const [activeSet, setActiveSet] = useState<PuzzleSet>("regular");
+  const activePuzzlesRef = useRef<PuzzleData[]>(PUZZLES_REGULAR);
   const [puzzleIdx, setPuzzleIdx] = useState(0);
-  const [board, setBoard] = useState<Board>(() => PUZZLES[0].board.map(v => ({ ...v })));
+  const [board, setBoard] = useState<Board>(() => PUZZLES_REGULAR[0].board.map(v => ({ ...v })));
   const [selected, setSelected] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const [moves, setMoves] = useState(0);
   const [minMoves, setMinMoves] = useState<number>(-1);
   const [cellPx, setCellPx] = useState(60);
 
-  // Touch state for swipe detection per vehicle
   const touchStart = useRef<{ x: number; y: number; vid: string } | null>(null);
 
+  // Keep ref in sync with state
   useEffect(() => {
-    const m = bfsSolve(PUZZLES[puzzleIdx].board);
-    setMinMoves(m);
-  }, [puzzleIdx]);
+    activePuzzlesRef.current = activeSet === "regular" ? PUZZLES_REGULAR : PUZZLES_EXTRA;
+  }, [activeSet]);
+
+  // Compute minMoves — use embedded value if available, else run BFS
+  useEffect(() => {
+    const puzzles = activePuzzlesRef.current;
+    const p = puzzles[puzzleIdx];
+    if (!p) return;
+    if (p.minMoves !== undefined) {
+      setMinMoves(p.minMoves);
+    } else {
+      const m = bfsSolve(p.board);
+      setMinMoves(m);
+    }
+  }, [puzzleIdx, activeSet]);
 
   useEffect(() => {
     const update = () => {
-      // Use full available width on mobile, cap at 400px
       const w = Math.min(window.innerWidth - 24, 400);
       setCellPx(Math.floor(w / 6));
     };
@@ -504,15 +393,17 @@ export default function RushHourGame({ title }: { title: string }) {
   const boardPx = cellPx * 6;
 
   const startPuzzle = useCallback((idx: number) => {
+    const puzzles = activePuzzlesRef.current;
     setPuzzleIdx(idx);
-    setBoard(PUZZLES[idx].board.map(v => ({ ...v })));
+    setBoard(puzzles[idx].board.map(v => ({ ...v })));
     setSelected(null);
     setMoves(0);
     setPhase("playing");
   }, []);
 
   const resetPuzzle = useCallback(() => {
-    setBoard(PUZZLES[puzzleIdx].board.map(v => ({ ...v })));
+    const puzzles = activePuzzlesRef.current;
+    setBoard(puzzles[puzzleIdx].board.map(v => ({ ...v })));
     setSelected(null);
     setMoves(0);
     setPhase("playing");
@@ -525,7 +416,6 @@ export default function RushHourGame({ title }: { title: string }) {
     }
   }, [board, phase]);
 
-  // Slide by delta steps (±1 or ±max)
   const slide = useCallback((vid: string, delta: number) => {
     if (phase !== "playing") return;
     if (!canSlide(board, vid, delta)) return;
@@ -533,14 +423,12 @@ export default function RushHourGame({ title }: { title: string }) {
     setMoves(m => m + 1);
   }, [board, phase]);
 
-  // Direction pad: slide one step
   const slideOne = useCallback((dir: "left" | "right" | "up" | "down") => {
     if (!selected) return;
     const delta = (dir === "left" || dir === "up") ? -1 : 1;
     slide(selected, delta);
   }, [selected, slide]);
 
-  // Touch handlers — attached to vehicle divs
   function onVehicleTouchStart(e: React.TouchEvent, vid: string) {
     e.stopPropagation();
     const t = e.touches[0];
@@ -559,13 +447,11 @@ export default function RushHourGame({ title }: { title: string }) {
     const threshold = 20;
 
     if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
-      // Tap — select / deselect
       if (selected === vid) setSelected(null);
       else setSelected(vid);
       return;
     }
 
-    // Swipe — find vehicle and move it
     const v = board.find(x => x.id === vid);
     if (!v || phase !== "playing") return;
 
@@ -577,14 +463,11 @@ export default function RushHourGame({ title }: { title: string }) {
       const delta = dy > 0 ? 1 : -1;
       slide(vid, delta);
       setSelected(vid);
-    }
-    // Swipe in wrong axis — just select
-    else {
+    } else {
       setSelected(vid);
     }
   }
 
-  // Click on empty cell to move selected vehicle there (desktop UX)
   function handleCellClick(row: number, col: number) {
     if (phase !== "playing") return;
 
@@ -599,8 +482,7 @@ export default function RushHourGame({ title }: { title: string }) {
       let delta = 0;
 
       if (sv.dir === "h" && row === sv.row) {
-        delta = col - sv.col; // positive = right; might need to check full slide
-        // Check if any cells between current and target are blocked
+        delta = col - sv.col;
         if (delta !== 0) {
           let ok = true;
           if (delta < 0) {
@@ -611,7 +493,6 @@ export default function RushHourGame({ title }: { title: string }) {
             for (let d = 1; d <= delta; d++) {
               if (sv.col + sv.size - 1 + d >= 6 || others[sv.row][sv.col + sv.size - 1 + d]) { ok = false; break; }
             }
-            // Adjust: user clicked inside the vehicle range, treat as no-op
             if (col >= sv.col && col < sv.col + sv.size) { ok = false; delta = 0; }
           }
           canMove = ok;
@@ -676,31 +557,82 @@ export default function RushHourGame({ title }: { title: string }) {
 
   const gap = Math.max(2, Math.round(cellPx * 0.04));
   const selVehicle = selected ? board.find(v => v.id === selected) : null;
+  const activePuzzles = activePuzzlesRef.current;
+  const groups = groupByLabel(activePuzzles);
+
+  const DIFFICULTY_COLORS: Record<string, string> = {
+    Beginner: "#10b981",
+    Easy: "#3b82f6",
+    Medium: "#f59e0b",
+    Hard: "#ef4444",
+    Expert: "#8b5cf6",
+  };
 
   return (
     <div className={styles.gameInner} style={{ userSelect: "none", touchAction: "pan-y" }}>
       <h2 className={styles.gameTitle}>{title}</h2>
 
       {phase === "idle" && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "6px 0" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "6px 0", width: "100%" }}>
           <p style={{ color: "#94a3b8", fontSize: 14, textAlign: "center", maxWidth: 360, lineHeight: 1.5, margin: 0 }}>
             Slide the cars to let the <span style={{ color: "#ef4444", fontWeight: 700 }}>red car 🚗</span> escape through the right exit.
             <br /><span style={{ fontSize: 12 }}>Swipe vehicles or tap to select, then use arrows.</span>
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8, width: "100%", maxWidth: 360 }}>
-            {PUZZLES.map((p, i) => (
+
+          {/* Set toggle */}
+          <div style={{ display: "flex", gap: 8, background: "#0f172a", borderRadius: 10, padding: 4 }}>
+            {(["regular", "extra"] as PuzzleSet[]).map(set => (
               <button
-                key={i}
-                onClick={() => startPuzzle(i)}
+                key={set}
+                onClick={() => { setActiveSet(set); setPuzzleIdx(0); }}
                 style={{
-                  padding: "10px 12px", borderRadius: 10,
-                  border: "1px solid #334155", background: "#1e293b",
-                  color: "#e2e8f0", fontSize: 14, cursor: "pointer", textAlign: "left",
+                  padding: "8px 18px", borderRadius: 8, border: "none",
+                  background: activeSet === set ? "#3b82f6" : "transparent",
+                  color: activeSet === set ? "#fff" : "#64748b",
+                  fontWeight: 700, fontSize: 13, cursor: "pointer",
+                  transition: "all 0.15s",
                 }}
               >
-                <div style={{ fontWeight: 700 }}>Puzzle {i + 1}</div>
-                <div style={{ color: "#64748b", fontSize: 12 }}>{p.label}</div>
+                {set === "regular" ? `Regular (${PUZZLES_REGULAR.length})` : `Extra (${PUZZLES_EXTRA.length})`}
               </button>
+            ))}
+          </div>
+
+          {/* Puzzle grid grouped by difficulty */}
+          <div style={{ width: "100%", maxWidth: 380, display: "flex", flexDirection: "column", gap: 12 }}>
+            {groups.map(({ label, indices }) => (
+              <div key={label}>
+                <div style={{
+                  fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
+                  color: DIFFICULTY_COLORS[label] ?? "#94a3b8",
+                  textTransform: "uppercase", marginBottom: 6,
+                }}>
+                  {label}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6 }}>
+                  {indices.map(i => {
+                    const p = activePuzzles[i];
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => startPuzzle(i)}
+                        style={{
+                          padding: "8px 4px", borderRadius: 8,
+                          border: `1px solid ${DIFFICULTY_COLORS[p.label] ?? "#334155"}22`,
+                          background: "#1e293b",
+                          color: "#e2e8f0", fontSize: 12, cursor: "pointer", textAlign: "center",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {i + 1}
+                        {p.minMoves !== undefined && (
+                          <div style={{ color: "#475569", fontSize: 10, fontWeight: 400 }}>{p.minMoves}m</div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -714,7 +646,7 @@ export default function RushHourGame({ title }: { title: string }) {
             marginBottom: 8, maxWidth: boardPx + 24, width: "100%",
           }}>
             <div style={{ color: "#94a3b8", fontSize: 13 }}>
-              Puzzle {puzzleIdx + 1} · {PUZZLES[puzzleIdx].label}
+              {activeSet === "extra" ? "Extra" : ""} Puzzle {puzzleIdx + 1} · {activePuzzles[puzzleIdx]?.label}
               {minMoves > 0 && <span style={{ color: "#64748b" }}> · best {minMoves}</span>}
             </div>
             <div style={{ color: "#e2e8f0", fontSize: 14, fontWeight: 600 }}>
@@ -724,7 +656,6 @@ export default function RushHourGame({ title }: { title: string }) {
 
           {/* Board + exit wrapper */}
           <div style={{ position: "relative", width: boardPx + 24, maxWidth: "100%", flexShrink: 0 }}>
-            {/* Board */}
             <div
               style={{
                 position: "relative", width: boardPx, height: boardPx,
@@ -835,7 +766,7 @@ export default function RushHourGame({ title }: { title: string }) {
             }}>▶</div>
           </div>
 
-          {/* Direction pad — visible when a vehicle is selected */}
+          {/* Direction pad */}
           <div style={{
             marginTop: 12,
             minHeight: 64,
@@ -884,7 +815,7 @@ export default function RushHourGame({ title }: { title: string }) {
             <button onClick={resetPuzzle} className={styles.resetBtn}>↺ Reset</button>
             {phase === "solved" && (
               <button
-                onClick={() => startPuzzle((puzzleIdx + 1) % PUZZLES.length)}
+                onClick={() => startPuzzle((puzzleIdx + 1) % activePuzzles.length)}
                 style={{
                   padding: "10px 22px", borderRadius: 8, border: "none",
                   background: "#3b82f6", color: "#fff", fontWeight: 700,
