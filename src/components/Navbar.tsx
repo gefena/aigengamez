@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
 import LanguageSwitcher from "./LanguageSwitcher";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Navbar() {
@@ -20,10 +21,12 @@ export default function Navbar() {
         <div className={styles.navLinks}>
           <Link href="/explore" className={styles.navLink}>{t.nav.explore}</Link>
           <Link href="/about" className={styles.navLink}>{t.nav.about}</Link>
+          <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
 
         <div className={styles.navRight}>
+          <ThemeSwitcher />
           <LanguageSwitcher />
           <button
             className={styles.hamburger}

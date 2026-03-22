@@ -131,7 +131,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] **Improve game tags/categories** — richer tags per game (Math, Word, Art, Logic, Coding, Action, Memory, STEM, Maze, Music, Hebrew); Explore page now has tag chip filter; Surprise Me kids pool derived dynamically from tags.
 - [x] **Replace generic Unsplash photos** — replaced with on-brand custom thumbnails reflecting each game's actual visuals.
 - [x] **Site visual identity overhaul** — gold/black premium arcade theme: shimmer logo, gold glow cards, glassmorphism navbar, gold accent lines throughout.
-- [ ] **American flag color theme** — red/white/blue palette variant as an alternative to gold; could be a selectable theme toggle (🇺🇸 mode).
+- [x] **American flag color theme** — red/white/blue palette toggle (✨/🇺🇸) in navbar alongside gold. Persisted to localStorage.
 
 ---
 

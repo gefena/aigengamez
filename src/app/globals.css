@@ -51,8 +51,56 @@
   --radius-lg:   20px;
   --radius-full: 9999px;
 
+  /* ── Extra border / glow tokens (used in CSS modules) ───── */
+  --border-strong:     rgba(245, 197, 24, 0.35);
+  --border-subtle:     rgba(245, 197, 24, 0.1);
+  --border-muted:      rgba(245, 197, 24, 0.06);
+  --sweep-color:       rgba(245, 197, 24, 0.07);
+  --card-glow:         0 0 0 1px rgba(245, 197, 24, 0.12), 0 0 32px rgba(212, 160, 23, 0.18);
+  --btn-primary-text:  #0a0800;
+
   /* ── Layout ──────────────────────────────────────────────── */
   --max-width: 1200px;
+}
+
+/* ── 🇺🇸 American flag theme ──────────────────────────────── */
+[data-theme="flag"] {
+  --bg-primary:   #06091e;
+  --bg-secondary: #08102a;
+  --bg-tertiary:  #0d1840;
+
+  --gold-bright:  #fca5a5;
+  --gold-primary: #dc2626;
+  --gold-warm:    #c8102e;
+  --gold-dark:    #b91c1c;
+  --gold-deep:    #7f1d1d;
+
+  --accent-primary:   #c8102e;
+  --accent-secondary: #dc2626;
+  --accent-gradient:  linear-gradient(135deg, #002868 0%, #c8102e 100%);
+  --gold-shimmer:     linear-gradient(90deg, #002868 0%, #c8102e 25%, #f0f0ff 50%, #c8102e 75%, #002868 100%);
+
+  --glass-bg:     rgba(6, 9, 30, 0.78);
+  --glass-border: 1px solid rgba(200, 16, 46, 0.15);
+
+  --border-color:      rgba(200, 16, 46, 0.1);
+  --border-highlight:  rgba(200, 16, 46, 0.28);
+  --border-strong:     rgba(200, 16, 46, 0.35);
+  --border-subtle:     rgba(200, 16, 46, 0.1);
+  --border-muted:      rgba(200, 16, 46, 0.06);
+  --sweep-color:       rgba(200, 16, 46, 0.07);
+  --card-glow:         0 0 0 1px rgba(200, 16, 46, 0.12), 0 0 32px rgba(200, 16, 46, 0.18);
+
+  --shadow-glow:        0 0 24px rgba(200, 16, 46, 0.25);
+  --shadow-glow-strong: 0 0 48px rgba(200, 16, 46, 0.4);
+
+  --btn-primary-text: #f8f8ff;
+}
+
+[data-theme="flag"] body {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(200, 16, 46, 0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 100%, rgba(0, 40, 104, 0.15) 0%, transparent 55%);
 }
 
 html,
