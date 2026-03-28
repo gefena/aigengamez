@@ -11,6 +11,16 @@
             "statusMessage": "Running ESLint..."
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command // empty'); if echo \"$cmd\" | grep -q 'git push'; then jq -n '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"git push completed. Update WISHLIST.md to mark shipped items [x] and update memory files in ~/.claude/projects/ to reflect current project state.\"}}'; fi",
+            "timeout": 5
+          }
+        ]
       }
     ]
   }
