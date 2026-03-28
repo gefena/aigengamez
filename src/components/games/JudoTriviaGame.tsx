@@ -623,7 +623,7 @@ export default function JudoTriviaGame({ title }: { title: string }) {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", width: "100%", animation: "jt-fade-in 0.3s ease-out" }}>
 
           {/* HUD */}
-          <div style={{ display: "flex", gap: "1.25rem", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ display: "flex", gap: "1.25rem", alignItems: "center", justifyContent: "center", direction: "ltr" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "1.8rem", fontWeight: 800, color: timerColor, fontFamily: "monospace", lineHeight: 1, animation: timeLeft <= 5 ? "jt-timer-pulse 0.5s ease-in-out infinite" : undefined }}>
                 {String(timeLeft).padStart(2, "0")}
@@ -721,7 +721,14 @@ export default function JudoTriviaGame({ title }: { title: string }) {
               {chosen === -1
                 ? (isHe ? `⏱️ הזמן נגמר! תשובה נכונה: ${currentQ.opts[currentQ.correct]}` : `⏱️ Time's up! Correct: ${currentQ.opts[currentQ.correct]}`)
                 : chosen === currentQ.correct
-                ? `✅ ${streakRef.current >= 3 ? `🔥 ${isHe ? `רצף ${streakRef.current}!` : `${streakRef.current}-streak!`} +${streakRef.current >= 5 ? 30 : 20} ${isHe ? "נק'" : "pts"}! ` : `+10 ${isHe ? "נק'" : "pts"}! `}${currentQ.fact}`
+                ? <>
+                    <span style={{ unicodeBidi: "isolate", direction: "ltr" }}>
+                      {streakRef.current >= 3
+                        ? `✅ 🔥 ${isHe ? `רצף ${streakRef.current}!` : `${streakRef.current}-streak!`} +${streakRef.current >= 5 ? 30 : 20} ${isHe ? "נק'" : "pts"}!`
+                        : `✅ +10 ${isHe ? "נק'" : "pts"}!`}
+                    </span>
+                    {" "}{currentQ.fact}
+                  </>
                 : `❌ ${currentQ.fact}`}
             </div>
           )}
@@ -741,7 +748,7 @@ export default function JudoTriviaGame({ title }: { title: string }) {
           </div>
           <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "var(--accent-primary)", lineHeight: 1, marginBottom: "0.2rem" }}>{score}</div>
           <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginBottom: "0.2rem" }}>{isHe ? "נקודות" : "points"}</div>
-          <div style={{ color: "var(--text-secondary)", fontSize: "0.82rem", marginBottom: "1.5rem" }}>
+          <div style={{ color: "var(--text-secondary)", fontSize: "0.82rem", marginBottom: "1.5rem", direction: "ltr" }}>
             {correct}/{QUESTIONS_PER_GAME} {isHe ? "נכון" : "correct"}
             {highScore > 0 && score < highScore && (
               <span> · {isHe ? "שיא: " : "Best: "}<strong style={{ color: "var(--accent-primary)" }}>{highScore}</strong></span>
