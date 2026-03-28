@@ -8,11 +8,7 @@ type Phase = "idle" | "playing" | "examples" | "over";
 const TIME_PER_CATEGORY = 30;
 
 const STYLES = `
-@keyframes ei-letter-pop {
-  0%   { transform: scale(0.25) rotate(-18deg); opacity: 0; }
-  60%  { transform: scale(1.08) rotate(3deg); }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
+
 
 @keyframes ei-fade-in {
   from { opacity: 0; transform: translateY(7px); }
@@ -132,7 +128,7 @@ export default function EretzIrGame({ title }: { title: string }) {
   const timerColor = timeLeft <= 5 ? "#ef4444" : timeLeft <= 10 ? "#f59e0b" : "#d4af37";
 
   // Shared letter badge used in playing + examples phases
-  const LetterBadge = ({ animate }: { animate: boolean }) => (
+  const LetterBadge = () => (
     <div style={{ textAlign: "center" }}>
       <div style={{ fontSize: "0.62rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.13em", marginBottom: "0.45rem" }}>
         האות שנבחרה
@@ -142,7 +138,6 @@ export default function EretzIrGame({ title }: { title: string }) {
         width: 78, height: 78, borderRadius: 18,
         background: "linear-gradient(145deg, rgba(212,175,55,0.14), rgba(212,175,55,0.04))",
         border: "2px solid #d4af37",
-        animation: animate ? "ei-letter-pop 0.45s ease-out" : undefined,
         boxShadow: "0 0 18px rgba(212,175,55,0.25), inset 0 1px 0 rgba(255,255,255,0.07)",
         fontSize: "3.25rem", fontWeight: 900, color: "#d4af37", lineHeight: 1,
       }}>
@@ -183,7 +178,7 @@ export default function EretzIrGame({ title }: { title: string }) {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem", animation: "ei-fade-in 0.2s ease-out" }}>
 
           {/* Letter badge */}
-          <LetterBadge animate />
+          <LetterBadge />
 
           {/* Category + progress dots */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -252,7 +247,7 @@ export default function EretzIrGame({ title }: { title: string }) {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", animation: "ei-fade-in 0.3s ease-out" }}>
 
           {/* Letter badge (no pop animation, just glow) */}
-          <LetterBadge animate={false} />
+          <LetterBadge />
 
           {/* Category label */}
           <div style={{ textAlign: "center", fontSize: "1.2rem", fontWeight: 700, color: "var(--text-primary)" }}>
@@ -314,7 +309,7 @@ export default function EretzIrGame({ title }: { title: string }) {
         <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "ei-fade-in 0.4s ease-out" }}>
 
           {/* Letter badge */}
-          <LetterBadge animate={false} />
+          <LetterBadge />
 
           <div style={{ textAlign: "center", fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.15rem" }}>
             סיכום הסיבוב
