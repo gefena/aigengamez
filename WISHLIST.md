@@ -63,7 +63,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 
 ### Engineering / STEM
 - [x] **Gear Train Puzzle** — SVG animated interlocking gears; kids: direction-only, adult: direction + RPM ratio.
-- [ ] **More engineering games** — ideas: bridge builder (truss stress), rocket trajectory (angle + thrust), pulley systems.
+- [ ] **More engineering games** — explore and build more STEM engineering games. Ideas: bridge builder (truss stress), rocket trajectory (angle + thrust), pulley systems, circuit builder, hydraulics/pneumatics, simple machines (lever, wedge, screw).
 - [x] **Rush Hour** — sliding block puzzle: move cars/trucks horizontally or vertically to clear a path for the red car to exit. Pure logic, no timer pressure.
 
 ### Biology / Immunology
@@ -116,6 +116,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 - [x] IceCreamMemoryGame TypeScript error on Vercel (Phase type) — fixed 2026-03-21
 - [x] MathBlitz invisible on mobile (play area needs explicit height) — fixed 2026-03-21
 - [x] Word Ladder broken Unsplash image — fixed 2026-03-21
+- [x] **Hebrew RTL bidi — numbers shift position** — JudoTrivia HUD flex row reversed by `dir=rtl` on root; game-over fraction reordered; points badge in feedback mixed with Hebrew. Fixed: `direction:ltr` on HUD row, game-over stats, and bidi-isolate span on points badge — 2026-03-28
 
 ---
 
