@@ -13,10 +13,7 @@ const STYLES = `
   60%  { transform: scale(1.08) rotate(3deg); }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
-@keyframes ei-letter-glow {
-  0%, 100% { box-shadow: 0 0 18px rgba(212,175,55,0.25), inset 0 1px 0 rgba(255,255,255,0.07); }
-  50%       { box-shadow: 0 0 32px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.07); }
-}
+
 @keyframes ei-fade-in {
   from { opacity: 0; transform: translateY(7px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -145,7 +142,8 @@ export default function EretzIrGame({ title }: { title: string }) {
         width: 78, height: 78, borderRadius: 18,
         background: "linear-gradient(145deg, rgba(212,175,55,0.14), rgba(212,175,55,0.04))",
         border: "2px solid #d4af37",
-        animation: animate ? "ei-letter-pop 0.45s ease-out, ei-letter-glow 2.5s ease-in-out 0.5s infinite" : "ei-letter-glow 2.5s ease-in-out infinite",
+        animation: animate ? "ei-letter-pop 0.45s ease-out" : undefined,
+        boxShadow: "0 0 18px rgba(212,175,55,0.25), inset 0 1px 0 rgba(255,255,255,0.07)",
         fontSize: "3.25rem", fontWeight: 900, color: "#d4af37", lineHeight: 1,
       }}>
         {letter}
