@@ -52,7 +52,7 @@ Track ideas and backlog items here. Update as things get done or new ideas come 
 | Blood Type Match | blood-type-match | ABO+Rh transfusion puzzle, kids/adult modes |
 | Immune Defense | immune-defense | Card-dispatch wave survival, 5 cell types vs 3 invader types |
 | Judo Drills Trivia | judo-trivia | 25 beginner + 30 advanced judo questions, streak multipliers |
-| ארץ עיר חי | eretz-ir | Hebrew-only classic family game, random letter, 7 categories × 30s, examples shown after each round |
+| ארץ עיר חי | eretz-ir | Hebrew-only classic family game, random letter, 8 categories × 30s (incl. מאכל), examples shown after each round |
 
 ---
 
